@@ -1,0 +1,76 @@
+@import "node_modules/bootstrap/scss/bootstrap";
+
+.user-header {
+    width:60px;
+    height:80px;
+}
+
+//头部
+header {
+    a {
+        color: #FFFFFF;
+    }
+    .navbar > .container {
+        flex-direction:row;
+        justify-content:flex-start;
+    }
+    .dropdown {
+        margin-left:auto;
+    }
+}
+
+//主面板
+main {
+    margin-top:20px;
+    #message-panel {
+        height:480px;
+        .card-header {
+            background-color:#FF8C00;
+            display:flex;
+            flex-direction:row;
+            justify-content:space-between;
+            text-align:center;
+        }
+        .message-contact {
+            display:flex;
+            flex-direction:row;
+            justify-content:flex-start;
+            .message-contact-info {
+                p {
+                    display:flex;
+                    flex-direction:row;
+                    justify-content:space-between;   
+                }
+            }
+        }
+        .card-body {
+            padding:0px;
+            overflow-y:auto;
+            overflow-x:hidden;
+            ul {
+                li {
+                    padding:0px;
+                    margin:0px;
+                    &:hover {
+                        background-color:#D3D3D3;
+                    }
+                }
+            }
+            .list-group {
+                margin:0px;
+                border:0px;
+            }
+            .list-group-item {
+                margin:0px;
+                padding:0.75rem;
+                padding-bottom:0px;
+                border:0px;
+            }
+        }
+        .card-footer {
+            display:flex;
+            flex-direction:row;
+            justify-content:space-around;
+        }
+    }
+}
