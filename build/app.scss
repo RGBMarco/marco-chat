@@ -1,8 +1,8 @@
 @import "node_modules/bootstrap/scss/bootstrap";
 
 .user-header {
-    width:60px;
-    height:80px;
+    width:40px;
+    height:30px;
 }
 
 //头部
@@ -22,6 +22,11 @@ header {
 //主面板
 main {
     margin-top:20px;
+    .container {
+        display:flex;
+        flex-direction:row;
+        justify-content:flex-start;
+    }
     #message-panel {
         height:480px;
         .card-header {
@@ -71,6 +76,100 @@ main {
             display:flex;
             flex-direction:row;
             justify-content:space-around;
+            .card-footer-tab {
+                padding:0.5rem;
+                &:hover {
+                    background-color:rgb(47, 123, 148);
+                }
+            }
+        }
+    }
+    #message-session {
+        .modal {
+            position:static;
+            display:block;
+            height:480px;
+        }
+        .modal-dialog {
+            margin-top:0px;
+            margin-bottom:0px;
+            height:480px;
+        }
+        .modal-content {
+            height:480px;
+        }
+        .modal-header {
+            display:flex;
+            flex-direction:column;
+            justify-content:space-between;
+        }
+        .modal-header-info {
+            display:flex;
+            flex-direction:row;
+            justify-content:space-between;
+            width:100%;
+        }
+        .modal-body {
+            overflow:auto;
+            .modal-body-session {
+                .message-by-other {
+                    border-width:0px;
+                    padding:0px;
+                    padding-bottom:4px;
+                    .message-owner {
+                       display:flex;
+                       flex-direction:row;
+                    }
+                    .message-content {
+                        margin-left:40px;
+                        background-color:#EE6363;
+                        border-style:solid;
+                        border-color:#FF8C00;
+                        border-width:2px;
+                        border-radius:5px;
+                        margin-bottom:0px;
+                        span {
+                            padding:6px;
+                            text-align:justify;
+                            display:inline-block;
+                        }
+                    }
+                }
+            }
+        }
+        .modal-footer {
+             display:flex;
+             flex-direction:column;
+             justify-content:flex-start;
+             align-items:flex-start;
+             padding:0px;
+            .modal-footer-toolbox {
+                ul {
+                    display:flex;
+                    flex-direction:row;
+                    justify-content:space-between;
+                    list-style-type:none;
+                    margin-bottom:2px;
+                }
+                .modal-footer-toolbox-group-item {
+                    margin-left:1rem;
+                }
+            }
+            .modal-footer-message-area {
+                width:100%;
+                margin-left:0px;
+                #message-input {
+                    width:100%;
+                }
+                .message-submit {
+                    display:flex;
+                    flex-direction:row;
+                    justify-content:flex-end;
+                    margin-top:0.25rem;
+                    margin-right:2rem;
+                    margin-bottom:0.5rem;
+                }
+            }
         }
     }
 }

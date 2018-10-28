@@ -10467,8 +10467,8 @@ a.text-dark:focus {
 }
 
 .user-header {
-  width: 60px;
-  height: 80px;
+  width: 40px;
+  height: 30px;
 }
 
 header a {
@@ -10491,6 +10491,19 @@ header .dropdown {
 
 main {
   margin-top: 20px;
+}
+
+main .container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
 }
 
 main #message-panel {
@@ -10575,5 +10588,153 @@ main #message-panel .card-footer {
           flex-direction: row;
   -ms-flex-pack: distribute;
       justify-content: space-around;
+}
+
+main #message-panel .card-footer .card-footer-tab {
+  padding: 0.5rem;
+}
+
+main #message-panel .card-footer .card-footer-tab:hover {
+  background-color: #2f7b94;
+}
+
+main #message-session .modal {
+  position: static;
+  display: block;
+  height: 480px;
+}
+
+main #message-session .modal-dialog {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  height: 480px;
+}
+
+main #message-session .modal-content {
+  height: 480px;
+}
+
+main #message-session .modal-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+main #message-session .modal-header-info {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 100%;
+}
+
+main #message-session .modal-body {
+  overflow: auto;
+}
+
+main #message-session .modal-body .modal-body-session .message-by-other {
+  border-width: 0px;
+  padding: 0px;
+  padding-bottom: 4px;
+}
+
+main #message-session .modal-body .modal-body-session .message-by-other .message-owner {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+main #message-session .modal-body .modal-body-session .message-by-other .message-content {
+  margin-left: 40px;
+  background-color: #EE6363;
+  border-style: solid;
+  border-color: #FF8C00;
+  border-width: 2px;
+  border-radius: 5px;
+  margin-bottom: 0px;
+}
+
+main #message-session .modal-body .modal-body-session .message-by-other .message-content span {
+  padding: 6px;
+  text-align: justify;
+  display: inline-block;
+}
+
+main #message-session .modal-footer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  padding: 0px;
+}
+
+main #message-session .modal-footer .modal-footer-toolbox ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  list-style-type: none;
+  margin-bottom: 2px;
+}
+
+main #message-session .modal-footer .modal-footer-toolbox .modal-footer-toolbox-group-item {
+  margin-left: 1rem;
+}
+
+main #message-session .modal-footer .modal-footer-message-area {
+  width: 100%;
+  margin-left: 0px;
+}
+
+main #message-session .modal-footer .modal-footer-message-area #message-input {
+  width: 100%;
+}
+
+main #message-session .modal-footer .modal-footer-message-area .message-submit {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  margin-top: 0.25rem;
+  margin-right: 2rem;
+  margin-bottom: 0.5rem;
 }
 

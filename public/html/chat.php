@@ -58,12 +58,15 @@
                             </ul>
                         </div>
                         <div class="card-footer">
-                            <div><span>消息</span></div>
-                            <div><span>联系人</span></div>
-                            <div>我的</div>
+                            <div class="card-footer-tab"><span>消息</span></div>
+                            <div class="card-footer-tab"><span>联系人</span></div>
+                            <div class="card-footer-tab"><span>我的<span></div>
                         </div>
                     </div>
                 </div>
+                <?php
+                    include("message-session.php");
+                ?>
         </div>
     </main>
     </body>
