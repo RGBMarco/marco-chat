@@ -10614,7 +10614,7 @@ main #message-session .modal-content {
   height: 480px;
 }
 
-main #message-session .modal-header {
+main #message-session #multi-session-header {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -10627,7 +10627,7 @@ main #message-session .modal-header {
           justify-content: space-between;
 }
 
-main #message-session .modal-header-info {
+main #message-session #multi-session-header .modal-header-info {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -10641,17 +10641,61 @@ main #message-session .modal-header-info {
   width: 100%;
 }
 
-main #message-session .modal-body {
+main #message-session #single-session-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+
+main #message-session #single-session-header .modal-header-title {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 100%;
+}
+
+main #message-session #single-session-header .title-info {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+
+main #message-session #single-session-header .title-info h4 {
+  margin-left: 1.75rem;
+}
+
+main #message-session #chat-modal-body {
   overflow: auto;
 }
 
-main #message-session .modal-body .modal-body-session .message-by-other {
+main #message-session #chat-modal-body .modal-body-session .message-by-other {
   border-width: 0px;
   padding: 0px;
   padding-bottom: 4px;
 }
 
-main #message-session .modal-body .modal-body-session .message-by-other .message-owner {
+main #message-session #chat-modal-body .modal-body-session .message-by-other .message-owner {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -10661,7 +10705,7 @@ main #message-session .modal-body .modal-body-session .message-by-other .message
           flex-direction: row;
 }
 
-main #message-session .modal-body .modal-body-session .message-by-other .message-content {
+main #message-session #chat-modal-body .modal-body-session .message-by-other .message-content {
   margin-left: 40px;
   background-color: #EE6363;
   border-style: solid;
@@ -10671,13 +10715,13 @@ main #message-session .modal-body .modal-body-session .message-by-other .message
   margin-bottom: 0px;
 }
 
-main #message-session .modal-body .modal-body-session .message-by-other .message-content span {
+main #message-session #chat-modal-body .modal-body-session .message-by-other .message-content span {
   padding: 6px;
   text-align: justify;
   display: inline-block;
 }
 
-main #message-session .modal-footer {
+main #message-session #chat-modal-footer {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -10694,7 +10738,7 @@ main #message-session .modal-footer {
   padding: 0px;
 }
 
-main #message-session .modal-footer .modal-footer-toolbox ul {
+main #message-session #chat-modal-footer .modal-footer-toolbox ul {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -10709,20 +10753,20 @@ main #message-session .modal-footer .modal-footer-toolbox ul {
   margin-bottom: 2px;
 }
 
-main #message-session .modal-footer .modal-footer-toolbox .modal-footer-toolbox-group-item {
+main #message-session #chat-modal-footer .modal-footer-toolbox .modal-footer-toolbox-group-item {
   margin-left: 1rem;
 }
 
-main #message-session .modal-footer .modal-footer-message-area {
+main #message-session #chat-modal-footer .modal-footer-message-area {
   width: 100%;
   margin-left: 0px;
 }
 
-main #message-session .modal-footer .modal-footer-message-area #message-input {
+main #message-session #chat-modal-footer .modal-footer-message-area #message-input {
   width: 100%;
 }
 
-main #message-session .modal-footer .modal-footer-message-area .message-submit {
+main #message-session #chat-modal-footer .modal-footer-message-area .message-submit {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -10736,5 +10780,85 @@ main #message-session .modal-footer .modal-footer-message-area .message-submit {
   margin-top: 0.25rem;
   margin-right: 2rem;
   margin-bottom: 0.5rem;
+}
+
+main #message-session #notices-panel-body {
+  overflow: auto;
+  padding: 0px;
+}
+
+main #message-session #notices-panel-body ul {
+  padding: 0px;
+}
+
+main #message-session #notices-panel-body .notice {
+  list-style-type: none;
+  padding: 0.2rem;
+}
+
+main #message-session #notices-panel-body .notice hr {
+  margin-top: 10px;
+  margin-bottom: 2px;
+}
+
+main #message-session #notices-panel-body .notice .notice-title .notice-title-info {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+main #message-session #notices-panel-body .notice .notice-content span {
+  text-align: center;
+}
+
+main #message-session #notices-panel-body .notice .notice-footer {
+  height: 20px;
+  background-color: #BEBEBE;
+}
+
+main #member-panel-body {
+  padding: 0px;
+}
+
+main #member-panel-body ul {
+  padding: 0px;
+}
+
+main #member-panel-body .member-group-item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 2rem;
+  padding-bottom: 0.25rem;
+  padding-top: 0.25rem;
+}
+
+main #member-panel-body .member-group-item p {
+  margin-left: 2rem;
+}
+
+main #member-panel-body .member-group-item p span {
+  margin-left: 2rem;
+}
+
+main #member-panel-body .member-group-item:hover {
+  background-color: #EE6363;
 }
 

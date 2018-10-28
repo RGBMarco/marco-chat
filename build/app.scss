@@ -98,18 +98,40 @@ main {
         .modal-content {
             height:480px;
         }
-        .modal-header {
+        //多人会话头部面板
+        #multi-session-header {
             display:flex;
             flex-direction:column;
             justify-content:space-between;
+            .modal-header-info {
+                display:flex;
+                flex-direction:row;
+                justify-content:space-between;
+                width:100%;
+            }
         }
-        .modal-header-info {
+        //单人会话头部面板
+        #single-session-header {
             display:flex;
-            flex-direction:row;
-            justify-content:space-between;
-            width:100%;
+            flex-direction:column;
+            justify-content:flex-start;
+            .modal-header-title {
+                display:flex;
+                flex-direction:row;
+                justify-content:space-between;
+                width:100%;
+            }
+            .title-info {
+                display:flex;
+                flex-direction:row;
+                justify-content:flex-start;
+                h4 {
+                    margin-left:1.75rem;
+                }
+            }
         }
-        .modal-body {
+        //聊天会话面板
+        #chat-modal-body {
             overflow:auto;
             .modal-body-session {
                 .message-by-other {
@@ -137,7 +159,8 @@ main {
                 }
             }
         }
-        .modal-footer {
+        //聊天面板脚注
+        #chat-modal-footer {
              display:flex;
              flex-direction:column;
              justify-content:flex-start;
@@ -169,6 +192,63 @@ main {
                     margin-right:2rem;
                     margin-bottom:0.5rem;
                 }
+            }
+        }
+        //公告面板
+        #notices-panel-body {
+            overflow:auto;
+            padding:0px;
+            ul {
+                padding:0px;
+            }
+            .notice {
+                list-style-type:none;
+                padding:0.2rem;
+                hr {
+                    margin-top:10px;
+                    margin-bottom:2px;
+                }
+                .notice-title {
+                    .notice-title-info {
+                        display:flex;
+                        flex-direction:row;
+                        justify-content: space-between;
+                    }
+                }
+                .notice-content {
+                    span {
+                        text-align:center;
+                    }
+                }
+                .notice-footer {
+                    height:20px;
+                    background-color:#BEBEBE;
+                }
+            }
+        }
+    }
+    //群成员面板
+    #member-panel-body {
+        padding:0px;
+        ul {
+            padding:0px;
+        }
+        .member-group-item {
+            display:flex;
+            flex-direction:row;
+            justify-content:flex-start;
+            align-items:center;
+            padding:2rem;
+            padding-bottom:0.25rem;
+            padding-top:0.25rem;
+            p {
+                margin-left:2rem;
+                span {
+                    margin-left:2rem;
+                }
+            }
+            &:hover {
+                background-color:#EE6363;
             }
         }
     }
