@@ -2,8 +2,9 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <link rel="stylesheet" href="app.css?version=123">
-        <script type="text/javascript"  src="app.js"></script>
+    <script type="text/javascript"  src="app.js"></script>
     </head>
     <body>
         <header>
@@ -33,36 +34,9 @@
     <main>
         <div class="container">
                 <div class="col col-4 offset-1">    
-                    <div id="message-panel" class="card">
-                        <div class="card-header">
-                            <a><img src="#" alt="联系人"></a>
-                            <h4>消息</h4>
-                            <a><h4>+</h4></a>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    <div class="row message-contact">
-                                        <div class="col col-1">
-                                            <img class="user-header" src="#" alt="">
-                                        </div>
-                                        <div class="col message-contact-info">
-                                            <p><span>联系人</span><small>时间</small></p>
-                                            <p><small>消息</small><span class="badge badge-danger">999</span></p>
-                                        </div>
-                                    </div>
-                                </li>
-                                <?php
-                                    include('_list.php');
-                                ?>
-                            </ul>
-                        </div>
-                        <div class="card-footer">
-                            <div class="card-footer-tab"><span>消息</span></div>
-                            <div class="card-footer-tab"><span>联系人</span></div>
-                            <div class="card-footer-tab"><span>我的<span></div>
-                        </div>
-                    </div>
+                   <?php
+                        include("_contacts-panel.php");
+                   ?>
                 </div>
                 <?php
                     include("message-session.php");
@@ -70,4 +44,10 @@
         </div>
     </main>
     </body>
+    
+    <script>
+        $('.contacts-group-user').on('click',function() {
+            $($(this).siblings('.collapse').get(0)).toggle();
+        });
+    </script>
 </html>

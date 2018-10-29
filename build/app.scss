@@ -252,4 +252,41 @@ main {
             }
         }
     }
+    #contacts-card-panel {
+        height:480px;
+        .card-header {
+            display:flex;
+            flex-direction:row;
+            justify-content:flex-start;
+        }
+        .card-body {
+            padding:0px;
+            padding-left:0.5rem;
+            padding-top:0.5rem;
+            .contacts-groups {
+                padding:0px;
+                li {
+                    list-style-type:none;
+                }
+                .user {
+                    display:flex;
+                    flex-direction:row;
+                    justify-content:flex-start;
+                    .user-info {
+                        margin-left:1rem;
+                    }
+                }
+                .contacts-group {
+                    .collapse {
+                        padding:0px;
+                    }
+                }
+            }
+        }
+        .card-footer {
+            display:flex;
+            flex-direction:row;
+            justify-content:space-around;
+        }
+    }
 }

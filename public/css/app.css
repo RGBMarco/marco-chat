@@ -10862,3 +10862,67 @@ main #member-panel-body .member-group-item:hover {
   background-color: #EE6363;
 }
 
+main #contacts-card-panel {
+  height: 480px;
+}
+
+main #contacts-card-panel .card-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+
+main #contacts-card-panel .card-body {
+  padding: 0px;
+  padding-left: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+main #contacts-card-panel .card-body .contacts-groups {
+  padding: 0px;
+}
+
+main #contacts-card-panel .card-body .contacts-groups li {
+  list-style-type: none;
+}
+
+main #contacts-card-panel .card-body .contacts-groups .user {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+
+main #contacts-card-panel .card-body .contacts-groups .user .user-info {
+  margin-left: 1rem;
+}
+
+main #contacts-card-panel .card-body .contacts-groups .contacts-group .collapse {
+  padding: 0px;
+}
+
+main #contacts-card-panel .card-footer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
