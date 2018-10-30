@@ -1,18 +1,19 @@
 <?php
+    namespace Config;
     class DbConfig {
-        public $config = [
+        public static $config = [
             'postgres' =>   [
                 'host'      =>  '127.0.0.1',
-                'dbname'    =>  'postgres',
+                'dbname'    =>  'phpstudy',
                 'user'      =>  'postgres',
                 'password'  =>  '577482975',
             ],
         ];
-        public function parseURL($dbKind):string {
+        public static function parseURL($dbKind):string {
             $ret = "";
-            if (array_key_exists($dbKind,$config)) {
-                foreach($config[$dbKind] as $k => $v) {
-                    $ret .= $k . $v;
+            if (array_key_exists($dbKind,self::$config)) {
+                foreach(self::$config[$dbKind] as $k => $v) {
+                    $ret .= $k ."=" .$v ." ";
                 }
             } else {
                 $ret = "";
