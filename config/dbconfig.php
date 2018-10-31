@@ -4,9 +4,9 @@
         public static $config = [
             'postgres' =>   [
                 'host'      =>  '127.0.0.1',
-                'dbname'    =>  'phpstudy',
-                'user'      =>  'postgres',
-                'password'  =>  '577482975',
+                'dbname'    =>  'chat',
+                'user'      =>  'chat',
+                'password'  =>  '123456',
             ],
         ];
         public static function parseURL($dbKind):string {

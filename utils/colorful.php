@@ -10,6 +10,8 @@
             'purle'     =>  "\033[35m",
             'cyan'      =>  "\033[36m",
         );
+        private static $danger = 'red';
+        private static $info = 'green';
         private const RECOVER = "\033[0m";
         /**
          * constructor
@@ -36,6 +38,30 @@
             } else {
                 return $str;
             }
+        }
+        /**
+         * 得到标识危险的字符串
+         *
+         * @param [type] $str
+         * @return string
+         * @author: Marco
+         * @email: rgbmarco@gmail.com
+         * @date: 2018
+         */
+        public static function getDangerString($str):string {
+            return self::$colors[self::$danger] . $str . self::RECOVER;
+        }
+        /**
+         * 得到标识信息的颜色字符串
+         *
+         * @param [type] $str
+         * @return string
+         * @author: Marco
+         * @email: rgbmarco@gmail.com
+         * @date: 2018
+         */
+        public static function getInfoString($str):string {
+            return self::$colors[self::$info] . $str . self::RECOVER;
         }
     }
 ?>
