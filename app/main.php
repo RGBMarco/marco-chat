@@ -1,16 +1,15 @@
 <?php
-    $server = new swoole_http_server("0.0.0.0","80");
-    $server->on("Request",function($request,$response) {
-        //print_r($request->get);
-         //print_r($request->post);
-       //print_r($request->header);
-        print_r($request->server);
-       // print_r($request->cookie);
-       // print_r($request->files);
-        $response->end("<h1>Hello</h1>");
-    });
-   /* $server->on("close",function() {
-
-    });*/
-    $server->start();
+   require_once(__DIR__."/route/register.php");
+   require_once(__DIR__."/Test.php");
+   require_once(__DIR__."/route/forward.php");
+   use App\Route\RouteRegister;
+   use App\Route\RouteForward;
+   RouteRegister::add("/home/marco","Test");
+   RouteRegister::add("/home","Test");
+   $http = new swoole_http_server("0.0.0.0",12000);
+   $http->on("Request",function(swoole_http_request $request,swoole_http_response $response) {
+        $entry = RouteForward::forward($request);
+        $entry->run($request,$response);
+   });
+   $http->start();
 ?>

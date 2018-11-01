@@ -1,6 +1,6 @@
 <?php
     namespace App\Route\Exceptions;
-    require_once(__DIR__."/utils/colorful.php");
+    require_once(__DIR__."/../../../utils/colorful.php");
     use \Utils\Colorful;
     class RouteException extends \Exception {
         private $reason;

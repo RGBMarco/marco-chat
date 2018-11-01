@@ -1,7 +1,9 @@
 <?php
     namespace App\Route;
     require_once(__DIR__."/exceptions/route.php");
+    require_once(__DIR__."/spell.php");
     use App\Route\Exceptions\RouteException;
+    use App\Route\RouteSpell;
     /**
      * 支持GET POST PATCH DELETE
      *
@@ -14,6 +16,30 @@
         public function __construct() {
 
         }
+        public function routeExists($view,$route) {
+            $rs  = new \App\Route\RouteSpell($view,$route);
+            foreach (self::$routes as $v => $k) {
+                if ($rs->realView() === $k->realView()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public static function routeRealViews() {
+            $realViews = [];
+            foreach (self::$routes as $k => $v) {
+                array_push($realViews,$v->realView());
+            }
+            return $realViews;
+        }
+        public static function getRoute($realview) {
+            foreach (self::$routes as $k => $v) {
+                if ($v->realView() === $realview) {
+                    return $v;
+                }
+            }
+            return null;
+        }
         /**
          * 添加路由规则
          *
@@ -25,24 +51,11 @@
          * @date: 2018
          */
         public function add(string $view,string $route) {
-            if (class_exists($route,false)) {
-                throw new RouteException("routehandler class is not exists");
-                return false;
-            } else {
-                if (is_subclass_of($route,'App\Route\RouteHandler')) {
-                    if (array_key_exists($view,self::$routes)) {
-                        throw new RouteException("view alreadly have handler");
-                        return false;
-                    } else {
-                        self::$routes[$view] = $route;
-                        return false;
-                    }
-                } else {
-                    throw new RouteException("gived is not routehandler");
-                    return false;
-                }
+            if (self::routeExists($view,$route)) {
+                throw new RouteException("route exist");
             }
-            return true;
+            $rs = new \App\Route\RouteSpell($view,$route);
+            self::$routes[$view] = $rs;
         }
     }
 ?>
