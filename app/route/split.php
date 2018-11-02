@@ -13,12 +13,14 @@
         public function __construct(string $uri) {
             $this->args = [];
             if ($uri === "/") {
+                $this->realUri = "/";
+                $this->route_ = \App\Route\RouteRegister::getRoute($this->realUri);
                 return;
             }
             if ($uri[strlen($uri) - 1] === "/") {
                 $uri = substr($uri,0,strlen($uri) - 1);
             }
-            $regex = "#\/(?P<sub>[a-zA-Z0-9]+)#";
+            $regex = "#\/(?P<sub>[a-zA-Z0-9\.]+)#";
             $arr = [];
             $views = \App\Route\RouteRegister::routeRealViews();
             if (preg_match_all($regex,$uri,$arr)) {
@@ -26,16 +28,13 @@
                     throw new RouteException("parse error");
                 }
                 $narr = $arr["sub"];
-                print_r($narr);
                 while (count($narr) > 0) {
                     $v = "/" . implode('/',$narr);
-                    print_r($narr);
-                    print_r($v);
-                    print_r($views);
                     if (in_array($v,$views)) {
                         $this->realUri = $v;
+                        echo $this->realUri;
                         $this->route_ = \App\Route\RouteRegister::getRoute($this->realUri);
-                        break;
+                        return;
                     } else {
                         array_unshift($this->args,array_pop($narr));
                     }

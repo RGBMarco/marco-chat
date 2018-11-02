@@ -1,11 +1,17 @@
 <?php
    require_once(__DIR__."/route/register.php");
-   require_once(__DIR__."/Test.php");
    require_once(__DIR__."/route/forward.php");
+   require_once(__DIR__."/view/index.php");
+   require_once(__DIR__."/view/favicon.php");
+   require_once(__DIR__."/utils/resource.php");
    use App\Route\RouteRegister;
    use App\Route\RouteForward;
-   RouteRegister::add("/home/marco","Test");
-   RouteRegister::add("/home","Test");
+   use App\View\Index;
+   use App\View\Favicon;
+   use App\Utils\Resource;
+   RouteRegister::add("/","App\View\Index");
+   RouteRegister::add("/utils/{name}","App\Utils\Resource");
+   RouteRegister::add("/favicon.ico","App\View\Favicon");
    $http = new swoole_http_server("0.0.0.0",12000);
    $http->on("Request",function(swoole_http_request $request,swoole_http_response $response) {
         $entry = RouteForward::forward($request);

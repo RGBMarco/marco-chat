@@ -10439,7 +10439,8 @@ return jQuery;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(2);
-module.exports = __webpack_require__(4);
+__webpack_require__(4);
+module.exports = __webpack_require__(5);
 
 
 /***/ }),
@@ -16923,6 +16924,12 @@ module.exports = g;
 
 /***/ }),
 /* 4 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

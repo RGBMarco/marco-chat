@@ -10,6 +10,7 @@
         }
         public static function forward(swoole_http_request $request) {
             $uri = $request->server['request_uri'];
+            echo $uri . "\n";
             return new RouteEntry($uri);
         }
     }

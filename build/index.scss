@@ -1,0 +1,57 @@
+@import "node_modules/bootstrap/scss/bootstrap";
+
+
+main {
+    #signIn {
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        .card {
+            .card-header {
+                display:flex;
+                flex-direction:row;
+                justify-content:center;
+            }
+            .card-body {
+                .utils {
+                    display:flex;
+                    flex-direction:row;
+                    justify-content:space-between;
+                }
+                .center-button {
+                    display:flex;
+                    flex-direction:row;
+                    justify-content:center;
+                }
+            }
+            .card-footer {
+                display:flex;
+                flex-direction:row;
+                justify-content:center;
+            }
+        }
+    }
+    #register {
+        display:none;
+        flex-direction:row;
+        .card {
+            .card-header {
+                display:flex;
+                flex-direction:row;
+                justify-content:center;
+            }
+            .card-body {
+                .center-button {
+                    display:flex;
+                    flex-direction:row;
+                    justify-content:center;
+                }
+            }
+            .card-footer {
+                display:flex;
+                flex-direction:row;
+                justify-content:center;
+            }
+        }
+    }
+}

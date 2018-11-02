@@ -21,11 +21,10 @@
             $args = $rs->args();
             $this->args_ = [];
             foreach ($argsName as $k => $v) {
-                $this->args_[$k] = $args[$k]; 
+               $this->args_[$v] = $args[$k];
             }
         }
         public function run(swoole_http_request $request,swoole_http_response $response) {
-            var_dump($this->class_);
             $obj = new $this->class_();
             $method = $this->method_;
             $obj->$method($request,$response,$this->args_);
