@@ -78,9 +78,6 @@ main {
             justify-content:space-around;
             .card-footer-tab {
                 padding:0.5rem;
-                &:hover {
-                    background-color:rgb(47, 123, 148);
-                }
             }
         }
     }
@@ -112,7 +109,8 @@ main {
         }
         //单人会话头部面板
         #single-session-header {
-            display:flex;
+            //display:flex;
+            display:none;
             flex-direction:column;
             justify-content:flex-start;
             .modal-header-title {
@@ -196,6 +194,7 @@ main {
         }
         //公告面板
         #notices-panel-body {
+            display:none;
             overflow:auto;
             padding:0px;
             ul {
@@ -229,6 +228,7 @@ main {
     }
     //群成员面板
     #member-panel-body {
+        display:none;
         padding:0px;
         ul {
             padding:0px;
@@ -254,6 +254,7 @@ main {
     }
     #contacts-card-panel {
         height:480px;
+        display:none;
         .card-header {
             display:flex;
             flex-direction:row;

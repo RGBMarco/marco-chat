@@ -10594,10 +10594,6 @@ main #message-panel .card-footer .card-footer-tab {
   padding: 0.5rem;
 }
 
-main #message-panel .card-footer .card-footer-tab:hover {
-  background-color: #2f7b94;
-}
-
 main #message-session .modal {
   position: static;
   display: block;
@@ -10642,9 +10638,7 @@ main #message-session #multi-session-header .modal-header-info {
 }
 
 main #message-session #single-session-header {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
+  display: none;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
@@ -10783,6 +10777,7 @@ main #message-session #chat-modal-footer .modal-footer-message-area .message-sub
 }
 
 main #message-session #notices-panel-body {
+  display: none;
   overflow: auto;
   padding: 0px;
 }
@@ -10824,6 +10819,7 @@ main #message-session #notices-panel-body .notice .notice-footer {
 }
 
 main #member-panel-body {
+  display: none;
   padding: 0px;
 }
 
@@ -10864,6 +10860,7 @@ main #member-panel-body .member-group-item:hover {
 
 main #contacts-card-panel {
   height: 480px;
+  display: none;
 }
 
 main #contacts-card-panel .card-header {

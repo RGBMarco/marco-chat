@@ -1,6 +1,7 @@
 <?php
     namespace App\View;
     require_once(__DIR__."/../route/handler.php");
+    require_once(__DIR__."/../../vendor/autoload.php");
     use Swoole\Http\Request as swoole_http_request;
     use Swoole\Http\Response as swoole_http_response;
     use App\Route\RouteHandler;
@@ -9,8 +10,13 @@
         }
         public function get(swoole_http_request $request,swoole_http_response $response,array $args) {
             $response->header("Content-Type","text/html;charset=utf-8");
-            $user = "Marco";
-            $response->end("<h1>主页</h1><img src=\"http://localhost:12000/favicon.ico\"><h1>$user<h1>");
+            $redis = new \Redis();
+            if (!$redis->connect("127.0.0.1",6379)) {
+                $response->end("页面不存在!");
+                return;
+            }
+            $str = $redis->hget("view","index");
+            $response->end($str);
         }
     }
 ?>
