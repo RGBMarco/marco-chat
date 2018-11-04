@@ -11,7 +11,7 @@
         public function get(swoole_http_request $request,swoole_http_response $response,array $args) {
             if (array_key_exists("name",$args)) {
                 $filename = $args["name"];
-                $regex = "#(\.(?P<suffix>css|js))$#";
+                $regex = "#(\.(?P<suffix>css|js|png))$#";
                 $arr = [];
                 if (preg_match_all($regex,$filename,$arr)) {
                     if (!$arr["suffix"][0]) {
@@ -19,13 +19,25 @@
                     } else {
                         if ($arr["suffix"][0] === "js") {
                             $response->header("Content-Type","application/x-javascript");
-                        } else {
+                            $path = __DIR__."/../../public/" . $arr["suffix"][0] . "/" . $filename;
+                            $size = filesize($path);
+                            $handle = fopen($path,"r");
+                            $response->end(fread($handle,$size));
+                        } else if ($arr["suffix"][0] === "css") {
                             $response->header("Content-Type","text/css");
+                            $path = __DIR__."/../../public/" . $arr["suffix"][0] . "/" . $filename;
+                            $size = filesize($path);
+                            $handle = fopen($path,"r");
+                            $response->end(fread($handle,$size));
+                        } else if ($arr["suffix"][0] === "png") {
+                            $response->header("Content-Type","image/png");
+                            $path = __DIR__."/../../public/img/" . $filename;
+                            $size = filesize($path);
+                            $handle = fopen($path,"r");
+                            $response->end(fread($handle,$size));
+                        } else {
+                            $response->end(" ");
                         }
-                        $path = __DIR__."/../../public/" . $arr["suffix"][0] . "/" . $filename;
-                        $size = filesize($path);
-                        $handle = fopen($path,"r");
-                        $response->end(fread($handle,$size));
                     }
                 } else {
                     $response->end(" ");

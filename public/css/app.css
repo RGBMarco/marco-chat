@@ -10591,7 +10591,32 @@ main #message-panel .card-footer {
 }
 
 main #message-panel .card-footer .card-footer-tab {
-  padding: 0.5rem;
+  padding: 0.25rem;
+}
+
+main #message-panel .card-footer .card-footer-tab .tab-info {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+main #message-panel .card-footer .card-footer-tab .tab-info img {
+  width: 30px;
+  height: 25px;
+}
+
+main #message-panel .card-footer .card-footer-tab .tab-info span {
+  text-align: center;
 }
 
 main #message-session .modal {
@@ -10611,16 +10636,14 @@ main #message-session .modal-content {
 }
 
 main #message-session #multi-session-header {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
+  display: none;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
 }
 
 main #message-session #multi-session-header .modal-header-info {
@@ -10638,20 +10661,27 @@ main #message-session #multi-session-header .modal-header-info {
 }
 
 main #message-session #single-session-header {
-  display: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  -webkit-box-pack: start;
-      -ms-flex-pack: start;
-          justify-content: flex-start;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -ms-flex-preferred-size: auto;
+      flex-basis: auto;
 }
 
 main #message-session #single-session-header .modal-header-title {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -ms-flex-preferred-size: auto;
+      flex-basis: auto;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
@@ -10662,7 +10692,7 @@ main #message-session #single-session-header .modal-header-title {
   width: 100%;
 }
 
-main #message-session #single-session-header .title-info {
+main #message-session #single-session-header .modal-header-title .title-info {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -10673,10 +10703,40 @@ main #message-session #single-session-header .title-info {
   -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: flex-start;
+  height: 100%;
+  overflow: auto;
 }
 
-main #message-session #single-session-header .title-info h4 {
+main #message-session #single-session-header .modal-header-title .title-info h4 {
   margin-left: 1.75rem;
+  display: block;
+}
+
+main #message-session #single-session-header .modal-header-title .title-info img {
+  display: block;
+}
+
+main #message-session #single-session-header .modal-header-title button {
+  display: inline-block;
+}
+
+main #message-session #single-session-header .modal-header-info {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  width: 100%;
+  /*ul {
+                    display:flex;
+                    flex-direction:row;
+                    justify-content:flex-start;
+                }*/
 }
 
 main #message-session #chat-modal-body {
@@ -10921,5 +10981,38 @@ main #contacts-card-panel .card-footer {
           flex-direction: row;
   -ms-flex-pack: distribute;
       justify-content: space-around;
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  width: 100%;
+}
+
+main #contacts-card-panel .card-footer .card-footer-tab {
+  padding: 0.25rem;
+}
+
+main #contacts-card-panel .card-footer .card-footer-tab .tab-info {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+main #contacts-card-panel .card-footer .card-footer-tab .tab-info img {
+  width: 30px;
+  height: 25px;
+}
+
+main #contacts-card-panel .card-footer .card-footer-tab .tab-info span {
+  text-align: center;
 }
 

@@ -2,9 +2,10 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
         <link rel="stylesheet" href="app.css?version=123">
-    <script type="text/javascript"  src="app.js"></script>
+        <script type="text/javascript"  src="app.js"></script>
+        <script type="text/javascript" src="chat.js"></script>
     </head>
     <body>
             <!--导航栏-->
@@ -37,7 +38,7 @@
                     <!-- 用户操作面板 -->
                 <div class="col col-4 offset-1">
                             <!--联系人-->
-                    <div id= "contacts-card-panel" class="card">
+                    <div id="contacts-card-panel" class="card">
                         <div class="card-header">
                             <img src="#" class="user-header">
                             <div>
@@ -76,9 +77,9 @@
                             </ul>
                         </div>
                         <div class="card-footer">
-                            <div class="card-footer-tab"><span>消息</span></div>
-                            <div class="card-footer-tab"><span>联系人</span></div>
-                            <div class="card-footer-tab"><span>我的<span></div>
+                            <div class="card-footer-tab"><div id="switchMessage_1" class="tab-info"><img src="http://localhost:12000/utils/msg.png"><span>消息</span></div></div>
+                            <div class="card-footer-tab"><div class="tab-info"><img src="http://localhost:12000/utils/contact.png"><span>联系人</span></div></div>
+                            <div class="card-footer-tab"><div id="switchMine_2" class="tab-info"><img src="http://localhost:12000/utils/mine.png"><span>我的<span></div></div>
                         </div>
                     </div>
                             <!--消息-->
@@ -101,15 +102,12 @@
                                         </div>
                                     </div>
                                 </li>
-                                <?php
-                                    include('_list.php');
-                                ?>
                             </ul>
                         </div>
                         <div class="card-footer">
-                            <div class="card-footer-tab"><span>消息</span></div>
-                            <div class="card-footer-tab"><span>联系人</span></div>
-                            <div class="card-footer-tab"><span>我的<span></div>
+                            <div class="card-footer-tab"><div class="tab-info"><img src="http://localhost:12000/utils/msg.png"><span>消息</span></div></div>
+                            <div class="card-footer-tab"><div id="switchContact_1" class="tab-info"><img src="http://localhost:12000/utils/contact.png"><span>联系人</span></div></div>
+                            <div class="card-footer-tab"><div id="switchMine_1" class="tab-info"><img src="http://localhost:12000/utils/mine.png"><span>我的<span></div></div>
                         </div>
                     </div>
                 </div>
@@ -164,9 +162,6 @@
                                                     <span>用户消息用户消息用户消息用户消息用户消息用户消息用户消息用户消息用户消息用户消息用户消息用户消息</span>
                                                 </div>
                                             </li>
-                                            <?php
-                                                include('_chat-messages.php');
-                                            ?>
                                         <ul>
                                     </div>
                                 </div>
@@ -223,8 +218,6 @@
         </main>
     </body>
     <script>
-        $('.contacts-group-user').on('click',function() {
-            $($(this).siblings('.collapse').get(0)).toggle();
-        });
+        
     </script>
 </html>
