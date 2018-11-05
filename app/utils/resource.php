@@ -36,11 +36,13 @@
                             $handle = fopen($path,"r");
                             $response->end(fread($handle,$size));
                         } else {
-                            $response->end(" ");
+                           $response->status(404);
+                           $response->end("<h1>页面不存在</h1>"); 
                         }
                     }
                 } else {
-                    $response->end(" ");
+                    $response->status(404);
+                    $response->end("<h1>页面不存在</h1>"); 
                 }
             }
         }

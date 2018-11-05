@@ -1,6 +1,7 @@
 <?php
     namespace App\Model\User;
     require_once(__DIR__."/../../__autoload.php");
+    require_once(__DIR__."/../../validate/user.php");
     class User extends RouteHandler {
         private $email_;
         private $name_;
@@ -15,10 +16,16 @@
         public function __construct() {
 
         }
-        public function get(swoole_http_request $request,swoole_http_response $response,$args) {
-
+        //用户登录
+        public function get(swoole_http_request $request,swoole_http_response $response,array $args) {
         }
-        public function post(swoole_http_request $request,swoole_http_response $response,$args) {
+        //用户注册
+        public function post(swoole_http_request $request,swoole_http_response $response,array $args) {
+            if (isset($request->post["email"]) && isset($request->post["password"])) {
+                
+            } else {
+                //Bad Request
+            }
         }
         public function __destruct() {
 

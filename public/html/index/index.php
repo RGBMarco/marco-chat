@@ -50,18 +50,18 @@
                         <h4>注册</h4>
                     </div>
                     <div class="card-body">
-                        <form>
+                        <form method="POST" id="signupForm" name="signup">
                             <div class="form-group">
-                                <input type="email" class="form-control" name="email" placeholder="请输入邮箱">    
+                                <input id="signupEmail" type="email" class="form-control" name="email" placeholder="请输入邮箱">    
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" name="password" placeholder="请输入密码">
+                                <input id="signupPw" type="password" class="form-control" name="password" placeholder="请输入密码">
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" name="password-confirmation" placeholder="请确认密码">
+                                <input id="signupPwConfirm" type="password" class="form-control" name="password-confirmation" placeholder="请确认密码">
                             </div>
                             <div class="center-button">
-                                <button class="btn btn-info">注册</button>    
+                                <button type="submit" class="btn btn-info">注册</button>    
                             </div>  
                         </form>    
                     </div>

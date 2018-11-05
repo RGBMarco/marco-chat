@@ -10452,6 +10452,7 @@ module.exports = __webpack_require__(7);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SignUp", function() { return SignUp; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -10493,8 +10494,49 @@ var Index = function () {
 
 /* harmony default export */ __webpack_exports__["default"] = (Index);
 
+
+var SignUp = function () {
+    function SignUp(signUpForm, signUpEmail, signUpPw, signUpPwConfirm) {
+        _classCallCheck(this, SignUp);
+
+        this.signUpForm_ = signUpForm;
+        this.signUpEmail_ = signUpEmail;
+        this.signUpPw_ = signUpPw;
+        this.signUpPwConfirm_ = signUpPwConfirm;
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this.signUpForm_).on('submit', this.signUp);
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this.signUpEmail_).on('blur', this.checkEmail);
+        console.log(__WEBPACK_IMPORTED_MODULE_0_jquery___default()(this.signUpForm_));
+    }
+
+    _createClass(SignUp, [{
+        key: "signUp",
+        value: function signUp(event) {
+            var email = document.signup.email.value;
+            var pw = document.signup.password.value;
+            var confirmpw = document.signup.password - confirmation.value;
+            return false;
+        }
+    }, {
+        key: "checkEmail",
+        value: function checkEmail(event) {
+            console.log(this.value);
+            var email = this.value;
+            var regex = new RegExp("^([a-zA-Z0-9]+)@[a-z0-9A-Z]{2,}(\.[a-z]+)$");
+            if (regex.test(email)) {
+                console.log("正确邮箱帐号!");
+            } else {
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).css('color', 'red');
+                console.log("不是正确邮箱帐号!");
+            }
+        }
+    }]);
+
+    return SignUp;
+}();
+
 __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).ready(function () {
     var index = new Index("#register", "#signIn", "#switchSignin", "#switchSignup");
+    var sign = new SignUp('#signupForm', '#signupEmail', '#signupPw', '#signupPwConfim');
 });
 
 /***/ })

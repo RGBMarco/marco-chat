@@ -7,15 +7,16 @@
         }
         public function up() {
             $cmd = "CREATE TABLE IF NOT EXISTS users (
-                id          serial,
-                email       text    PRIMARY KEY,
-                name        text NOT NULL,
-                password    text NOT NULL,
-                create_time timestamp NOT NULL,
-                last_time   timestamp NOT NULL,
-                actived     boolean DEFAULT(false),
-                last_ip     cidr DEFAULT('0.0.0.0/32'),
-                remembered  boolean DEFAULT(false),
+                id              serial,
+                email           text    PRIMARY KEY,
+                name            text,
+                password        text NOT NULL,
+                create_time     timestamp,
+                last_time       timestamp,
+                actived         boolean DEFAULT(false),
+                active_token    text,
+                last_ip         cidr DEFAULT('0.0.0.0/32'),
+                remembered      boolean DEFAULT(false),
                 remember_token  text
             );";
             echo $cmd."\n";
