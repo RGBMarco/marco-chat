@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
         <title>主页</title>
         <script type="text/javascript" src="http://localhost:12000/utils/app.js"></script>
         <script type="text/javascript" src="http://localhost:12000/utils/index.js"></script>
@@ -32,7 +33,7 @@
                             </div>
                             <div class="form-group utils">
                                 <label><input type="checkbox">记住密码</label>
-                                <a href="#">?忘记密码</a>
+                                <a target="_blank">?忘记密码</a>
                             </div>
                             <div class="center-button">
                                 <button class="btn btn-info">登录</button>    
@@ -50,7 +51,10 @@
                         <h4>注册</h4>
                     </div>
                     <div class="card-body">
-                        <form method="POST" id="signupForm" name="signup">
+                        <form id="signupForm" action="" name="signup">
+                            <div id="signupHint"class="alert alert-danger">
+                                <span></span>
+                            </div>
                             <div class="form-group">
                                 <input id="signupEmail" type="email" class="form-control" name="email" placeholder="请输入邮箱">    
                             </div>
@@ -58,7 +62,7 @@
                                 <input id="signupPw" type="password" class="form-control" name="password" placeholder="请输入密码">
                             </div>
                             <div class="form-group">
-                                <input id="signupPwConfirm" type="password" class="form-control" name="password-confirmation" placeholder="请确认密码">
+                                <input id="signupPwConfirm" type="password" class="form-control" name="passwordconfirmation" placeholder="请确认密码">
                             </div>
                             <div class="center-button">
                                 <button type="submit" class="btn btn-info">注册</button>    

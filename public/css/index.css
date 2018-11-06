@@ -10490,6 +10490,14 @@ main #signIn .card .card-header {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+main #signIn .card .card-header h4 {
+  text-align: center;
+  margin: 0px;
 }
 
 main #signIn .card .card-body .utils {
@@ -10550,6 +10558,14 @@ main #register .card .card-header {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+main #register .card .card-header h4 {
+  text-align: center;
+  margin: 0px;
 }
 
 main #register .card .card-body .center-button {
@@ -10563,6 +10579,11 @@ main #register .card .card-body .center-button {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+}
+
+main #register .card .card-body #signupHint {
+  display: none;
+  padding: 0.25rem;
 }
 
 main #register .card .card-footer {

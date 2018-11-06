@@ -15,7 +15,7 @@
             return count($name) > 15 ? false : true;
         }
         function isValidPassword(string $password):bool {
-            $regex = "#^[0-9a-zA-Z]{6,15}$#";
+            $regex = "#^[0-9a-zA-Z]{6,50}$#";
             if (preg_match($regex,$password)) {
                 return true;
             } else {

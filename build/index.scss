@@ -11,6 +11,11 @@ main {
                 display:flex;
                 flex-direction:row;
                 justify-content:center;
+                align-items:center;
+                h4 {
+                    text-align:center;
+                    margin:0px;
+                }
             }
             .card-body {
                 .utils {
@@ -39,12 +44,21 @@ main {
                 display:flex;
                 flex-direction:row;
                 justify-content:center;
+                align-items:center;
+                h4 {
+                    text-align:center;
+                    margin:0px;
+                }
             }
             .card-body {
                 .center-button {
                     display:flex;
                     flex-direction:row;
                     justify-content:center;
+                }
+                #signupHint {
+                    display:none;
+                    padding:0.25rem;
                 }
             }
             .card-footer {
