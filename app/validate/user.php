@@ -1,7 +1,7 @@
 <?php
     namespace App\Validate;
     trait UserValidate {
-        function isEmail(string $email):bool {
+        function isValidEmail(string $email):bool {
             $regex = "#^(([0-9a-zA-Z-_]+)@([0-9a-z]+){2,3})((\.[a-z]{2,3})+)$#";
             if (preg_match($regex,$email)) {
                 echo "验证成功: " . $email . "\n";

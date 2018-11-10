@@ -18,6 +18,10 @@ main {
                 }
             }
             .card-body {
+                #signinHint {
+                    display:none;
+                    padding:0.25rem;
+                }
                 .utils {
                     display:flex;
                     flex-direction:row;

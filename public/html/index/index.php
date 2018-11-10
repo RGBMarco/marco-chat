@@ -24,15 +24,18 @@
                         <h4>登录</h4>
                     </div>
                     <div class="card-body">
-                        <form>
-                            <div class="form-group">
-                                <input type="email" class="form-control" name="email" placeholder="邮箱">
+                        <form id="signinForm" name="signin">
+                            <div id="signinHint" class="alert alert-danger">
+                                <span></span>    
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" name="password" placeholder="密码">
+                                <input id="signinEmail" type="email" class="form-control" name="email" placeholder="邮箱">
+                            </div>
+                            <div class="form-group">
+                                <input id="signinPw" type="password" class="form-control" name="password" placeholder="密码">
                             </div>
                             <div class="form-group utils">
-                                <label><input type="checkbox">记住密码</label>
+                                <label><input name="remember" type="checkbox">记住密码</label>
                                 <a target="_blank">?忘记密码</a>
                             </div>
                             <div class="center-button">
@@ -52,7 +55,7 @@
                     </div>
                     <div class="card-body">
                         <form id="signupForm" action="" name="signup">
-                            <div id="signupHint"class="alert alert-danger">
+                            <div id="signupHint" class="alert alert-danger">
                                 <span></span>
                             </div>
                             <div class="form-group">

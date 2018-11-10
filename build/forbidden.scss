@@ -1,0 +1,24 @@
+@import "node_modules/bootstrap/scss/bootstrap";
+
+main {
+    #forbidden {
+        margin-top:10%;
+        .forbidden-header {
+            display:flex;
+            flex-direction:row;
+            justify-content: center;
+        }
+        .forbidden-body {
+            padding-top:1rem;
+            display:flex;
+            flex-direction:row;
+            justify-content: center;
+        }
+        .forbidden-footer {
+            padding-top:2rem;
+            display:flex;
+            flex-direction:row;
+            justify-content: center;
+        }
+    }
+}

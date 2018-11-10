@@ -9,7 +9,6 @@
             $cmd = "CREATE TABLE IF NOT EXISTS users (
                 id              serial,
                 email           text    PRIMARY KEY,
-                name            text,
                 password        text NOT NULL,
                 create_time     timestamp,
                 last_time       timestamp,

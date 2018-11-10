@@ -3,5 +3,8 @@
     "/public/js/app.js": "/public/js/app.js",
     "/public/css/app.css": "/public/css/app.css",
     "/public/css/index.css": "/public/css/index.css",
+    "/public/css/register.css": "/public/css/register.css",
+    "/public/css/active.css": "/public/css/active.css",
+    "/public/css/forbidden.css": "/public/css/forbidden.css",
     "/public/js/chat.js": "/public/js/chat.js"
 }

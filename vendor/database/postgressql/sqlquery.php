@@ -61,6 +61,23 @@
             }
             return $arr;
         }
-        
+        public function query(string $q):array {
+            var_dump(parent::$connection);
+            $result = pg_query(parent::$connection->connection,$q);
+            $status = pg_result_status($result);
+            $retarr = [];
+            if ($status === PGSQL_COMMAND_OK) {
+                $retarr['success'] = true;
+            } else if ($status === PGSQL_TUPLES_OK){
+                $arr = pg_fetch_all($result);
+                $retarr['success'] = true;
+                if ($arr) {
+                   $retarr['data'] = $arr;
+                }
+            } else {
+                $retarr['success'] = false;
+            }
+            return $retarr;
+        }
     }
 ?>

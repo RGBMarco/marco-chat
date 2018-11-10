@@ -17,12 +17,14 @@
          * @date: 2018
          */
         public function __construct() {
-            $this->connection = pg_pconnect(DbConfig::parseURL(self::DBKIND));
-            if ($this->connection === FALSE) {
-                $this->connected = false;
-                throw new ConnectException("Can't Connect",DbConfig::parseURL(self::DBKIND));
-            } else {
-                $this->connected = true;
+            if(!isset(self::$connection)) {
+                $this->connection = pg_pconnect(DbConfig::parseURL(self::DBKIND));
+                if ($this->connection === FALSE) {
+                    $this->connected = false;
+                    throw new ConnectException("Can't Connect",DbConfig::parseURL(self::DBKIND));
+                } else {
+                    $this->connected = true;
+                }
             }
         }
         /**

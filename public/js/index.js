@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -10466,24 +10466,28 @@ module.exports = g;
 /* 3 */,
 /* 4 */,
 /* 5 */,
-/* 6 */
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(7);
+module.exports = __webpack_require__(10);
 
 
 /***/ }),
-/* 7 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SignUp", function() { return SignUp; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SignIn", function() { return SignIn; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_js_md5__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_js_md5__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_js_md5___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_js_md5__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ipaddr_js__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ipaddr_js__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ipaddr_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ipaddr_js__);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -10568,9 +10572,26 @@ var SignUp = function () {
                 request.send(JSON.stringify(data));
                 request.onreadystatechange = function () {
                     if (request.readyState === 4 && request.status === 200) {
-                        console.log("connect success");
-                    } else {
-                        console.log("connect failed");
+                        var _data = JSON.parse(request.responseText);
+                        console.log(_data);
+                        console.log(Boolean(_data.success));
+                        if (String(_data.success) === String("false")) {
+                            var m = {
+                                id: 'tonet',
+                                msg: '帐号已存在'
+                            };
+                            __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.signUpHint_).find('span').text(m.msg);
+                            __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.signUpHint_).show();
+                            console.log(m.msg);
+                            console.log(__WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.signupHint).show());
+                            __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.signUpHint_).show();
+                            console.log(__WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.signUpHint_).find('span'));
+                            return;
+                        }
+                        window.location.href = _data.url;
+                    } else if (request.readyState === 4 && request.status === 400) {
+                        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.hintId).find('span').text('恶意请求');
+                        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.hintId).show();
                     }
                 };
             } else {
@@ -10720,14 +10741,151 @@ var SignUp = function () {
 
     return SignUp;
 }();
+var SignIn = function () {
+    function SignIn(signinForm, signinEmail, signinPw, signinHint) {
+        _classCallCheck(this, SignIn);
 
+        this.signinForm_ = signinForm;
+        this.signinEmail_ = signinEmail;
+        this.signinPw_ = signinPw;
+        this.signinHint_ = signinHint;
+        this.hintMsgs_ = new Array();
+        this.baseURL = "http://localhost:12000";
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this.signinForm_).on('submit', { that: this }, this.login);
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this.signinEmail_).on('blur', { that: this }, this.checkEmail);
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this.signinPw_).on('blur', { that: this }, this.checkPassword);
+    }
+
+    _createClass(SignIn, [{
+        key: 'login',
+        value: function login(event) {
+            event.preventDefault();
+            var that = event.data.that;
+            var email = document.signin.email.value;
+            var pw = document.signin.password.value;
+            var remember = document.signin.remember.checked;
+            console.log(email);
+            console.log(pw);
+            console.log(remember);
+            var canSubmit = that.isValidEmail(email) && that.isValidPassword(pw);
+            if (canSubmit) {
+                var http = new XMLHttpRequest();
+                var url = that.baseURL + "/user?e=" + email + "&p=" + __WEBPACK_IMPORTED_MODULE_1_js_md5___default()(pw) + "&r=" + remember;
+                http.open("GET", url, true);
+                console.log(url);
+                http.send();
+                http.onreadystatechange = function () {
+                    if (http.readyState === 4 && http.status === 200) {
+                        var data = JSON.parse(http.responseText);
+                        console.log(data);
+                        if (data.success) {
+                            window.location.href = data.url;
+                        } else {
+                            var m = {
+                                id: "login",
+                                msg: "密码错误"
+                            };
+                            __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.signinHint_).find('span').text(m.msg);
+                            __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.signinHint_).show();
+                        }
+                    }
+                };
+                return true;
+            }
+            return false;
+        }
+    }, {
+        key: 'isValidEmail',
+        value: function isValidEmail(email) {
+            var regex = new RegExp("^([a-zA-Z0-9]+)@[a-z0-9A-Z]{2,}(\.[a-z]+)$");
+            return regex.test(email);
+        }
+    }, {
+        key: 'isValidPassword',
+        value: function isValidPassword(pw) {
+            var regex = new RegExp("[0-9a-zA-Z]{6,15}");
+            return regex.test(pw);
+        }
+    }, {
+        key: 'checkEmail',
+        value: function checkEmail(event) {
+            var that = event.data.that;
+            var email = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.signinEmail_).val();
+            var msgs = that.hintMsgs_;
+            var m = {
+                id: 'email',
+                msg: "您的邮箱输入不正确!"
+            };
+            if (that.isValidEmail(email)) {
+                for (var index in msgs) {
+                    if (msgs[index].id === m.id) {
+                        msgs.splice(index, 1);
+                        break;
+                    }
+                }
+                if (msgs.length === 0) {
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.signinHint_).hide();
+                } else {
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.signinHint_).find('span').text();
+                }
+            } else {
+                for (var _index4 in msgs) {
+                    if (msgs[_index4].id === m.id) {
+                        msgs.splice(_index4, 1);
+                        break;
+                    }
+                }
+                msgs.push(m);
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.signinHint_).find('span').text(m.msg);
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.signinHint_).show();
+            }
+        }
+    }, {
+        key: 'checkPassword',
+        value: function checkPassword(event) {
+            var that = event.data.that;
+            var msgs = that.hintMsgs_;
+            var pw = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.signinPw_).val();
+            var m = {
+                id: 'password',
+                msg: "您的密码输入有误!"
+            };
+            if (that.isValidPassword(pw)) {
+                for (var index in msgs) {
+                    if (msgs[index].id === m.id) {
+                        msgs.splice(index, 1);
+                        break;
+                    }
+                }
+                if (msgs.length === 0) {
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.signinHint_).hide();
+                } else {
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.signinHint_).find('span').text();
+                }
+            } else {
+                for (var _index5 in msgs) {
+                    if (msgs[_index5].id === m.id) {
+                        msgs.splice(_index5, 1);
+                        break;
+                    }
+                }
+                msgs.push(m);
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.signinHint_).find('span').text(m.msg);
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.signinHint_).show();
+            }
+        }
+    }]);
+
+    return SignIn;
+}();
 __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).ready(function () {
     var index = new Index("#register", "#signIn", "#switchSignin", "#switchSignup");
-    var sign = new SignUp('#signupForm', '#signupEmail', '#signupPw', '#signupPwConfirm', '#signupHint');
+    var signUp = new SignUp('#signupForm', '#signupEmail', '#signupPw', '#signupPwConfirm', '#signupHint');
+    var signIn = new SignIn("#signinForm", "#signinEmail", "#signinPw", "#signinHint");
 });
 
 /***/ }),
-/* 8 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -10756,7 +10914,7 @@ __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).ready(function () {
     root = self;
   }
   var COMMON_JS = !root.JS_MD5_NO_COMMON_JS && typeof module === 'object' && module.exports;
-  var AMD = "function" === 'function' && __webpack_require__(10);
+  var AMD = "function" === 'function' && __webpack_require__(13);
   var ARRAY_BUFFER = !root.JS_MD5_NO_ARRAY_BUFFER && typeof ArrayBuffer !== 'undefined';
   var HEX_CHARS = '0123456789abcdef'.split('');
   var EXTRA = [128, 32768, 8388608, -2147483648];
@@ -11415,10 +11573,10 @@ __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).ready(function () {
   }
 })();
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9), __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12), __webpack_require__(1)))
 
 /***/ }),
-/* 9 */
+/* 12 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -11608,7 +11766,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 10 */
+/* 13 */
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -11617,7 +11775,7 @@ module.exports = __webpack_amd_options__;
 /* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ }),
-/* 11 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {(function() {
@@ -12257,10 +12415,10 @@ module.exports = __webpack_amd_options__;
 
 }).call(this);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15)(module)))
 
 /***/ }),
-/* 12 */
+/* 15 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {

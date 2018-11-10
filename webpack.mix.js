@@ -4,3 +4,6 @@ mix.js("build/index.js","public/js");
 mix.js("build/chat.js","public/js");
 mix.sass("build/app.scss","public/css");
 mix.sass("build/index.scss","public/css");
+mix.sass("build/register.scss","public/css");
+mix.sass("build/active.scss","public/css");
+mix.sass("build/forbidden.scss","public/css");

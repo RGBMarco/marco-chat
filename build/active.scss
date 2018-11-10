@@ -1,0 +1,24 @@
+@import "node_modules/bootstrap/scss/bootstrap";
+
+main {
+    #active {
+        margin-top:10%;
+        .active-header {
+            display:flex;
+            flex-direction:row;
+            justify-content:center;
+        }
+        .active-body {
+            display:flex;
+            flex-direction:row;
+            justify-content:center;
+            padding-top:1rem;
+        }
+        .active-footer {
+            display:flex;
+            flex-direction:row;
+            justify-content:center;
+            padding-top:2rem;
+        }
+    }
+}
