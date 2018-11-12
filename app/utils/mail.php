@@ -12,7 +12,7 @@
             $mail->Host = "smtp.mxhichina.com";
             $mail->SMTPAuth = true;
             $mail->Username = "chat@rgbmarco.top";
-            $mail->Password = ;
+            $mail->Password = '577482975Wh';
             $mail->SMTPSecure = 'ssl';
             $mail->Port = 465;
             $mail->Charset = "UTF-8";

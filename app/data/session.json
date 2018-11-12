@@ -1,0 +1,12 @@
+/* It's Sample*/
+[
+    {
+        "sessionId":1,
+        "fromId":1,
+        "toId":2,
+        "toName":"Marco",
+        "toSign":"1111",
+        "sendtime":"2016-10-12 10:19",
+
+    }
+]

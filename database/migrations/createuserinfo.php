@@ -30,6 +30,7 @@
             $this->immediateExec("createuserinfo",$cmd);          
             $this->keepWithUsers();
             $this->insertUsersTrigger();
+            $this->getUserName();
         }
         public function createHeader() {
             $cmd = "
@@ -59,6 +60,19 @@
                 FOR EACH ROW EXECUTE PROCEDURE keepWithUsers();
             ";
             $this->immediateExec("insertuserstrigger",$cmd);
+        }
+        public function getUserName() {
+            $cmd = "
+                CREATE OR REPLACE FUNCTION getUserName(e text)
+                RETURNS text AS $$
+                    DECLARE n text;
+                    BEGIN
+                        SELECT name INTO n FROM userinfo WHERE email = $1;
+                        RETURN n;
+                    END;
+                $$ LANGUAGE plpgsql; 
+            ";
+            $this->immediateExec($cmd,$cmd);
         }
         public function down() {
 

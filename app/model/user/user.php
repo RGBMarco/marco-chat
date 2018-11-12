@@ -58,9 +58,14 @@
                 $data = [
                     'success'   => true,
                     'url'       => $skip,
+                    'id'        => $id,
+                    'email'     => $email,
                 ];
                 $userSession = new UserSession();
-                $args = ['email' => $email];
+                $args = [
+                    'email' => $email,
+                    'id'    => $id,
+                ];
                 $userSession->get($request,$response,$args);
                 $json = \json_encode($data);
                 $response->end($json);

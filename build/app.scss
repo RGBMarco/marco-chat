@@ -2,9 +2,11 @@
 
 .user-header {
     width:40px;
-    height:30px;
+    height:20px;
 }
-
+.msguser-header {
+    height:80%;
+}
 //头部
 header {
     a {
@@ -76,6 +78,7 @@ main {
             display:flex;
             flex-direction:row;
             justify-content:space-around;
+            padding:0.25rem;
             .card-footer-tab {
                 padding:0.25rem;
                 .tab-info {
@@ -179,6 +182,29 @@ main {
                     .message-content {
                         margin-left:40px;
                         background-color:#EE6363;
+                        border-style:solid;
+                        border-color:#FF8C00;
+                        border-width:2px;
+                        border-radius:5px;
+                        margin-bottom:0px;
+                        span {
+                            padding:6px;
+                            text-align:justify;
+                            display:inline-block;
+                        }
+                    }
+                }
+                .message-by-self {
+                    border-width:0px;
+                    padding:0px;
+                    padding-bottom:4px;
+                    .message-owner {
+                       display:flex;
+                       flex-direction:row;
+                    }
+                    .message-content {
+                        margin-left:40px;
+                        background-color:#00CDCD;
                         border-style:solid;
                         border-color:#FF8C00;
                         border-width:2px;

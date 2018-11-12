@@ -6,6 +6,31 @@
         <link rel="stylesheet" href="http://localhost:12000/utils/app.css?version=123">
         <script type="text/javascript"  src="http://localhost:12000/utils/app.js"></script>
         <script type="text/javascript" src="http://localhost:12000/utils/chat.js"></script>
+        <script type="text/javascript" src="http://localhost:12000/utils/websocket.js"></script>
+        <script id="recordTpl" type="text/html">
+            <li class="list-group-item">
+                <div class="row message-contact">
+                    <div class="col col-1">
+                        <img class="user-header" src="{{contactHeader}}" alt="">
+                    </div>
+                    <div class="col message-contact-info">
+                        <p><span>{{contactName}}</span><small>{{contactTime}}</small></p>
+                        <p><small>{{contactMsg}}</small><span class="badge badge-danger">{{unRead}}</span></p>
+                    </div>
+                </div>
+            </li>
+        </script>
+        <script id="messageTpl" type="text/html">
+            <li class="list-group-item message-by-other">
+                <div class="message-owner">    
+                    <img src="{{msgUseHeader}}" alt="头像" class="user-header">
+                    <p><h5><span>{{msgActive}}<span><span>{{msgUserName}}<span></h5></p>
+                </div>
+                <div class="message-content">
+                    <span>{{msgContent}}</span>
+                </div>
+            </li>
+        </script>
     </head>
     <body>
             <!--导航栏-->
@@ -22,7 +47,7 @@
                     </ul>
                     <div class="dropdown">
                         <div class="data-toggle" data-toggle="dropdown">
-                            <img src="#" alt="头像">
+                            <img src="http://localhost:12000/userheader/1" class="user-header" alt="头像">
                             <span>{{userName}}</span>
                         </div>
                         <ul class="dropdown-menu">
@@ -90,18 +115,8 @@
                             <a><h4>+</h4></a>
                         </div>
                         <div class="card-body">
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    <div class="row message-contact">
-                                        <div class="col col-1">
-                                            <img class="user-header" src="#" alt="">
-                                        </div>
-                                        <div class="col message-contact-info">
-                                            <p><span>联系人</span><small>时间</small></p>
-                                            <p><small>消息</small><span class="badge badge-danger">999</span></p>
-                                        </div>
-                                    </div>
-                                </li>
+                            <ul id="messageRecord" class="list-group">
+                                <!--信息记录模板-->
                             </ul>
                         </div>
                         <div class="card-footer">
@@ -152,16 +167,8 @@
                                 <!-- 单人， 多人聊天消息界面 -->
                                 <div id="chat-modal-body" class="modal-body">
                                     <div class="modal-body-session">        
-                                        <ul class="list-group">
-                                            <li class="list-group-item message-by-other">
-                                                <div class="message-owner">    
-                                                    <img src="#" alt="头像" class="user-header">
-                                                    <p><h5><span>活跃度<span><span>用户名<span></h5></p>
-                                                </div>
-                                                <div class="message-content">
-                                                    <span>用户消息用户消息用户消息用户消息用户消息用户消息用户消息用户消息用户消息用户消息用户消息用户消息</span>
-                                                </div>
-                                            </li>
+                                        <ul id="messageSession" class="list-group">
+                                            <!--单人多人 聊天会话界面-->
                                         <ul>
                                     </div>
                                 </div>
@@ -175,10 +182,10 @@
                                         <ul>
                                     </div>
                                     <div class="modal-footer-message-area">
-                                        <textarea id="message-input">
+                                        <textarea id="messageInput">
                                         </textarea>
                                         <div class="message-submit">
-                                            <button type="button" onclick="listenInputMessage()" class="btn-info">发送</button>
+                                            <button id="sendButton" type="button" class="btn-info">发送</button>
                                         </div>
                                     </div>
                                 </div>                

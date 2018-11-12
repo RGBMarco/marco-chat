@@ -6,5 +6,7 @@
     "/public/css/register.css": "/public/css/register.css",
     "/public/css/active.css": "/public/css/active.css",
     "/public/css/forbidden.css": "/public/css/forbidden.css",
-    "/public/js/chat.js": "/public/js/chat.js"
+    "/public/js/websocket.js": "/public/js/websocket.js",
+    "/public/js/chat.js": "/public/js/chat.js",
+    "/public/js/worker.js": "/public/js/worker.js"
 }

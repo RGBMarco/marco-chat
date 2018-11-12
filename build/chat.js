@@ -1,5 +1,4 @@
 import $ from 'jquery';
-
 export default class ChatPanel {
     constructor(messageSwitchIdOne,contactSwitchIdOne,mineSwitchIdOne,messageSwitchIdTwo,contactSwitchIdTwo,mineSwitchIdTwo,messagePanelId,contactPanelId,minePanelId) {
         this.messageSwitchIdOne_ = messageSwitchIdOne;

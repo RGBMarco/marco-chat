@@ -10468,7 +10468,11 @@ a.text-dark:focus {
 
 .user-header {
   width: 40px;
-  height: 30px;
+  height: 20px;
+}
+
+.msguser-header {
+  height: 80%;
 }
 
 header a {
@@ -10588,6 +10592,7 @@ main #message-panel .card-footer {
           flex-direction: row;
   -ms-flex-pack: distribute;
       justify-content: space-around;
+  padding: 0.25rem;
 }
 
 main #message-panel .card-footer .card-footer-tab {
@@ -10770,6 +10775,38 @@ main #message-session #chat-modal-body .modal-body-session .message-by-other .me
 }
 
 main #message-session #chat-modal-body .modal-body-session .message-by-other .message-content span {
+  padding: 6px;
+  text-align: justify;
+  display: inline-block;
+}
+
+main #message-session #chat-modal-body .modal-body-session .message-by-self {
+  border-width: 0px;
+  padding: 0px;
+  padding-bottom: 4px;
+}
+
+main #message-session #chat-modal-body .modal-body-session .message-by-self .message-owner {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+main #message-session #chat-modal-body .modal-body-session .message-by-self .message-content {
+  margin-left: 40px;
+  background-color: #00CDCD;
+  border-style: solid;
+  border-color: #FF8C00;
+  border-width: 2px;
+  border-radius: 5px;
+  margin-bottom: 0px;
+}
+
+main #message-session #chat-modal-body .modal-body-session .message-by-self .message-content span {
   padding: 6px;
   text-align: justify;
   display: inline-block;

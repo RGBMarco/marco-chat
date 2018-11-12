@@ -19,6 +19,7 @@
             }*/
             $rc = new RedisConnection();
             $redis = RedisConnection::$connection;
+            $redis->select(0);
             $str = $redis->hget("view","index");
             $response->end($str);
         }

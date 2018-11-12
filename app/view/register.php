@@ -13,6 +13,7 @@
         public function get(swoole_http_request $request,swoole_http_response $response,array $args) {
             $rc = new RedisConnection();
             $redis = RedisConnection::$connection;
+            $redis->select(0);
             $str = $redis->hget('view','register');
             $response->header("Content-Type","text/html");
             $response->end($str);

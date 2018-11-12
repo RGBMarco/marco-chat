@@ -19,24 +19,42 @@
         //生成用户会话 //只能内部访问不提供API接口
         public function get(swoole_http_request $request,swoole_http_response $response,array $args) {
             $email = $args["email"];
+            $id = $args["id"];
             $rc = new RedisConnection();
             $redis = RedisConnection::$connection;
             $redis->select(1);
             $session_token = md5(uniqid(microtime(true),true));
-            $redis->set($email,$session_token);
+            $data = [
+                'email'     =>  $email,
+                'session'   =>  $session_token,
+            ];
+            $value = \json_encode($data);
+            $redis->set($id,$value);
             $redis->expire($email,3600 * 4);
             $response->cookie(self::USER_SESSION_COOKIE_KEY,$session_token,time() + 3600 * 4,'/');
             return;
         }
         //验证用户会话
         public function post(swoole_http_request $request,swoole_http_response $response,array $args) {
-            if (!isset($request->cookie[self::USER_SESSION_COOKIE_KEY])) {
+            if (!isset($request->cookie[self::USER_SESSION_COOKIE_KEY]) || !isset($args['id'])) {
                 echo "未设置!\n";
                 return false;
             }
             $userSessionToken = $request->cookie[self::USER_SESSION_COOKIE_KEY];
+            $id = $args['id'];
+            $rc = new RedisConnection();
+            $redis = RedisConnection::$connection;
+            $redis->select(1);
+            $value = $redis->get($id);
+            if (!$value) {
+                return false;
+            }
+            $data = \json_decode($value);
+            if ($data->session != $userSessionToken) {
+                return false;
+            }
             echo $userSessionToken . "\n";
-            return;
+            return true;
         }
     }
 ?>

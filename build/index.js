@@ -247,6 +247,8 @@ export class SignIn {
                     let data = JSON.parse(http.responseText);
                     console.log(data);
                     if (data.success) {
+                        sessionStorage.setItem('id',data.id);
+                        sessionStorage.setItem('email',data.email);
                         window.location.href = data.url;
                     } else {
                         let m = {

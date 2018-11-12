@@ -27,6 +27,7 @@
             ];
             $rc = new RedisConnection();
             $redis = RedisConnection::$connection;
+            $redis->select(0);
             $str = $redis->hget('view','active');
             $m = new \Mustache_Engine();
             if (!isset($request->get["t"]) || !isset($request->get["e"])) {
