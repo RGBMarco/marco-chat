@@ -10468,7 +10468,7 @@ a.text-dark:focus {
 
 .user-header {
   width: 40px;
-  height: 20px;
+  height: 30px;
 }
 
 .msguser-header {
@@ -10624,23 +10624,27 @@ main #message-panel .card-footer .card-footer-tab .tab-info span {
   text-align: center;
 }
 
-main #message-session .modal {
+main #chatSession {
+  display: none;
+}
+
+main #chatSession .modal {
   position: static;
   display: block;
   height: 480px;
 }
 
-main #message-session .modal-dialog {
+main #chatSession .modal-dialog {
   margin-top: 0px;
   margin-bottom: 0px;
   height: 480px;
 }
 
-main #message-session .modal-content {
+main #chatSession .modal-content {
   height: 480px;
 }
 
-main #message-session #multi-session-header {
+main #chatSession #multi-session-header {
   display: none;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
@@ -10651,7 +10655,7 @@ main #message-session #multi-session-header {
           justify-content: flex-start;
 }
 
-main #message-session #multi-session-header .modal-header-info {
+main #chatSession #multi-session-header .modal-header-info {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -10665,7 +10669,7 @@ main #message-session #multi-session-header .modal-header-info {
   width: 100%;
 }
 
-main #message-session #single-session-header {
+main #chatSession #single-session-header {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -10681,7 +10685,7 @@ main #message-session #single-session-header {
       flex-basis: auto;
 }
 
-main #message-session #single-session-header .modal-header-title {
+main #chatSession #single-session-header .modal-header-title {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -10697,7 +10701,7 @@ main #message-session #single-session-header .modal-header-title {
   width: 100%;
 }
 
-main #message-session #single-session-header .modal-header-title .title-info {
+main #chatSession #single-session-header .modal-header-title .title-info {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -10712,20 +10716,20 @@ main #message-session #single-session-header .modal-header-title .title-info {
   overflow: auto;
 }
 
-main #message-session #single-session-header .modal-header-title .title-info h4 {
+main #chatSession #single-session-header .modal-header-title .title-info h4 {
   margin-left: 1.75rem;
   display: block;
 }
 
-main #message-session #single-session-header .modal-header-title .title-info img {
+main #chatSession #single-session-header .modal-header-title .title-info img {
   display: block;
 }
 
-main #message-session #single-session-header .modal-header-title button {
+main #chatSession #single-session-header .modal-header-title button {
   display: inline-block;
 }
 
-main #message-session #single-session-header .modal-header-info {
+main #chatSession #single-session-header .modal-header-info {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -10744,17 +10748,17 @@ main #message-session #single-session-header .modal-header-info {
                 }*/
 }
 
-main #message-session #chat-modal-body {
+main #chatSession #chat-modal-body {
   overflow: auto;
 }
 
-main #message-session #chat-modal-body .modal-body-session .message-by-other {
+main #chatSession #chat-modal-body .modal-body-session .message-by-other {
   border-width: 0px;
   padding: 0px;
   padding-bottom: 4px;
 }
 
-main #message-session #chat-modal-body .modal-body-session .message-by-other .message-owner {
+main #chatSession #chat-modal-body .modal-body-session .message-by-other .message-owner {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -10762,9 +10766,12 @@ main #message-session #chat-modal-body .modal-body-session .message-by-other .me
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
 }
 
-main #message-session #chat-modal-body .modal-body-session .message-by-other .message-content {
+main #chatSession #chat-modal-body .modal-body-session .message-by-other .message-content {
   margin-left: 40px;
   background-color: #EE6363;
   border-style: solid;
@@ -10772,21 +10779,7 @@ main #message-session #chat-modal-body .modal-body-session .message-by-other .me
   border-width: 2px;
   border-radius: 5px;
   margin-bottom: 0px;
-}
-
-main #message-session #chat-modal-body .modal-body-session .message-by-other .message-content span {
-  padding: 6px;
-  text-align: justify;
-  display: inline-block;
-}
-
-main #message-session #chat-modal-body .modal-body-session .message-by-self {
-  border-width: 0px;
-  padding: 0px;
-  padding-bottom: 4px;
-}
-
-main #message-session #chat-modal-body .modal-body-session .message-by-self .message-owner {
+  width: 60%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -10794,9 +10787,47 @@ main #message-session #chat-modal-body .modal-body-session .message-by-self .mes
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
 }
 
-main #message-session #chat-modal-body .modal-body-session .message-by-self .message-content {
+main #chatSession #chat-modal-body .modal-body-session .message-by-other .message-content span {
+  padding: 6px;
+  text-align: justify;
+  display: inline-block;
+}
+
+main #chatSession #chat-modal-body .modal-body-session .message-by-self {
+  border-width: 0px;
+  padding: 0px;
+  padding-bottom: 4px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+}
+
+main #chatSession #chat-modal-body .modal-body-session .message-by-self .message-owner {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: reverse;
+      -ms-flex-direction: row-reverse;
+          flex-direction: row-reverse;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+
+main #chatSession #chat-modal-body .modal-body-session .message-by-self .message-content {
   margin-left: 40px;
   background-color: #00CDCD;
   border-style: solid;
@@ -10804,15 +10835,19 @@ main #message-session #chat-modal-body .modal-body-session .message-by-self .mes
   border-width: 2px;
   border-radius: 5px;
   margin-bottom: 0px;
+  width: 60%;
+  /*display:flex;
+                        flex-direction: row;
+                        justify-content: flex-start;*/
 }
 
-main #message-session #chat-modal-body .modal-body-session .message-by-self .message-content span {
+main #chatSession #chat-modal-body .modal-body-session .message-by-self .message-content span {
   padding: 6px;
   text-align: justify;
   display: inline-block;
 }
 
-main #message-session #chat-modal-footer {
+main #chatSession #chat-modal-footer {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -10829,7 +10864,7 @@ main #message-session #chat-modal-footer {
   padding: 0px;
 }
 
-main #message-session #chat-modal-footer .modal-footer-toolbox ul {
+main #chatSession #chat-modal-footer .modal-footer-toolbox ul {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -10844,20 +10879,20 @@ main #message-session #chat-modal-footer .modal-footer-toolbox ul {
   margin-bottom: 2px;
 }
 
-main #message-session #chat-modal-footer .modal-footer-toolbox .modal-footer-toolbox-group-item {
+main #chatSession #chat-modal-footer .modal-footer-toolbox .modal-footer-toolbox-group-item {
   margin-left: 1rem;
 }
 
-main #message-session #chat-modal-footer .modal-footer-message-area {
+main #chatSession #chat-modal-footer .modal-footer-message-area {
   width: 100%;
   margin-left: 0px;
 }
 
-main #message-session #chat-modal-footer .modal-footer-message-area #message-input {
+main #chatSession #chat-modal-footer .modal-footer-message-area #messageInput {
   width: 100%;
 }
 
-main #message-session #chat-modal-footer .modal-footer-message-area .message-submit {
+main #chatSession #chat-modal-footer .modal-footer-message-area .message-submit {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -10873,27 +10908,27 @@ main #message-session #chat-modal-footer .modal-footer-message-area .message-sub
   margin-bottom: 0.5rem;
 }
 
-main #message-session #notices-panel-body {
+main #chatSession #notices-panel-body {
   display: none;
   overflow: auto;
   padding: 0px;
 }
 
-main #message-session #notices-panel-body ul {
+main #chatSession #notices-panel-body ul {
   padding: 0px;
 }
 
-main #message-session #notices-panel-body .notice {
+main #chatSession #notices-panel-body .notice {
   list-style-type: none;
   padding: 0.2rem;
 }
 
-main #message-session #notices-panel-body .notice hr {
+main #chatSession #notices-panel-body .notice hr {
   margin-top: 10px;
   margin-bottom: 2px;
 }
 
-main #message-session #notices-panel-body .notice .notice-title .notice-title-info {
+main #chatSession #notices-panel-body .notice .notice-title .notice-title-info {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -10906,11 +10941,11 @@ main #message-session #notices-panel-body .notice .notice-title .notice-title-in
           justify-content: space-between;
 }
 
-main #message-session #notices-panel-body .notice .notice-content span {
+main #chatSession #notices-panel-body .notice .notice-content span {
   text-align: center;
 }
 
-main #message-session #notices-panel-body .notice .notice-footer {
+main #chatSession #notices-panel-body .notice .notice-footer {
   height: 20px;
   background-color: #BEBEBE;
 }

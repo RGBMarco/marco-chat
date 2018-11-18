@@ -62,7 +62,6 @@
             return $arr;
         }
         public function query(string $q):array {
-            var_dump(parent::$connection);
             $result = pg_query(parent::$connection->connection,$q);
             $status = pg_result_status($result);
             $retarr = [];
