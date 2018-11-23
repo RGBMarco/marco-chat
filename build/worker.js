@@ -1,17 +1,29 @@
 let websocket = new WebSocket("ws://localhost:13000");
 websocket.onopen = function(event) {
-    
+    requestInit();
 };
 websocket.onmessage = function(event) {
-    let msg = event.data;
-    postMessage(msg);
+    requestDebug("接收到网络信息!");
+    postMessage(event.data);
 };
 websocket.onclose = function(event) {
-    postMessage("close!");
+   // postMessage("close!");
 };
 self.onmessage = function(event) {
-    postMessage("onmessage!");
-    websocket.send(event.data);
+    let request = JSON.parse(event.data);
+    if (!isBaseRequest(request)) {
+        return;
+    }
+    switch (String(request.request)) {
+        case "init":
+            handleInitMessage(request);
+        break;
+        case "message":
+            handleSenderMessage(request);
+        break;
+        default:
+        return;
+    }     
 };
 
 function isBaseRequest(request) {
@@ -19,4 +31,29 @@ function isBaseRequest(request) {
 }
 function handleInitMessage(request) {
     websocket.send(JSON.stringify(request));
+    requestDebug("已发送初始化消息!");
+}
+
+function requestInit() {
+    let request = {
+        request:"init",
+        data:{
+
+        }
+    };
+    postMessage(JSON.stringify(request));
+}
+function requestDebug(message) {
+    let request = {
+        request:"debug",
+        data: {
+            message:message
+        }
+    };
+    postMessage(JSON.stringify(request));
+}
+
+function handleSenderMessage(request) {
+    websocket.send(JSON.stringify(request));
+    requestDebug("已发送发送者消息!");
 }

@@ -60,36 +60,50 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 21);
+/******/ 	return __webpack_require__(__webpack_require__.s = 149);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 21:
+/***/ 149:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(22);
+module.exports = __webpack_require__(150);
 
 
 /***/ }),
 
-/***/ 22:
+/***/ 150:
 /***/ (function(module, exports) {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var websocket = new WebSocket("ws://localhost:13000");
-websocket.onopen = function (event) {};
+websocket.onopen = function (event) {
+    requestInit();
+};
 websocket.onmessage = function (event) {
-    var msg = event.data;
-    postMessage(msg);
+    requestDebug("接收到网络信息!");
+    postMessage(event.data);
 };
 websocket.onclose = function (event) {
-    postMessage("close!");
+    // postMessage("close!");
 };
 self.onmessage = function (event) {
-    postMessage("onmessage!");
-    websocket.send(event.data);
+    var request = JSON.parse(event.data);
+    if (!isBaseRequest(request)) {
+        return;
+    }
+    switch (String(request.request)) {
+        case "init":
+            handleInitMessage(request);
+            break;
+        case "message":
+            handleSenderMessage(request);
+            break;
+        default:
+            return;
+    }
 };
 
 function isBaseRequest(request) {
@@ -97,6 +111,29 @@ function isBaseRequest(request) {
 }
 function handleInitMessage(request) {
     websocket.send(JSON.stringify(request));
+    requestDebug("已发送初始化消息!");
+}
+
+function requestInit() {
+    var request = {
+        request: "init",
+        data: {}
+    };
+    postMessage(JSON.stringify(request));
+}
+function requestDebug(message) {
+    var request = {
+        request: "debug",
+        data: {
+            message: message
+        }
+    };
+    postMessage(JSON.stringify(request));
+}
+
+function handleSenderMessage(request) {
+    websocket.send(JSON.stringify(request));
+    requestDebug("已发送发送者消息!");
 }
 
 /***/ })

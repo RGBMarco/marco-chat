@@ -11,7 +11,7 @@
         public static function forward(swoole_http_request $request) {
             $uri = $request->server['request_uri'];
             $method = strtolower($request->server["request_method"]);
-            echo $uri . "  " . $method . "\n";
+            //echo $uri . "  " . $method . "\n";
             return new RouteEntry($uri,$method);
         }
     }
