@@ -170,7 +170,7 @@ main {
         }
         //聊天会话面板
         #chat-modal-body {
-            overflow:auto;
+            overflow-y:auto;
             .modal-body-session {
                 .message-by-other {
                     border-width:0px;
@@ -386,4 +386,66 @@ main {
             }
         }
     }
+    #userInfo {
+        margin-left:12%;
+        .modal {
+            position:static;
+            display:block;
+            height:480px;
+        }
+        .modal-dialog {
+            margin-top:0px;
+            margin-bottom:0px;
+            height:480px;
+        }
+        .modal-content {
+            height:480px;
+        }
+        .modal-header {
+            .h4 {
+                text-align:center;
+            }
+        }
+        .modal-body {
+            .headerInfo {
+                display:flex;
+                flex-direction: row;
+                justify-content: center;
+                .fuison {
+                    height:78px;
+                    width:78px;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    background-color:#CDCDB4;
+                    input {
+                        display:none;
+                    }
+                    img {
+                        z-index:10;
+                    }
+                }
+            }
+            overflow-x: auto;
+            .userAction {
+                display:flex;
+                flex-direction: row;
+                justify-content: center;
+                margin-bottom:1.25rem;
+            }
+            form {
+                #sexGroup {
+                    display:flex;
+                    flex-direction:row;
+                    justify-content: space-around;
+                }
+            }
+        }
+    }
+}
+.radius-header {
+    height:78px;
+    width:78px;
+    border-radius: 50%;
+    overflow: hidden;
+    //background-color:#CDCDB4;
 }

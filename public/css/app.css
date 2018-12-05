@@ -10749,7 +10749,7 @@ main #chatSession #single-session-header .modal-header-info {
 }
 
 main #chatSession #chat-modal-body {
-  overflow: auto;
+  overflow-y: auto;
 }
 
 main #chatSession #chat-modal-body .modal-body-session .message-by-other {
@@ -11086,5 +11086,95 @@ main #contacts-card-panel .card-footer .card-footer-tab .tab-info img {
 
 main #contacts-card-panel .card-footer .card-footer-tab .tab-info span {
   text-align: center;
+}
+
+main #userInfo {
+  margin-left: 12%;
+}
+
+main #userInfo .modal {
+  position: static;
+  display: block;
+  height: 480px;
+}
+
+main #userInfo .modal-dialog {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  height: 480px;
+}
+
+main #userInfo .modal-content {
+  height: 480px;
+}
+
+main #userInfo .modal-header .h4 {
+  text-align: center;
+}
+
+main #userInfo .modal-body {
+  overflow-x: auto;
+}
+
+main #userInfo .modal-body .headerInfo {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+main #userInfo .modal-body .headerInfo .fuison {
+  height: 78px;
+  width: 78px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #CDCDB4;
+}
+
+main #userInfo .modal-body .headerInfo .fuison input {
+  display: none;
+}
+
+main #userInfo .modal-body .headerInfo .fuison img {
+  z-index: 10;
+}
+
+main #userInfo .modal-body .userAction {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+main #userInfo .modal-body form #sexGroup {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.radius-header {
+  height: 78px;
+  width: 78px;
+  border-radius: 50%;
+  overflow: hidden;
 }
 

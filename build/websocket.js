@@ -1,7 +1,8 @@
 import $ from 'jquery';
 import mustache from 'mustache';
 import monment from 'moment';
-import { isArray } from 'util';
+import { isArray, isNull } from 'util';
+import { isUndefined } from '_util@0.10.4@util';
 //fixed me by modified the {let of} || {let in} to foreach
 /*
     Template of contact    
@@ -30,7 +31,7 @@ import { isArray } from 'util';
 */
 
 export default class Chat {
-    constructor(messageInput,sendButton,messageRecord,messageSession,chatSession,closeSession,sessionHeader) {
+    constructor(messageInput,sendButton,messageRecord,messageSession,chatSession,closeSession,sessionHeader,chatModalBody,selfCenter) {
         let that = this;
         this.messageInput_ = messageInput;
         this.sendButton_ = sendButton;
@@ -42,6 +43,9 @@ export default class Chat {
         this.userId_ = Number(sessionStorage.getItem('id'));
         this.currentSessionId_ = null;
         this.currentSessionInfo_ = null;
+        this.currentUserInfo_ = null;
+        this.chatModalBody_ = chatModalBody;
+        this.selfCenter_ = selfCenter;
         console.log(sessionStorage.getItem('id'));
         this.initRecordPanel().then(function(data){that.initWorker(that);});
         console.log(that.sessions_);
@@ -50,6 +54,7 @@ export default class Chat {
             let sessionId = sessionInfo.sessionId;
             let records_ = that.records_;
             let header = new Object();
+            that.closeUserInfo();
             that.currentSessionId_ = sessionId;
             that.currentSessionInfo_ = sessionInfo;
             for (let i in records_) {
@@ -71,6 +76,7 @@ export default class Chat {
             });
         });
         $(this.sendButton_).on('click',{that:this},this.sendMessage);
+        $(this.selfCenter_).on('click',{that:this},this.displayUserInfo);
     }
     sendMessage(event) {
         let that = event.data.that;
@@ -91,6 +97,10 @@ export default class Chat {
         };
         that.worker_.postMessage(JSON.stringify(request));
         console.log("发送数据!");
+        $(that.messageInput_).val("");
+        console.log($(that.chatModalBody_));
+        console.log($(that.chatModalBody_)[0].scrollHeight);
+        
     }
     
     getRecordTemplate() {
@@ -254,6 +264,7 @@ export default class Chat {
         let sessionId = message.sessionId;
         that.realSessions_.get(sessionId).handleMessage(this.currentSessionId_,message);
         console.log(that.realSessions_);
+        $(that.chatModalBody_).scrollTop($(that.chatModalBody_)[0].scrollHeight);
     }
     checkRecord(record) {
         return !(typeof(record.sessionId) === undefined) && !(typeof(record.userId) === undefined) && !(typeof(record.peerId) === undefined); 
@@ -320,6 +331,22 @@ export default class Chat {
             }
         };
     }
+    closeUserInfo() {
+        let userInfo = '#userInfo';
+        if (!isNull(this.currentUserInfo_)) {
+            $(userInfo).hide();
+        }
+    }
+    closeChatSession() {
+        $(this.chatSession_).hide();
+        this.currentSessionId_ = null;
+        this.currentSessionInfo_ = null;
+    }
+    displayUserInfo(event) {
+        let that = event.data.that;
+        that.closeChatSession();
+        that.currentUserInfo_ = new UserInfo(that.userId_,'#userInfo','#userInfoForm','#changeUserInfo','#uploadHeader','#closeUserInfo');
+    }
 }
 class MessageQueue {
     constructor(messages,getMessageTemplate,userId) {
@@ -369,6 +396,7 @@ class MessageQueue {
     }
     displayMessages(messageSession) {
         $(messageSession).html(mustache.render(this.getMessageTemplate(),{messages:this.messages_}));
+        this.unread_ = 0;
     }
 }
 
@@ -427,9 +455,10 @@ class ChatSession {
     }
     displayMessages() {
         this.messages_.displayMessages(this.messageSession_);
+        this.records_.updateBadge(0);
     }
-    inMessage(message) {
-        this.records_.inMessage(message);
+    inMessage(message,count) {
+        this.records_.inMessage(message,count);
     }
     handleMessage(currentSessionId,message) {
         this.addMessage(message,this.userId_);
@@ -439,11 +468,422 @@ class ChatSession {
             this.inMessage(message,this.messages_.unread_);
             return;
         }
+        console.log("unRead!");
+        console.log(this.messages_.unread_);
         this.inMessage(message,this.messages_.unread_);
+    }
+}
+
+class UserInfo {
+    constructor(userId,userInfoId,userInfoFormId,changeUserInfoId,photoId,closeId) {
+        this.userId_ = userId;
+        this.userInfoId_ = userInfoId;
+        this.userInfoFormId_ = userInfoFormId;
+        this.routeURL = "http://localhost:12000/userinfo/" + this.userId_;
+        this.changeUserInfoId_ = changeUserInfoId;
+        this.photoId_ = photoId;
+        this.isCorrectPhoto_ = false;
+        this.closeId_ = closeId;
+        this.getUserInfo();
+        //console.log(this.changeUserInfoId_);
+        //console.log($(this.changeUserInfoId_));
+    }
+    getUserInfo() {
+        let http = new XMLHttpRequest();
+        http.open('GET',this.routeURL,true);
+        http.send();
+        let that = this;
+        let action = function() {
+            let data = JSON.parse(http.responseText);
+            console.log("获取个人数据!");
+            console.log(data);
+            if (data.success) {
+                data.data.manSex = "";
+                data.data.womanSex = "";
+                data.data.unknowSex = "";
+                if (data.data.sex == "男") {
+                    data.data.manSex = "checked";
+                } else if (data.data.sex == "女") {
+                    data.data.womanSex = "checked";
+                } else {
+                    data.data.unknowSex = "checked";
+                }
+                let str = mustache.render(that.getUserInfoTemplate(),data.data);
+                $(that.userInfoId_).html(str);
+                console.log($(that.closeId_));
+                $(that.closeId_).on('click',{that:that},that.closeUserInfo);
+            }
+            return new Promise(function(resolve,reject) {
+                resolve(null);
+            });
+        };
+        http.onreadystatechange = function() {
+            if (http.readyState == 4 && http.status == 200) {
+                action().then(
+                    function (data) {
+                        $(that.changeUserInfoId_).on('click',{that:that},that.tryToChangeUserInfo);
+                        $(that.photoId_).on('change',{that:that},that.changePhoto);
+                        console.log($(that.changeUserInfoId_));
+                    }
+                );
+            }
+        };
+    }
+    tryToChangeUserInfo(event) {
+        event.preventDefault();
+        let that = event.data.that;
+        that.clearErrorHint();
+        let name = document.userinfo.name.value;
+        let sign = document.userinfo.sign.value;
+        let birth = document.userinfo.birth.value;
+        let sex = document.userinfo.sex.value;
+        let vocation = document.userinfo.vocation.value;
+        let company = document.userinfo.company.value;
+        let school = document.userinfo.school.value;
+        let zone = document.userinfo.zone.value;
+        let hometown = document.userinfo.hometown.value;
+        let isCorrectPhoto = that.isCorrectPhoto_;
+        let photo = isCorrectPhoto ? document.userinfo.photo.files[0]: new Blob();
+        let reader = new FileReader();
+        let base64Photo;
+        console.log(photo);
+        reader.readAsDataURL(photo);
+        let loadImage = function(event) {
+            let result = event.target.result;
+            base64Photo = isCorrectPhoto ? result.substring(result.indexOf(',') + 1): "";
+            return new Promise(function(resolve,reject) {
+                resolve(null);
+            });
+        };
+        reader.onload = function(event) {
+            loadImage(event).then(function(d) {
+                console.log(name);
+                console.log(sign);
+                if (birth === "") {
+                    birth = "未填写";
+                }
+                console.log(birth);
+                console.log(vocation);
+                console.log(company);
+                console.log(school);
+                console.log(zone);
+                console.log(hometown);
+                console.log(sex);
+                console.log(photo);
+                let havePhoto = document.userinfo.photo.files.length >= 1 ? true : false;
+                let photoInfo;
+                if (havePhoto) {
+                    photoInfo = document.userinfo.photo.files[0];
+                }
+                let photoAbout = havePhoto ? {
+                    type: photoInfo.type,
+                    size: photoInfo.size
+                }: undefined;
+                let http = new XMLHttpRequest();
+                let data = {
+                    name:name,
+                    photo:base64Photo,
+                    photoAbout:photoAbout,
+                    sign:sign,
+                    birth:birth,
+                    sex:sex,
+                    vocation:vocation,
+                    company:company,
+                    school:school,
+                    zone:zone,
+                    hometown:hometown
+                };
+                console.log(data);
+                let canSubmit = that.testData(data);
+                if (!canSubmit) {
+                    return false;
+                }
+                console.log(canSubmit);
+                http.open("POST",that.routeURL,true);
+                http.setRequestHeader("Content-Type","application/json");
+                http.send(JSON.stringify(data));
+                let successFunc = function() {
+                    let fetch = JSON.parse(http.responseText);
+                    let hint = fetch.hint;
+                    let success = fetch.success;
+                    if (success) {
+                        let update = that.updateSuccess(hint);
+                        if (update) {
+                            console.log("更新刷新中!");
+                            that.getUserInfo();
+                        } else {
+                            that.showErrorHint("更新信息失败!");
+                            return;
+                        }
+                    } else {
+                        let errMsg = that.errorMsg();
+                        for (let i in hint) {
+                            if (!hint[i]) {
+                                that.showErrorHint(errMsg.i);
+                                return;
+                            }
+                        }
+                    }
+                };
+                http.onreadystatechange = function() {
+                    if (http.readyState === 4 && http.status === 200) {
+                        successFunc();
+                    }
+                };
+            });
+        };
+    }
+    changePhoto(event) {
+        let that = event.data.that;
+        that.clearErrorHint();
+        let reader = new FileReader();
+        let img = this.files[0];
+        let regex = new RegExp("(image/jpeg)|(image/jpg)|(image/gif)|(image/png)");
+        let type = img.type.trim();
+        let errMsg = that.errorMsg();
+        if (!regex.test(type.trim())) {
+            that.showErrorHint(errMsg.photo);
+            that.isCorrectPhoto_ = false;
+            return;
+        } else {
+            that.isCorrectPhoto_ = true;
+        }
+        let maxSize = 2.0 * 1024 * 1024;
+        let size = img.size;
+        if (size > maxSize) {
+            that.showErrorHint(errMsg.photo);
+            that.isCorrectPhoto_ = false;
+            return;
+        } else {
+            that.isCorrectPhoto_ = true;
+        }
+        reader.readAsDataURL(img);
+        reader.onload = function(event) {
+            document.getElementById("photoSrc").src = this.result;
+        }
+    }
+    getUserInfoTemplate() {
+        return `
+        <div class="modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4>个人信息</h4>
+                        <button id="closeUserInfo">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                       <div id="infoHint" class="alert-danger">
+                            <span></span>
+                       </div>
+                       <form id="userInfoForm" name="userinfo">
+                            <div class="headerInfo">
+                                <div class="fuison">
+                                    <label for="uploadHeader">
+                                        <img id="photoSrc" class="radius-header" src="http://localhost:12000/userheader/82">
+                                    </label>
+                                    <input name="photo" type="file" accept="image/*" id="uploadHeader">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">帐号/邮箱</label>
+                                <input class="form-control" type="email" name="email" value="{{email}}" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="sign">个性签名</label>
+                                <input class="form-control" name="sign" type="text" value="{{sign}}">
+                            </div>
+                            <div class="form-group">
+                                <label for="name">昵称</label>
+                                <input class="form-control" name="name" type="text" value="{{name}}">
+                            </div>
+                            <div class="form-group">
+                                <label>性别</label><br>
+                                <!--<input class="form-control" type="text" value="{{sex}}">-->
+                                <div id="sexGroup">
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" class="custom-control-input" id="man" value="男" name="sex" {{manSex}}>
+                                        <label class="custom-control-label" for="man">男</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" class="custom-control-input" id="woman" name="sex" value="女" {{womanSex}}>
+                                        <label class="custom-control-label" for="woman">女</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <input type="radio" class="custom-control-input" id="untell" name="sex" value="暂不透露" {{unknowSex}}>
+                                        <label class="custom-control-label" for="untell">暂未透露</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="birth">生日</label>
+                                <input class="form-control" type="date" value="{{birth}}" name="birth" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="vocation">职业</label>
+                                <input class="form-control" type="text" name="vocation" value="{{vocation}}">
+                            </div>
+                            <div class="form-group">
+                                <label for="company">公司</label>
+                                <input type="text" class="form-control" name="company" value="{{company}}">
+                            </div>
+                            <div class="form-group">
+                                <label for="school">学校</label>
+                                <input type="text" class="form-control" name="school" value="{{school}}">
+                            </div>
+                            <div class="form-group">
+                                <label for="zone">地区</label>
+                                <input type="text" class="form-control" name="zone" value="{{zone}}">
+                            </div>
+                            <div class="form-group">
+                                <label for="hometown">故乡</label>
+                                <input type="text" class="form-control" name="hometown" value="{{hometown}}">
+                            </div>
+                            <div class="userAction">
+                                <button id="changeUserInfo" type="button" class="btn btn-info">修改</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    }
+    isValidName(name) {
+        return name.length <= 30 ? true : false;
+    }
+    isValidSign(sign) {
+        return sign.length <= 80 ? true : false;
+    }
+    isValidSex(sex) {
+        switch (sex) {
+            case "男" :
+                return true;
+            case "女" :
+                return true;
+            case "暂不透露" :
+                return true;
+            default :
+                return false;
+        }
+        return false;
+    }
+    isValidBirth(birth) {
+        let regex = new RegExp("([12][0-9]{3})-(([0][1-9])|([1][012]))-([012][0-9])");
+        let isDate = regex.test(birth);
+        if (isDate) {
+            return true;
+        }
+        if (birth === "未填写") {
+            return true;
+        }
+        return false;
+    }
+    isValidVocation(vocation) {
+        return vocation.length <= 18 ? true : false;
+    }
+    isValidCompany(company) {
+        return company.length <= 40 ? true : false;
+    }
+    isValidHometown(hometown) {
+        return hometown.length <= 30 ? true : false;
+    }
+    isValidZone(zone) {
+        return zone.length <= 50 ? true : false;
+    }
+    isValidSchool(school) {
+        return school.length <= 20 ? true : false;
+    }
+    testData(data) {
+        let errMsg = this.errorMsg();
+        if (!isUndefined(data.photoAbout)) {
+            let photoAbout = data.photoAbout;
+            if (isUndefined(photoAbout.type) || isUndefined(photoAbout.size)) {
+                return false;
+            }
+            let regex = new RegExp("(image/png)|(image/jpg)|(image/jpeg)|(image/gif)");
+            if (!regex.test(photoAbout.type)) {
+                return false;
+            }
+            let maxSize = 2.0 * 1024 * 1024;
+            if (photoAbout.size > maxSize) {
+                return false;
+            }
+        }
+        if (!this.isValidName(data.name)) {
+            this.showErrorHint(errMsg.name);
+            return false;
+        }
+        if (!this.isValidSign(data.sign)) {
+            this.showErrorHint(data.sign);
+            return false;
+        }
+        if (!this.isValidBirth(data.birth)) {
+            this.showErrorHint(data.birth);
+            return false;
+        }
+        if (!this.isValidSex(data.sex)) {
+            this.showErrorHint(data.sex);
+        }
+        if (!this.isValidCompany(data.company)) {
+            this.showErrorHint(data.company);
+            return false;
+        }
+        if (!this.isValidHometown(data.hometown)) {
+            this.showErrorHint(data.hometown);
+            return false;
+        }
+        if (!this.isValidVocation(data.vocation)) {
+            this.showErrorHint(data.vocation);
+            return false;
+        }
+        if (!this.isValidZone(data.zone)) {
+            this.showErrorHint(data.zone);
+            return false;
+        }
+        if (!this.isValidSchool(data.school)) {
+            this.showErrorHint(data.school);
+            return false;
+        }
+        return true;
+    }
+    errorMsg() {
+        return {
+            name:       "昵称填写有误!",
+            sign:       "个性签名填写有误!",
+            photo:      "头像格式或尺寸有误!",
+            sex:        "性别填写有误!",
+            birth:      "生日填写有误!",
+            vocation:   "职业填写有误!",
+            company:    "公司填写有误!",
+            zone:       "地区填写有误!",
+            hometown:   "家乡填写有误！",
+            school:     "学校填写有误!"
+        };
+    }
+    showErrorHint(msg) {
+        let id = "#infoHint";
+        $(id).find('span').text(msg);
+    }
+    clearErrorHint() {
+        let id = "#infoHint";
+        $(id).find('span').text("");
+    }
+    updateSuccess(hint) {
+        for (let i in hint) {
+            if (!hint[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    closeUserInfo(event) {
+        let that = event.data.that;
+        console.log("try to close!");
+        $(that.userInfoId_).hide();
     }
 }
 
 $(document).ready(function() {
     console.log("Websocket Begin");
-    let chat = new Chat('#messageInput','#sendButton','#messageRecord','#messageSession','#chatSession','#closeSession','#single-session-header');
+    let chat = new Chat('#messageInput','#sendButton','#messageRecord','#messageSession','#chatSession','#closeSession','#single-session-header','#chat-modal-body','#selfCenter');
 });

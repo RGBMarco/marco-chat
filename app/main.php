@@ -12,6 +12,7 @@
    require_once(__DIR__."/model/header/user.php");
    require_once(__DIR__."/model/message/record.php");
    require_once(__DIR__."/chatstation/websocket.php");
+   require_once(__DIR__."/model/user/userinfo.php");
    use App\Route\RouteRegister;
    use App\Route\RouteForward;
    use App\View\Index;
@@ -24,6 +25,7 @@
    use App\Model\User\User;
    use App\Model\Header\UserHeader;
    use App\Model\Message\MeesageRecord;
+   use App\Model\User\UserInfo;
    use App\ChatStation\WebSocket;
    $cache = new Cache();
    RouteRegister::add("/","App\View\Index");
@@ -35,10 +37,12 @@
    RouteRegister::add("/active","App\View\ActiveUser");
    RouteRegister::add("/userheader/{id}","App\Model\Header\UserHeader");
    RouteRegister::add("/message/record/{id}","App\Model\Message\MessageRecord");
+   RouteRegister::add("/userinfo/{id}","App\Model\User\UserInfo");
    $server = new swoole_websocket_server("0.0.0.0",12000);
    //$http = $server->listen("0.0.0.0",12000,SWOOLE_SOCK_TCP);
    $server->set([
        'open_websocket_protocol'    => false,
+       'package_max_length'         => 5 * 1024 * 1024,
    ]);
    $server->on("Request",function(swoole_http_request $request,swoole_http_response $response) {
         $entry = RouteForward::forward($request);

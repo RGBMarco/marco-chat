@@ -21,6 +21,7 @@
                     age         integer,
                     sign        varchar(100),
                     birth       date,
+                    school      varchar(20),
                     vocation    varchar(20),
                     company     varchar(50),
                     zone        varchar(60),

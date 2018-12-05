@@ -18,9 +18,9 @@
                //var_dump($server);
                echo "websocket开始!";
             });
-            $this->ws->on('message',function(swoole_websocket_server $server,$frame) {
+            $colusure = function(swoole_websocket_server $server,$frame) {
                 $request = \json_decode($frame->data);
-                var_dump($request);
+                //var_dump($request);
                 if (!$this->isBaseRequest($request)) {
                     //to do
                     echo "It's not base request!";
@@ -28,13 +28,18 @@
                 }
                 if (\method_exists($this,$request->request)) {
                     $this->{$request->request}($server,$frame,$request);
-                    var_dump(self::$connections);
-                }
-            });
+                    //var_dump(self::$connections);
+                };
+            };
+            $this->ws->on('message',$colusure->bindTo($this)
+            );
             $this->ws->on('close',function($server,$fd) {
-                echo $fd;
-                unset(self::$connections,$fd);
-                echo "have close!";
+                //echo $fd;
+                echo "before close: \n";
+                var_dump(self::$connections);
+                unset(self::$connections[$fd]);
+                echo "end close: \n";
+                var_dump(self::$connections);
             });
         }
         public function isBaseRequest($request):bool {
@@ -68,10 +73,10 @@
             //var_dump(self::$connections);
             foreach (self::$connections as $k => $v) {
                 echo $k;
-                var_dump(self::$connections);
+                //var_dump(self::$connections);
                 if ($v->haveCareSession($message->sessionId)) {
                     $server->push($k,\json_encode($request));
-                    echo "have forward!";
+                    //echo "have forward!";
                 }
             }
             return;

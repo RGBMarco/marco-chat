@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 142);
+/******/ 	return __webpack_require__(__webpack_require__.s = 143);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1902,7 +1902,7 @@
             try {
                 oldLocale = globalLocale._abbr;
                 var aliasedRequire = require;
-                __webpack_require__(145)("./" + name);
+                __webpack_require__(146)("./" + name);
                 getSetGlobalLocale(oldLocale);
             } catch (e) {}
         }
@@ -27038,7 +27038,599 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 128 */,
+/* 128 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global, process) {// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+var formatRegExp = /%[sdj%]/g;
+exports.format = function(f) {
+  if (!isString(f)) {
+    var objects = [];
+    for (var i = 0; i < arguments.length; i++) {
+      objects.push(inspect(arguments[i]));
+    }
+    return objects.join(' ');
+  }
+
+  var i = 1;
+  var args = arguments;
+  var len = args.length;
+  var str = String(f).replace(formatRegExp, function(x) {
+    if (x === '%%') return '%';
+    if (i >= len) return x;
+    switch (x) {
+      case '%s': return String(args[i++]);
+      case '%d': return Number(args[i++]);
+      case '%j':
+        try {
+          return JSON.stringify(args[i++]);
+        } catch (_) {
+          return '[Circular]';
+        }
+      default:
+        return x;
+    }
+  });
+  for (var x = args[i]; i < len; x = args[++i]) {
+    if (isNull(x) || !isObject(x)) {
+      str += ' ' + x;
+    } else {
+      str += ' ' + inspect(x);
+    }
+  }
+  return str;
+};
+
+
+// Mark that a method should not be used.
+// Returns a modified function which warns once by default.
+// If --no-deprecation is set, then it is a no-op.
+exports.deprecate = function(fn, msg) {
+  // Allow for deprecating things in the process of starting up.
+  if (isUndefined(global.process)) {
+    return function() {
+      return exports.deprecate(fn, msg).apply(this, arguments);
+    };
+  }
+
+  if (process.noDeprecation === true) {
+    return fn;
+  }
+
+  var warned = false;
+  function deprecated() {
+    if (!warned) {
+      if (process.throwDeprecation) {
+        throw new Error(msg);
+      } else if (process.traceDeprecation) {
+        console.trace(msg);
+      } else {
+        console.error(msg);
+      }
+      warned = true;
+    }
+    return fn.apply(this, arguments);
+  }
+
+  return deprecated;
+};
+
+
+var debugs = {};
+var debugEnviron;
+exports.debuglog = function(set) {
+  if (isUndefined(debugEnviron))
+    debugEnviron = Object({"NODE_ENV":"development"}).NODE_DEBUG || '';
+  set = set.toUpperCase();
+  if (!debugs[set]) {
+    if (new RegExp('\\b' + set + '\\b', 'i').test(debugEnviron)) {
+      var pid = process.pid;
+      debugs[set] = function() {
+        var msg = exports.format.apply(exports, arguments);
+        console.error('%s %d: %s', set, pid, msg);
+      };
+    } else {
+      debugs[set] = function() {};
+    }
+  }
+  return debugs[set];
+};
+
+
+/**
+ * Echos the value of a value. Trys to print the value out
+ * in the best way possible given the different types.
+ *
+ * @param {Object} obj The object to print out.
+ * @param {Object} opts Optional options object that alters the output.
+ */
+/* legacy: obj, showHidden, depth, colors*/
+function inspect(obj, opts) {
+  // default options
+  var ctx = {
+    seen: [],
+    stylize: stylizeNoColor
+  };
+  // legacy...
+  if (arguments.length >= 3) ctx.depth = arguments[2];
+  if (arguments.length >= 4) ctx.colors = arguments[3];
+  if (isBoolean(opts)) {
+    // legacy...
+    ctx.showHidden = opts;
+  } else if (opts) {
+    // got an "options" object
+    exports._extend(ctx, opts);
+  }
+  // set default options
+  if (isUndefined(ctx.showHidden)) ctx.showHidden = false;
+  if (isUndefined(ctx.depth)) ctx.depth = 2;
+  if (isUndefined(ctx.colors)) ctx.colors = false;
+  if (isUndefined(ctx.customInspect)) ctx.customInspect = true;
+  if (ctx.colors) ctx.stylize = stylizeWithColor;
+  return formatValue(ctx, obj, ctx.depth);
+}
+exports.inspect = inspect;
+
+
+// http://en.wikipedia.org/wiki/ANSI_escape_code#graphics
+inspect.colors = {
+  'bold' : [1, 22],
+  'italic' : [3, 23],
+  'underline' : [4, 24],
+  'inverse' : [7, 27],
+  'white' : [37, 39],
+  'grey' : [90, 39],
+  'black' : [30, 39],
+  'blue' : [34, 39],
+  'cyan' : [36, 39],
+  'green' : [32, 39],
+  'magenta' : [35, 39],
+  'red' : [31, 39],
+  'yellow' : [33, 39]
+};
+
+// Don't use 'blue' not visible on cmd.exe
+inspect.styles = {
+  'special': 'cyan',
+  'number': 'yellow',
+  'boolean': 'yellow',
+  'undefined': 'grey',
+  'null': 'bold',
+  'string': 'green',
+  'date': 'magenta',
+  // "name": intentionally not styling
+  'regexp': 'red'
+};
+
+
+function stylizeWithColor(str, styleType) {
+  var style = inspect.styles[styleType];
+
+  if (style) {
+    return '\u001b[' + inspect.colors[style][0] + 'm' + str +
+           '\u001b[' + inspect.colors[style][1] + 'm';
+  } else {
+    return str;
+  }
+}
+
+
+function stylizeNoColor(str, styleType) {
+  return str;
+}
+
+
+function arrayToHash(array) {
+  var hash = {};
+
+  array.forEach(function(val, idx) {
+    hash[val] = true;
+  });
+
+  return hash;
+}
+
+
+function formatValue(ctx, value, recurseTimes) {
+  // Provide a hook for user-specified inspect functions.
+  // Check that value is an object with an inspect function on it
+  if (ctx.customInspect &&
+      value &&
+      isFunction(value.inspect) &&
+      // Filter out the util module, it's inspect function is special
+      value.inspect !== exports.inspect &&
+      // Also filter out any prototype objects using the circular check.
+      !(value.constructor && value.constructor.prototype === value)) {
+    var ret = value.inspect(recurseTimes, ctx);
+    if (!isString(ret)) {
+      ret = formatValue(ctx, ret, recurseTimes);
+    }
+    return ret;
+  }
+
+  // Primitive types cannot have properties
+  var primitive = formatPrimitive(ctx, value);
+  if (primitive) {
+    return primitive;
+  }
+
+  // Look up the keys of the object.
+  var keys = Object.keys(value);
+  var visibleKeys = arrayToHash(keys);
+
+  if (ctx.showHidden) {
+    keys = Object.getOwnPropertyNames(value);
+  }
+
+  // IE doesn't make error fields non-enumerable
+  // http://msdn.microsoft.com/en-us/library/ie/dww52sbt(v=vs.94).aspx
+  if (isError(value)
+      && (keys.indexOf('message') >= 0 || keys.indexOf('description') >= 0)) {
+    return formatError(value);
+  }
+
+  // Some type of object without properties can be shortcutted.
+  if (keys.length === 0) {
+    if (isFunction(value)) {
+      var name = value.name ? ': ' + value.name : '';
+      return ctx.stylize('[Function' + name + ']', 'special');
+    }
+    if (isRegExp(value)) {
+      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
+    }
+    if (isDate(value)) {
+      return ctx.stylize(Date.prototype.toString.call(value), 'date');
+    }
+    if (isError(value)) {
+      return formatError(value);
+    }
+  }
+
+  var base = '', array = false, braces = ['{', '}'];
+
+  // Make Array say that they are Array
+  if (isArray(value)) {
+    array = true;
+    braces = ['[', ']'];
+  }
+
+  // Make functions say that they are functions
+  if (isFunction(value)) {
+    var n = value.name ? ': ' + value.name : '';
+    base = ' [Function' + n + ']';
+  }
+
+  // Make RegExps say that they are RegExps
+  if (isRegExp(value)) {
+    base = ' ' + RegExp.prototype.toString.call(value);
+  }
+
+  // Make dates with properties first say the date
+  if (isDate(value)) {
+    base = ' ' + Date.prototype.toUTCString.call(value);
+  }
+
+  // Make error with message first say the error
+  if (isError(value)) {
+    base = ' ' + formatError(value);
+  }
+
+  if (keys.length === 0 && (!array || value.length == 0)) {
+    return braces[0] + base + braces[1];
+  }
+
+  if (recurseTimes < 0) {
+    if (isRegExp(value)) {
+      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
+    } else {
+      return ctx.stylize('[Object]', 'special');
+    }
+  }
+
+  ctx.seen.push(value);
+
+  var output;
+  if (array) {
+    output = formatArray(ctx, value, recurseTimes, visibleKeys, keys);
+  } else {
+    output = keys.map(function(key) {
+      return formatProperty(ctx, value, recurseTimes, visibleKeys, key, array);
+    });
+  }
+
+  ctx.seen.pop();
+
+  return reduceToSingleString(output, base, braces);
+}
+
+
+function formatPrimitive(ctx, value) {
+  if (isUndefined(value))
+    return ctx.stylize('undefined', 'undefined');
+  if (isString(value)) {
+    var simple = '\'' + JSON.stringify(value).replace(/^"|"$/g, '')
+                                             .replace(/'/g, "\\'")
+                                             .replace(/\\"/g, '"') + '\'';
+    return ctx.stylize(simple, 'string');
+  }
+  if (isNumber(value))
+    return ctx.stylize('' + value, 'number');
+  if (isBoolean(value))
+    return ctx.stylize('' + value, 'boolean');
+  // For some reason typeof null is "object", so special case here.
+  if (isNull(value))
+    return ctx.stylize('null', 'null');
+}
+
+
+function formatError(value) {
+  return '[' + Error.prototype.toString.call(value) + ']';
+}
+
+
+function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
+  var output = [];
+  for (var i = 0, l = value.length; i < l; ++i) {
+    if (hasOwnProperty(value, String(i))) {
+      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
+          String(i), true));
+    } else {
+      output.push('');
+    }
+  }
+  keys.forEach(function(key) {
+    if (!key.match(/^\d+$/)) {
+      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
+          key, true));
+    }
+  });
+  return output;
+}
+
+
+function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
+  var name, str, desc;
+  desc = Object.getOwnPropertyDescriptor(value, key) || { value: value[key] };
+  if (desc.get) {
+    if (desc.set) {
+      str = ctx.stylize('[Getter/Setter]', 'special');
+    } else {
+      str = ctx.stylize('[Getter]', 'special');
+    }
+  } else {
+    if (desc.set) {
+      str = ctx.stylize('[Setter]', 'special');
+    }
+  }
+  if (!hasOwnProperty(visibleKeys, key)) {
+    name = '[' + key + ']';
+  }
+  if (!str) {
+    if (ctx.seen.indexOf(desc.value) < 0) {
+      if (isNull(recurseTimes)) {
+        str = formatValue(ctx, desc.value, null);
+      } else {
+        str = formatValue(ctx, desc.value, recurseTimes - 1);
+      }
+      if (str.indexOf('\n') > -1) {
+        if (array) {
+          str = str.split('\n').map(function(line) {
+            return '  ' + line;
+          }).join('\n').substr(2);
+        } else {
+          str = '\n' + str.split('\n').map(function(line) {
+            return '   ' + line;
+          }).join('\n');
+        }
+      }
+    } else {
+      str = ctx.stylize('[Circular]', 'special');
+    }
+  }
+  if (isUndefined(name)) {
+    if (array && key.match(/^\d+$/)) {
+      return str;
+    }
+    name = JSON.stringify('' + key);
+    if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
+      name = name.substr(1, name.length - 2);
+      name = ctx.stylize(name, 'name');
+    } else {
+      name = name.replace(/'/g, "\\'")
+                 .replace(/\\"/g, '"')
+                 .replace(/(^"|"$)/g, "'");
+      name = ctx.stylize(name, 'string');
+    }
+  }
+
+  return name + ': ' + str;
+}
+
+
+function reduceToSingleString(output, base, braces) {
+  var numLinesEst = 0;
+  var length = output.reduce(function(prev, cur) {
+    numLinesEst++;
+    if (cur.indexOf('\n') >= 0) numLinesEst++;
+    return prev + cur.replace(/\u001b\[\d\d?m/g, '').length + 1;
+  }, 0);
+
+  if (length > 60) {
+    return braces[0] +
+           (base === '' ? '' : base + '\n ') +
+           ' ' +
+           output.join(',\n  ') +
+           ' ' +
+           braces[1];
+  }
+
+  return braces[0] + base + ' ' + output.join(', ') + ' ' + braces[1];
+}
+
+
+// NOTE: These type checking functions intentionally don't use `instanceof`
+// because it is fragile and can be easily faked with `Object.create()`.
+function isArray(ar) {
+  return Array.isArray(ar);
+}
+exports.isArray = isArray;
+
+function isBoolean(arg) {
+  return typeof arg === 'boolean';
+}
+exports.isBoolean = isBoolean;
+
+function isNull(arg) {
+  return arg === null;
+}
+exports.isNull = isNull;
+
+function isNullOrUndefined(arg) {
+  return arg == null;
+}
+exports.isNullOrUndefined = isNullOrUndefined;
+
+function isNumber(arg) {
+  return typeof arg === 'number';
+}
+exports.isNumber = isNumber;
+
+function isString(arg) {
+  return typeof arg === 'string';
+}
+exports.isString = isString;
+
+function isSymbol(arg) {
+  return typeof arg === 'symbol';
+}
+exports.isSymbol = isSymbol;
+
+function isUndefined(arg) {
+  return arg === void 0;
+}
+exports.isUndefined = isUndefined;
+
+function isRegExp(re) {
+  return isObject(re) && objectToString(re) === '[object RegExp]';
+}
+exports.isRegExp = isRegExp;
+
+function isObject(arg) {
+  return typeof arg === 'object' && arg !== null;
+}
+exports.isObject = isObject;
+
+function isDate(d) {
+  return isObject(d) && objectToString(d) === '[object Date]';
+}
+exports.isDate = isDate;
+
+function isError(e) {
+  return isObject(e) &&
+      (objectToString(e) === '[object Error]' || e instanceof Error);
+}
+exports.isError = isError;
+
+function isFunction(arg) {
+  return typeof arg === 'function';
+}
+exports.isFunction = isFunction;
+
+function isPrimitive(arg) {
+  return arg === null ||
+         typeof arg === 'boolean' ||
+         typeof arg === 'number' ||
+         typeof arg === 'string' ||
+         typeof arg === 'symbol' ||  // ES6 symbol
+         typeof arg === 'undefined';
+}
+exports.isPrimitive = isPrimitive;
+
+exports.isBuffer = __webpack_require__(147);
+
+function objectToString(o) {
+  return Object.prototype.toString.call(o);
+}
+
+
+function pad(n) {
+  return n < 10 ? '0' + n.toString(10) : n.toString(10);
+}
+
+
+var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
+              'Oct', 'Nov', 'Dec'];
+
+// 26 Feb 16:19:34
+function timestamp() {
+  var d = new Date();
+  var time = [pad(d.getHours()),
+              pad(d.getMinutes()),
+              pad(d.getSeconds())].join(':');
+  return [d.getDate(), months[d.getMonth()], time].join(' ');
+}
+
+
+// log is just a thin wrapper to console.log that prepends a timestamp
+exports.log = function() {
+  console.log('%s - %s', timestamp(), exports.format.apply(exports, arguments));
+};
+
+
+/**
+ * Inherit the prototype methods from one constructor into another.
+ *
+ * The Function.prototype.inherits from lang.js rewritten as a standalone
+ * function (not on Function.prototype). NOTE: If this file is to be loaded
+ * during bootstrapping this function needs to be rewritten using some native
+ * functions as prototype setup using normal JavaScript does not work as
+ * expected during bootstrapping (see mirror.js in r114903).
+ *
+ * @param {function} ctor Constructor function which needs to inherit the
+ *     prototype.
+ * @param {function} superCtor Constructor function to inherit prototype from.
+ */
+exports.inherits = __webpack_require__(148);
+
+exports._extend = function(origin, add) {
+  // Don't do anything if add isn't an object
+  if (!add || !isObject(add)) return origin;
+
+  var keys = Object.keys(add);
+  var i = keys.length;
+  while (i--) {
+    origin[keys[i]] = add[keys[i]];
+  }
+  return origin;
+};
+
+function hasOwnProperty(obj, prop) {
+  return Object.prototype.hasOwnProperty.call(obj, prop);
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(3)))
+
+/***/ }),
 /* 129 */,
 /* 130 */,
 /* 131 */,
@@ -27052,31 +27644,35 @@ module.exports = function(module) {
 /* 139 */,
 /* 140 */,
 /* 141 */,
-/* 142 */
+/* 142 */,
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(143);
+module.exports = __webpack_require__(144);
 
 
 /***/ }),
-/* 143 */
+/* 144 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mustache__ = __webpack_require__(144);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mustache__ = __webpack_require__(145);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mustache___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_mustache__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_moment__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_moment__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_util__ = __webpack_require__(146);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_util__ = __webpack_require__(128);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_util___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_util__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__util_0_10_4_util__ = __webpack_require__(128);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__util_0_10_4_util___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__util_0_10_4_util__);
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 
 
 
@@ -27110,7 +27706,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 */
 
 var Chat = function () {
-    function Chat(messageInput, sendButton, messageRecord, messageSession, chatSession, closeSession, sessionHeader) {
+    function Chat(messageInput, sendButton, messageRecord, messageSession, chatSession, closeSession, sessionHeader, chatModalBody, selfCenter) {
         _classCallCheck(this, Chat);
 
         var that = this;
@@ -27124,6 +27720,9 @@ var Chat = function () {
         this.userId_ = Number(sessionStorage.getItem('id'));
         this.currentSessionId_ = null;
         this.currentSessionInfo_ = null;
+        this.currentUserInfo_ = null;
+        this.chatModalBody_ = chatModalBody;
+        this.selfCenter_ = selfCenter;
         console.log(sessionStorage.getItem('id'));
         this.initRecordPanel().then(function (data) {
             that.initWorker(that);
@@ -27134,6 +27733,7 @@ var Chat = function () {
             var sessionId = sessionInfo.sessionId;
             var records_ = that.records_;
             var header = new Object();
+            that.closeUserInfo();
             that.currentSessionId_ = sessionId;
             that.currentSessionInfo_ = sessionInfo;
             for (var i in records_) {
@@ -27155,6 +27755,7 @@ var Chat = function () {
             });
         });
         __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this.sendButton_).on('click', { that: this }, this.sendMessage);
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this.selfCenter_).on('click', { that: this }, this.displayUserInfo);
     }
 
     _createClass(Chat, [{
@@ -27178,6 +27779,9 @@ var Chat = function () {
             };
             that.worker_.postMessage(JSON.stringify(request));
             console.log("发送数据!");
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.messageInput_).val("");
+            console.log(__WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.chatModalBody_));
+            console.log(__WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.chatModalBody_)[0].scrollHeight);
         }
     }, {
         key: 'getRecordTemplate',
@@ -27332,6 +27936,7 @@ var Chat = function () {
             var sessionId = message.sessionId;
             that.realSessions_.get(sessionId).handleMessage(this.currentSessionId_, message);
             console.log(that.realSessions_);
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.chatModalBody_).scrollTop(__WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.chatModalBody_)[0].scrollHeight);
         }
     }, {
         key: 'checkRecord',
@@ -27405,6 +28010,28 @@ var Chat = function () {
                 }
             };
         }
+    }, {
+        key: 'closeUserInfo',
+        value: function closeUserInfo() {
+            var userInfo = '#userInfo';
+            if (!Object(__WEBPACK_IMPORTED_MODULE_3_util__["isNull"])(this.currentUserInfo_)) {
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()(userInfo).hide();
+            }
+        }
+    }, {
+        key: 'closeChatSession',
+        value: function closeChatSession() {
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this.chatSession_).hide();
+            this.currentSessionId_ = null;
+            this.currentSessionInfo_ = null;
+        }
+    }, {
+        key: 'displayUserInfo',
+        value: function displayUserInfo(event) {
+            var that = event.data.that;
+            that.closeChatSession();
+            that.currentUserInfo_ = new UserInfo(that.userId_, '#userInfo', '#userInfoForm', '#changeUserInfo', '#uploadHeader', '#closeUserInfo');
+        }
     }]);
 
     return Chat;
@@ -27468,6 +28095,7 @@ var MessageQueue = function () {
         key: 'displayMessages',
         value: function displayMessages(messageSession) {
             __WEBPACK_IMPORTED_MODULE_0_jquery___default()(messageSession).html(__WEBPACK_IMPORTED_MODULE_1_mustache___default.a.render(this.getMessageTemplate(), { messages: this.messages_ }));
+            this.unread_ = 0;
         }
     }]);
 
@@ -27557,11 +28185,12 @@ var ChatSession = function () {
         key: 'displayMessages',
         value: function displayMessages() {
             this.messages_.displayMessages(this.messageSession_);
+            this.records_.updateBadge(0);
         }
     }, {
         key: 'inMessage',
-        value: function inMessage(message) {
-            this.records_.inMessage(message);
+        value: function inMessage(message, count) {
+            this.records_.inMessage(message, count);
         }
     }, {
         key: 'handleMessage',
@@ -27573,6 +28202,8 @@ var ChatSession = function () {
                 this.inMessage(message, this.messages_.unread_);
                 return;
             }
+            console.log("unRead!");
+            console.log(this.messages_.unread_);
             this.inMessage(message, this.messages_.unread_);
         }
     }]);
@@ -27580,13 +28211,381 @@ var ChatSession = function () {
     return ChatSession;
 }();
 
+var UserInfo = function () {
+    function UserInfo(userId, userInfoId, userInfoFormId, changeUserInfoId, photoId, closeId) {
+        _classCallCheck(this, UserInfo);
+
+        this.userId_ = userId;
+        this.userInfoId_ = userInfoId;
+        this.userInfoFormId_ = userInfoFormId;
+        this.routeURL = "http://localhost:12000/userinfo/" + this.userId_;
+        this.changeUserInfoId_ = changeUserInfoId;
+        this.photoId_ = photoId;
+        this.isCorrectPhoto_ = false;
+        this.closeId_ = closeId;
+        this.getUserInfo();
+        //console.log(this.changeUserInfoId_);
+        //console.log($(this.changeUserInfoId_));
+    }
+
+    _createClass(UserInfo, [{
+        key: 'getUserInfo',
+        value: function getUserInfo() {
+            var http = new XMLHttpRequest();
+            http.open('GET', this.routeURL, true);
+            http.send();
+            var that = this;
+            var action = function action() {
+                var data = JSON.parse(http.responseText);
+                console.log("获取个人数据!");
+                console.log(data);
+                if (data.success) {
+                    data.data.manSex = "";
+                    data.data.womanSex = "";
+                    data.data.unknowSex = "";
+                    if (data.data.sex == "男") {
+                        data.data.manSex = "checked";
+                    } else if (data.data.sex == "女") {
+                        data.data.womanSex = "checked";
+                    } else {
+                        data.data.unknowSex = "checked";
+                    }
+                    var str = __WEBPACK_IMPORTED_MODULE_1_mustache___default.a.render(that.getUserInfoTemplate(), data.data);
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.userInfoId_).html(str);
+                    console.log(__WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.closeId_));
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.closeId_).on('click', { that: that }, that.closeUserInfo);
+                }
+                return new Promise(function (resolve, reject) {
+                    resolve(null);
+                });
+            };
+            http.onreadystatechange = function () {
+                if (http.readyState == 4 && http.status == 200) {
+                    action().then(function (data) {
+                        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.changeUserInfoId_).on('click', { that: that }, that.tryToChangeUserInfo);
+                        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.photoId_).on('change', { that: that }, that.changePhoto);
+                        console.log(__WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.changeUserInfoId_));
+                    });
+                }
+            };
+        }
+    }, {
+        key: 'tryToChangeUserInfo',
+        value: function tryToChangeUserInfo(event) {
+            event.preventDefault();
+            var that = event.data.that;
+            that.clearErrorHint();
+            var name = document.userinfo.name.value;
+            var sign = document.userinfo.sign.value;
+            var birth = document.userinfo.birth.value;
+            var sex = document.userinfo.sex.value;
+            var vocation = document.userinfo.vocation.value;
+            var company = document.userinfo.company.value;
+            var school = document.userinfo.school.value;
+            var zone = document.userinfo.zone.value;
+            var hometown = document.userinfo.hometown.value;
+            var isCorrectPhoto = that.isCorrectPhoto_;
+            var photo = isCorrectPhoto ? document.userinfo.photo.files[0] : new Blob();
+            var reader = new FileReader();
+            var base64Photo = void 0;
+            console.log(photo);
+            reader.readAsDataURL(photo);
+            var loadImage = function loadImage(event) {
+                var result = event.target.result;
+                base64Photo = isCorrectPhoto ? result.substring(result.indexOf(',') + 1) : "";
+                return new Promise(function (resolve, reject) {
+                    resolve(null);
+                });
+            };
+            reader.onload = function (event) {
+                loadImage(event).then(function (d) {
+                    console.log(name);
+                    console.log(sign);
+                    if (birth === "") {
+                        birth = "未填写";
+                    }
+                    console.log(birth);
+                    console.log(vocation);
+                    console.log(company);
+                    console.log(school);
+                    console.log(zone);
+                    console.log(hometown);
+                    console.log(sex);
+                    console.log(photo);
+                    var havePhoto = document.userinfo.photo.files.length >= 1 ? true : false;
+                    var photoInfo = void 0;
+                    if (havePhoto) {
+                        photoInfo = document.userinfo.photo.files[0];
+                    }
+                    var photoAbout = havePhoto ? {
+                        type: photoInfo.type,
+                        size: photoInfo.size
+                    } : undefined;
+                    var http = new XMLHttpRequest();
+                    var data = {
+                        name: name,
+                        photo: base64Photo,
+                        photoAbout: photoAbout,
+                        sign: sign,
+                        birth: birth,
+                        sex: sex,
+                        vocation: vocation,
+                        company: company,
+                        school: school,
+                        zone: zone,
+                        hometown: hometown
+                    };
+                    console.log(data);
+                    var canSubmit = that.testData(data);
+                    if (!canSubmit) {
+                        return false;
+                    }
+                    console.log(canSubmit);
+                    http.open("POST", that.routeURL, true);
+                    http.setRequestHeader("Content-Type", "application/json");
+                    http.send(JSON.stringify(data));
+                    var successFunc = function successFunc() {
+                        var fetch = JSON.parse(http.responseText);
+                        var hint = fetch.hint;
+                        var success = fetch.success;
+                        if (success) {
+                            var update = that.updateSuccess(hint);
+                            if (update) {
+                                console.log("更新刷新中!");
+                                that.getUserInfo();
+                            } else {
+                                that.showErrorHint("更新信息失败!");
+                                return;
+                            }
+                        } else {
+                            var errMsg = that.errorMsg();
+                            for (var i in hint) {
+                                if (!hint[i]) {
+                                    that.showErrorHint(errMsg.i);
+                                    return;
+                                }
+                            }
+                        }
+                    };
+                    http.onreadystatechange = function () {
+                        if (http.readyState === 4 && http.status === 200) {
+                            successFunc();
+                        }
+                    };
+                });
+            };
+        }
+    }, {
+        key: 'changePhoto',
+        value: function changePhoto(event) {
+            var that = event.data.that;
+            that.clearErrorHint();
+            var reader = new FileReader();
+            var img = this.files[0];
+            var regex = new RegExp("(image/jpeg)|(image/jpg)|(image/gif)|(image/png)");
+            var type = img.type.trim();
+            var errMsg = that.errorMsg();
+            if (!regex.test(type.trim())) {
+                that.showErrorHint(errMsg.photo);
+                that.isCorrectPhoto_ = false;
+                return;
+            } else {
+                that.isCorrectPhoto_ = true;
+            }
+            var maxSize = 2.0 * 1024 * 1024;
+            var size = img.size;
+            if (size > maxSize) {
+                that.showErrorHint(errMsg.photo);
+                that.isCorrectPhoto_ = false;
+                return;
+            } else {
+                that.isCorrectPhoto_ = true;
+            }
+            reader.readAsDataURL(img);
+            reader.onload = function (event) {
+                document.getElementById("photoSrc").src = this.result;
+            };
+        }
+    }, {
+        key: 'getUserInfoTemplate',
+        value: function getUserInfoTemplate() {
+            return '\n        <div class="modal">\n            <div class="modal-dialog">\n                <div class="modal-content">\n                    <div class="modal-header">\n                        <h4>\u4E2A\u4EBA\u4FE1\u606F</h4>\n                        <button id="closeUserInfo">&times;</button>\n                    </div>\n                    <div class="modal-body">\n                       <div id="infoHint" class="alert-danger">\n                            <span></span>\n                       </div>\n                       <form id="userInfoForm" name="userinfo">\n                            <div class="headerInfo">\n                                <div class="fuison">\n                                    <label for="uploadHeader">\n                                        <img id="photoSrc" class="radius-header" src="http://localhost:12000/userheader/82">\n                                    </label>\n                                    <input name="photo" type="file" accept="image/*" id="uploadHeader">\n                                </div>\n                            </div>\n                            <div class="form-group">\n                                <label for="email">\u5E10\u53F7/\u90AE\u7BB1</label>\n                                <input class="form-control" type="email" name="email" value="{{email}}" disabled>\n                            </div>\n                            <div class="form-group">\n                                <label for="sign">\u4E2A\u6027\u7B7E\u540D</label>\n                                <input class="form-control" name="sign" type="text" value="{{sign}}">\n                            </div>\n                            <div class="form-group">\n                                <label for="name">\u6635\u79F0</label>\n                                <input class="form-control" name="name" type="text" value="{{name}}">\n                            </div>\n                            <div class="form-group">\n                                <label>\u6027\u522B</label><br>\n                                <!--<input class="form-control" type="text" value="{{sex}}">-->\n                                <div id="sexGroup">\n                                    <div class="custom-control custom-radio custom-control-inline">\n                                        <input type="radio" class="custom-control-input" id="man" value="\u7537" name="sex" {{manSex}}>\n                                        <label class="custom-control-label" for="man">\u7537</label>\n                                    </div>\n                                    <div class="custom-control custom-radio custom-control-inline">\n                                        <input type="radio" class="custom-control-input" id="woman" name="sex" value="\u5973" {{womanSex}}>\n                                        <label class="custom-control-label" for="woman">\u5973</label>\n                                    </div>\n                                    <div class="custom-control custom-radio custom-control-inline">\n                                        <input type="radio" class="custom-control-input" id="untell" name="sex" value="\u6682\u4E0D\u900F\u9732" {{unknowSex}}>\n                                        <label class="custom-control-label" for="untell">\u6682\u672A\u900F\u9732</label>\n                                    </div>\n                                </div>\n                            </div>\n                            <div class="form-group">\n                                <label for="birth">\u751F\u65E5</label>\n                                <input class="form-control" type="date" value="{{birth}}" name="birth" required>\n                            </div>\n                            <div class="form-group">\n                                <label for="vocation">\u804C\u4E1A</label>\n                                <input class="form-control" type="text" name="vocation" value="{{vocation}}">\n                            </div>\n                            <div class="form-group">\n                                <label for="company">\u516C\u53F8</label>\n                                <input type="text" class="form-control" name="company" value="{{company}}">\n                            </div>\n                            <div class="form-group">\n                                <label for="school">\u5B66\u6821</label>\n                                <input type="text" class="form-control" name="school" value="{{school}}">\n                            </div>\n                            <div class="form-group">\n                                <label for="zone">\u5730\u533A</label>\n                                <input type="text" class="form-control" name="zone" value="{{zone}}">\n                            </div>\n                            <div class="form-group">\n                                <label for="hometown">\u6545\u4E61</label>\n                                <input type="text" class="form-control" name="hometown" value="{{hometown}}">\n                            </div>\n                            <div class="userAction">\n                                <button id="changeUserInfo" type="button" class="btn btn-info">\u4FEE\u6539</button>\n                            </div>\n                        </form>\n                    </div>\n                </div>\n            </div>\n        </div>\n    ';
+        }
+    }, {
+        key: 'isValidName',
+        value: function isValidName(name) {
+            return name.length <= 30 ? true : false;
+        }
+    }, {
+        key: 'isValidSign',
+        value: function isValidSign(sign) {
+            return sign.length <= 80 ? true : false;
+        }
+    }, {
+        key: 'isValidSex',
+        value: function isValidSex(sex) {
+            switch (sex) {
+                case "男":
+                    return true;
+                case "女":
+                    return true;
+                case "暂不透露":
+                    return true;
+                default:
+                    return false;
+            }
+            return false;
+        }
+    }, {
+        key: 'isValidBirth',
+        value: function isValidBirth(birth) {
+            var regex = new RegExp("([12][0-9]{3})-(([0][1-9])|([1][012]))-([012][0-9])");
+            var isDate = regex.test(birth);
+            if (isDate) {
+                return true;
+            }
+            if (birth === "未填写") {
+                return true;
+            }
+            return false;
+        }
+    }, {
+        key: 'isValidVocation',
+        value: function isValidVocation(vocation) {
+            return vocation.length <= 18 ? true : false;
+        }
+    }, {
+        key: 'isValidCompany',
+        value: function isValidCompany(company) {
+            return company.length <= 40 ? true : false;
+        }
+    }, {
+        key: 'isValidHometown',
+        value: function isValidHometown(hometown) {
+            return hometown.length <= 30 ? true : false;
+        }
+    }, {
+        key: 'isValidZone',
+        value: function isValidZone(zone) {
+            return zone.length <= 50 ? true : false;
+        }
+    }, {
+        key: 'isValidSchool',
+        value: function isValidSchool(school) {
+            return school.length <= 20 ? true : false;
+        }
+    }, {
+        key: 'testData',
+        value: function testData(data) {
+            var errMsg = this.errorMsg();
+            if (!Object(__WEBPACK_IMPORTED_MODULE_4__util_0_10_4_util__["isUndefined"])(data.photoAbout)) {
+                var photoAbout = data.photoAbout;
+                if (Object(__WEBPACK_IMPORTED_MODULE_4__util_0_10_4_util__["isUndefined"])(photoAbout.type) || Object(__WEBPACK_IMPORTED_MODULE_4__util_0_10_4_util__["isUndefined"])(photoAbout.size)) {
+                    return false;
+                }
+                var regex = new RegExp("(image/png)|(image/jpg)|(image/jpeg)|(image/gif)");
+                if (!regex.test(photoAbout.type)) {
+                    return false;
+                }
+                var maxSize = 2.0 * 1024 * 1024;
+                if (photoAbout.size > maxSize) {
+                    return false;
+                }
+            }
+            if (!this.isValidName(data.name)) {
+                this.showErrorHint(errMsg.name);
+                return false;
+            }
+            if (!this.isValidSign(data.sign)) {
+                this.showErrorHint(data.sign);
+                return false;
+            }
+            if (!this.isValidBirth(data.birth)) {
+                this.showErrorHint(data.birth);
+                return false;
+            }
+            if (!this.isValidSex(data.sex)) {
+                this.showErrorHint(data.sex);
+            }
+            if (!this.isValidCompany(data.company)) {
+                this.showErrorHint(data.company);
+                return false;
+            }
+            if (!this.isValidHometown(data.hometown)) {
+                this.showErrorHint(data.hometown);
+                return false;
+            }
+            if (!this.isValidVocation(data.vocation)) {
+                this.showErrorHint(data.vocation);
+                return false;
+            }
+            if (!this.isValidZone(data.zone)) {
+                this.showErrorHint(data.zone);
+                return false;
+            }
+            if (!this.isValidSchool(data.school)) {
+                this.showErrorHint(data.school);
+                return false;
+            }
+            return true;
+        }
+    }, {
+        key: 'errorMsg',
+        value: function errorMsg() {
+            return {
+                name: "昵称填写有误!",
+                sign: "个性签名填写有误!",
+                photo: "头像格式或尺寸有误!",
+                sex: "性别填写有误!",
+                birth: "生日填写有误!",
+                vocation: "职业填写有误!",
+                company: "公司填写有误!",
+                zone: "地区填写有误!",
+                hometown: "家乡填写有误！",
+                school: "学校填写有误!"
+            };
+        }
+    }, {
+        key: 'showErrorHint',
+        value: function showErrorHint(msg) {
+            var id = "#infoHint";
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()(id).find('span').text(msg);
+        }
+    }, {
+        key: 'clearErrorHint',
+        value: function clearErrorHint() {
+            var id = "#infoHint";
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()(id).find('span').text("");
+        }
+    }, {
+        key: 'updateSuccess',
+        value: function updateSuccess(hint) {
+            for (var i in hint) {
+                if (!hint[i]) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }, {
+        key: 'closeUserInfo',
+        value: function closeUserInfo(event) {
+            var that = event.data.that;
+            console.log("try to close!");
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.userInfoId_).hide();
+        }
+    }]);
+
+    return UserInfo;
+}();
+
 __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).ready(function () {
     console.log("Websocket Begin");
-    var chat = new Chat('#messageInput', '#sendButton', '#messageRecord', '#messageSession', '#chatSession', '#closeSession', '#single-session-header');
+    var chat = new Chat('#messageInput', '#sendButton', '#messageRecord', '#messageSession', '#chatSession', '#closeSession', '#single-session-header', '#chat-modal-body', '#selfCenter');
 });
 
 /***/ }),
-/* 144 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -28277,7 +29276,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 
 /***/ }),
-/* 145 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -28542,600 +29541,7 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 145;
-
-/***/ }),
-/* 146 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global, process) {// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-var formatRegExp = /%[sdj%]/g;
-exports.format = function(f) {
-  if (!isString(f)) {
-    var objects = [];
-    for (var i = 0; i < arguments.length; i++) {
-      objects.push(inspect(arguments[i]));
-    }
-    return objects.join(' ');
-  }
-
-  var i = 1;
-  var args = arguments;
-  var len = args.length;
-  var str = String(f).replace(formatRegExp, function(x) {
-    if (x === '%%') return '%';
-    if (i >= len) return x;
-    switch (x) {
-      case '%s': return String(args[i++]);
-      case '%d': return Number(args[i++]);
-      case '%j':
-        try {
-          return JSON.stringify(args[i++]);
-        } catch (_) {
-          return '[Circular]';
-        }
-      default:
-        return x;
-    }
-  });
-  for (var x = args[i]; i < len; x = args[++i]) {
-    if (isNull(x) || !isObject(x)) {
-      str += ' ' + x;
-    } else {
-      str += ' ' + inspect(x);
-    }
-  }
-  return str;
-};
-
-
-// Mark that a method should not be used.
-// Returns a modified function which warns once by default.
-// If --no-deprecation is set, then it is a no-op.
-exports.deprecate = function(fn, msg) {
-  // Allow for deprecating things in the process of starting up.
-  if (isUndefined(global.process)) {
-    return function() {
-      return exports.deprecate(fn, msg).apply(this, arguments);
-    };
-  }
-
-  if (process.noDeprecation === true) {
-    return fn;
-  }
-
-  var warned = false;
-  function deprecated() {
-    if (!warned) {
-      if (process.throwDeprecation) {
-        throw new Error(msg);
-      } else if (process.traceDeprecation) {
-        console.trace(msg);
-      } else {
-        console.error(msg);
-      }
-      warned = true;
-    }
-    return fn.apply(this, arguments);
-  }
-
-  return deprecated;
-};
-
-
-var debugs = {};
-var debugEnviron;
-exports.debuglog = function(set) {
-  if (isUndefined(debugEnviron))
-    debugEnviron = Object({"NODE_ENV":"development"}).NODE_DEBUG || '';
-  set = set.toUpperCase();
-  if (!debugs[set]) {
-    if (new RegExp('\\b' + set + '\\b', 'i').test(debugEnviron)) {
-      var pid = process.pid;
-      debugs[set] = function() {
-        var msg = exports.format.apply(exports, arguments);
-        console.error('%s %d: %s', set, pid, msg);
-      };
-    } else {
-      debugs[set] = function() {};
-    }
-  }
-  return debugs[set];
-};
-
-
-/**
- * Echos the value of a value. Trys to print the value out
- * in the best way possible given the different types.
- *
- * @param {Object} obj The object to print out.
- * @param {Object} opts Optional options object that alters the output.
- */
-/* legacy: obj, showHidden, depth, colors*/
-function inspect(obj, opts) {
-  // default options
-  var ctx = {
-    seen: [],
-    stylize: stylizeNoColor
-  };
-  // legacy...
-  if (arguments.length >= 3) ctx.depth = arguments[2];
-  if (arguments.length >= 4) ctx.colors = arguments[3];
-  if (isBoolean(opts)) {
-    // legacy...
-    ctx.showHidden = opts;
-  } else if (opts) {
-    // got an "options" object
-    exports._extend(ctx, opts);
-  }
-  // set default options
-  if (isUndefined(ctx.showHidden)) ctx.showHidden = false;
-  if (isUndefined(ctx.depth)) ctx.depth = 2;
-  if (isUndefined(ctx.colors)) ctx.colors = false;
-  if (isUndefined(ctx.customInspect)) ctx.customInspect = true;
-  if (ctx.colors) ctx.stylize = stylizeWithColor;
-  return formatValue(ctx, obj, ctx.depth);
-}
-exports.inspect = inspect;
-
-
-// http://en.wikipedia.org/wiki/ANSI_escape_code#graphics
-inspect.colors = {
-  'bold' : [1, 22],
-  'italic' : [3, 23],
-  'underline' : [4, 24],
-  'inverse' : [7, 27],
-  'white' : [37, 39],
-  'grey' : [90, 39],
-  'black' : [30, 39],
-  'blue' : [34, 39],
-  'cyan' : [36, 39],
-  'green' : [32, 39],
-  'magenta' : [35, 39],
-  'red' : [31, 39],
-  'yellow' : [33, 39]
-};
-
-// Don't use 'blue' not visible on cmd.exe
-inspect.styles = {
-  'special': 'cyan',
-  'number': 'yellow',
-  'boolean': 'yellow',
-  'undefined': 'grey',
-  'null': 'bold',
-  'string': 'green',
-  'date': 'magenta',
-  // "name": intentionally not styling
-  'regexp': 'red'
-};
-
-
-function stylizeWithColor(str, styleType) {
-  var style = inspect.styles[styleType];
-
-  if (style) {
-    return '\u001b[' + inspect.colors[style][0] + 'm' + str +
-           '\u001b[' + inspect.colors[style][1] + 'm';
-  } else {
-    return str;
-  }
-}
-
-
-function stylizeNoColor(str, styleType) {
-  return str;
-}
-
-
-function arrayToHash(array) {
-  var hash = {};
-
-  array.forEach(function(val, idx) {
-    hash[val] = true;
-  });
-
-  return hash;
-}
-
-
-function formatValue(ctx, value, recurseTimes) {
-  // Provide a hook for user-specified inspect functions.
-  // Check that value is an object with an inspect function on it
-  if (ctx.customInspect &&
-      value &&
-      isFunction(value.inspect) &&
-      // Filter out the util module, it's inspect function is special
-      value.inspect !== exports.inspect &&
-      // Also filter out any prototype objects using the circular check.
-      !(value.constructor && value.constructor.prototype === value)) {
-    var ret = value.inspect(recurseTimes, ctx);
-    if (!isString(ret)) {
-      ret = formatValue(ctx, ret, recurseTimes);
-    }
-    return ret;
-  }
-
-  // Primitive types cannot have properties
-  var primitive = formatPrimitive(ctx, value);
-  if (primitive) {
-    return primitive;
-  }
-
-  // Look up the keys of the object.
-  var keys = Object.keys(value);
-  var visibleKeys = arrayToHash(keys);
-
-  if (ctx.showHidden) {
-    keys = Object.getOwnPropertyNames(value);
-  }
-
-  // IE doesn't make error fields non-enumerable
-  // http://msdn.microsoft.com/en-us/library/ie/dww52sbt(v=vs.94).aspx
-  if (isError(value)
-      && (keys.indexOf('message') >= 0 || keys.indexOf('description') >= 0)) {
-    return formatError(value);
-  }
-
-  // Some type of object without properties can be shortcutted.
-  if (keys.length === 0) {
-    if (isFunction(value)) {
-      var name = value.name ? ': ' + value.name : '';
-      return ctx.stylize('[Function' + name + ']', 'special');
-    }
-    if (isRegExp(value)) {
-      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
-    }
-    if (isDate(value)) {
-      return ctx.stylize(Date.prototype.toString.call(value), 'date');
-    }
-    if (isError(value)) {
-      return formatError(value);
-    }
-  }
-
-  var base = '', array = false, braces = ['{', '}'];
-
-  // Make Array say that they are Array
-  if (isArray(value)) {
-    array = true;
-    braces = ['[', ']'];
-  }
-
-  // Make functions say that they are functions
-  if (isFunction(value)) {
-    var n = value.name ? ': ' + value.name : '';
-    base = ' [Function' + n + ']';
-  }
-
-  // Make RegExps say that they are RegExps
-  if (isRegExp(value)) {
-    base = ' ' + RegExp.prototype.toString.call(value);
-  }
-
-  // Make dates with properties first say the date
-  if (isDate(value)) {
-    base = ' ' + Date.prototype.toUTCString.call(value);
-  }
-
-  // Make error with message first say the error
-  if (isError(value)) {
-    base = ' ' + formatError(value);
-  }
-
-  if (keys.length === 0 && (!array || value.length == 0)) {
-    return braces[0] + base + braces[1];
-  }
-
-  if (recurseTimes < 0) {
-    if (isRegExp(value)) {
-      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
-    } else {
-      return ctx.stylize('[Object]', 'special');
-    }
-  }
-
-  ctx.seen.push(value);
-
-  var output;
-  if (array) {
-    output = formatArray(ctx, value, recurseTimes, visibleKeys, keys);
-  } else {
-    output = keys.map(function(key) {
-      return formatProperty(ctx, value, recurseTimes, visibleKeys, key, array);
-    });
-  }
-
-  ctx.seen.pop();
-
-  return reduceToSingleString(output, base, braces);
-}
-
-
-function formatPrimitive(ctx, value) {
-  if (isUndefined(value))
-    return ctx.stylize('undefined', 'undefined');
-  if (isString(value)) {
-    var simple = '\'' + JSON.stringify(value).replace(/^"|"$/g, '')
-                                             .replace(/'/g, "\\'")
-                                             .replace(/\\"/g, '"') + '\'';
-    return ctx.stylize(simple, 'string');
-  }
-  if (isNumber(value))
-    return ctx.stylize('' + value, 'number');
-  if (isBoolean(value))
-    return ctx.stylize('' + value, 'boolean');
-  // For some reason typeof null is "object", so special case here.
-  if (isNull(value))
-    return ctx.stylize('null', 'null');
-}
-
-
-function formatError(value) {
-  return '[' + Error.prototype.toString.call(value) + ']';
-}
-
-
-function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
-  var output = [];
-  for (var i = 0, l = value.length; i < l; ++i) {
-    if (hasOwnProperty(value, String(i))) {
-      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
-          String(i), true));
-    } else {
-      output.push('');
-    }
-  }
-  keys.forEach(function(key) {
-    if (!key.match(/^\d+$/)) {
-      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
-          key, true));
-    }
-  });
-  return output;
-}
-
-
-function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
-  var name, str, desc;
-  desc = Object.getOwnPropertyDescriptor(value, key) || { value: value[key] };
-  if (desc.get) {
-    if (desc.set) {
-      str = ctx.stylize('[Getter/Setter]', 'special');
-    } else {
-      str = ctx.stylize('[Getter]', 'special');
-    }
-  } else {
-    if (desc.set) {
-      str = ctx.stylize('[Setter]', 'special');
-    }
-  }
-  if (!hasOwnProperty(visibleKeys, key)) {
-    name = '[' + key + ']';
-  }
-  if (!str) {
-    if (ctx.seen.indexOf(desc.value) < 0) {
-      if (isNull(recurseTimes)) {
-        str = formatValue(ctx, desc.value, null);
-      } else {
-        str = formatValue(ctx, desc.value, recurseTimes - 1);
-      }
-      if (str.indexOf('\n') > -1) {
-        if (array) {
-          str = str.split('\n').map(function(line) {
-            return '  ' + line;
-          }).join('\n').substr(2);
-        } else {
-          str = '\n' + str.split('\n').map(function(line) {
-            return '   ' + line;
-          }).join('\n');
-        }
-      }
-    } else {
-      str = ctx.stylize('[Circular]', 'special');
-    }
-  }
-  if (isUndefined(name)) {
-    if (array && key.match(/^\d+$/)) {
-      return str;
-    }
-    name = JSON.stringify('' + key);
-    if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
-      name = name.substr(1, name.length - 2);
-      name = ctx.stylize(name, 'name');
-    } else {
-      name = name.replace(/'/g, "\\'")
-                 .replace(/\\"/g, '"')
-                 .replace(/(^"|"$)/g, "'");
-      name = ctx.stylize(name, 'string');
-    }
-  }
-
-  return name + ': ' + str;
-}
-
-
-function reduceToSingleString(output, base, braces) {
-  var numLinesEst = 0;
-  var length = output.reduce(function(prev, cur) {
-    numLinesEst++;
-    if (cur.indexOf('\n') >= 0) numLinesEst++;
-    return prev + cur.replace(/\u001b\[\d\d?m/g, '').length + 1;
-  }, 0);
-
-  if (length > 60) {
-    return braces[0] +
-           (base === '' ? '' : base + '\n ') +
-           ' ' +
-           output.join(',\n  ') +
-           ' ' +
-           braces[1];
-  }
-
-  return braces[0] + base + ' ' + output.join(', ') + ' ' + braces[1];
-}
-
-
-// NOTE: These type checking functions intentionally don't use `instanceof`
-// because it is fragile and can be easily faked with `Object.create()`.
-function isArray(ar) {
-  return Array.isArray(ar);
-}
-exports.isArray = isArray;
-
-function isBoolean(arg) {
-  return typeof arg === 'boolean';
-}
-exports.isBoolean = isBoolean;
-
-function isNull(arg) {
-  return arg === null;
-}
-exports.isNull = isNull;
-
-function isNullOrUndefined(arg) {
-  return arg == null;
-}
-exports.isNullOrUndefined = isNullOrUndefined;
-
-function isNumber(arg) {
-  return typeof arg === 'number';
-}
-exports.isNumber = isNumber;
-
-function isString(arg) {
-  return typeof arg === 'string';
-}
-exports.isString = isString;
-
-function isSymbol(arg) {
-  return typeof arg === 'symbol';
-}
-exports.isSymbol = isSymbol;
-
-function isUndefined(arg) {
-  return arg === void 0;
-}
-exports.isUndefined = isUndefined;
-
-function isRegExp(re) {
-  return isObject(re) && objectToString(re) === '[object RegExp]';
-}
-exports.isRegExp = isRegExp;
-
-function isObject(arg) {
-  return typeof arg === 'object' && arg !== null;
-}
-exports.isObject = isObject;
-
-function isDate(d) {
-  return isObject(d) && objectToString(d) === '[object Date]';
-}
-exports.isDate = isDate;
-
-function isError(e) {
-  return isObject(e) &&
-      (objectToString(e) === '[object Error]' || e instanceof Error);
-}
-exports.isError = isError;
-
-function isFunction(arg) {
-  return typeof arg === 'function';
-}
-exports.isFunction = isFunction;
-
-function isPrimitive(arg) {
-  return arg === null ||
-         typeof arg === 'boolean' ||
-         typeof arg === 'number' ||
-         typeof arg === 'string' ||
-         typeof arg === 'symbol' ||  // ES6 symbol
-         typeof arg === 'undefined';
-}
-exports.isPrimitive = isPrimitive;
-
-exports.isBuffer = __webpack_require__(147);
-
-function objectToString(o) {
-  return Object.prototype.toString.call(o);
-}
-
-
-function pad(n) {
-  return n < 10 ? '0' + n.toString(10) : n.toString(10);
-}
-
-
-var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
-              'Oct', 'Nov', 'Dec'];
-
-// 26 Feb 16:19:34
-function timestamp() {
-  var d = new Date();
-  var time = [pad(d.getHours()),
-              pad(d.getMinutes()),
-              pad(d.getSeconds())].join(':');
-  return [d.getDate(), months[d.getMonth()], time].join(' ');
-}
-
-
-// log is just a thin wrapper to console.log that prepends a timestamp
-exports.log = function() {
-  console.log('%s - %s', timestamp(), exports.format.apply(exports, arguments));
-};
-
-
-/**
- * Inherit the prototype methods from one constructor into another.
- *
- * The Function.prototype.inherits from lang.js rewritten as a standalone
- * function (not on Function.prototype). NOTE: If this file is to be loaded
- * during bootstrapping this function needs to be rewritten using some native
- * functions as prototype setup using normal JavaScript does not work as
- * expected during bootstrapping (see mirror.js in r114903).
- *
- * @param {function} ctor Constructor function which needs to inherit the
- *     prototype.
- * @param {function} superCtor Constructor function to inherit prototype from.
- */
-exports.inherits = __webpack_require__(148);
-
-exports._extend = function(origin, add) {
-  // Don't do anything if add isn't an object
-  if (!add || !isObject(add)) return origin;
-
-  var keys = Object.keys(add);
-  var i = keys.length;
-  while (i--) {
-    origin[keys[i]] = add[keys[i]];
-  }
-  return origin;
-};
-
-function hasOwnProperty(obj, prop) {
-  return Object.prototype.hasOwnProperty.call(obj, prop);
-}
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(3)))
+webpackContext.id = 146;
 
 /***/ }),
 /* 147 */

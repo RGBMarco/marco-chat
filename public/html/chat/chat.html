@@ -47,11 +47,11 @@
                     </ul>
                     <div class="dropdown">
                         <div class="data-toggle" data-toggle="dropdown">
-                            <img src="http://localhost:12000/userheader/1" class="user-header" alt="头像">
+                            <img src="http://localhost:12000/userheader/82" class="user-header" alt="头像">
                             <span>{{userName}}</span>
                         </div>
                         <ul class="dropdown-menu">
-                            <li class="dropdown-item"><a class="dropdown-link">个人中心</a></li>
+                            <li class="dropdown-item" id="selfCenter"><a class="dropdown-link">个人中心</a></li>
                             <li class="dropdown-item"><a class="dropdown-link">退出</a></li>
                         </ul>
                     </div>
@@ -208,7 +208,10 @@
                             </div>
                         </div>
                     </div>
-                </div>                
+                </div>
+                <!--用户信息列表-->
+                <div id="userInfo" class="col-5">
+                </div>    
             </div>
         </main>
     </body>
