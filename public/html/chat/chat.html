@@ -4,9 +4,11 @@
         <meta charset="UTF-8">
         <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>-->
         <link rel="stylesheet" href="http://localhost:12000/utils/app.css?version=123">
+        <script type="text/javascript" src="http://localhost:12000/utils/panel.js"></script>
         <script type="text/javascript"  src="http://localhost:12000/utils/app.js"></script>
         <script type="text/javascript" src="http://localhost:12000/utils/chat.js"></script>
         <script type="text/javascript" src="http://localhost:12000/utils/websocket.js"></script>
+        <script type="text/javascript" src="http://localhost:12000/utils/contact.js"></script>
         <script id="recordTpl" type="text/html">
             <li class="list-group-item">
                 <div class="row message-contact">
@@ -47,7 +49,7 @@
                     </ul>
                     <div class="dropdown">
                         <div class="data-toggle" data-toggle="dropdown">
-                            <img src="http://localhost:12000/userheader/82" class="user-header" alt="头像">
+                            <img src="{{userHeader}}" class="radius-user-header" alt="头像">
                             <span>{{userName}}</span>
                         </div>
                         <ul class="dropdown-menu">
@@ -65,38 +67,30 @@
                             <!--联系人-->
                     <div id="contacts-card-panel" class="card">
                         <div class="card-header">
-                            <img src="#" class="user-header">
-                            <div>
-                                <h4>心跳呼吸正常</h4>
-                                <p><span>个人签名</span></p>
+                            <img class="radius-user-header" src="{{userHeader}}">
+                            <div class="info-header">
+                                <h4>{{userName}}</h4>
+                                <p><span>{{userSign}}</span></p>
                             </div>
                         </div>
                         <div class="card-body">
                             <ul class="contacts-groups">
                                 <li class="contacts-group">
-                                    <a class="contacts-group-user" data-toggle="collapse">我的站主</a>
+                                    <a class="contacts-group-user" data-toggle="collapse" id="siteOwner"><span>+</span> 我的站主</a>
                                         <ul class="collapse">
-                                            <li class="user">
-                                                <div class="user-title">
-                                                    <img src="#" alt="头像" class="user-header">
-                                                </div>
-                                                <div class="user-info">
-                                                    <h5>我的站主<h5>
-                                                    <p><small>个性签名</small></p>
-                                                </div>
-                                            </li>
+                                            <!--站主 template-->
                                         </ul>
                                 </li>
                                 <li class="contacts-group">
-                                    <a class="contacts-group-user" data-toggle="collapse">我的好友</a>
+                                    <a class="contacts-group-user" data-toggle="collapse" id="myFriend"><span>+</span> 我的好友</a>
                                     <ul class="collapse">
-                                        <li class="user">
-                                            <img src="#" alt="头像" class="user-header">
-                                            <div class="user-info">
-                                                <h5>我的好友</h5>
-                                                <p><span>个性签名</span></p>
-                                            </div>
-                                        </li>
+                                        <!--我的好友-->
+                                    </ul>
+                                </li>
+                                <li class="contacts-group">
+                                    <a class="contacts-group-user" data-toggle="collapse" id="newFriend"><span>+</span> 新朋友</a>
+                                    <ul class="collapse">
+                                        <!--新朋友-->
                                     </ul>
                                 </li>
                             </ul>
@@ -110,9 +104,10 @@
                             <!--消息-->
                     <div id="message-panel" class="card">
                         <div class="card-header">
-                            <a><img src="#" alt="联系人"></a>
+                            <!---<img src="#" alt="联系人">-->
+                            <h4>联系人</h4>
                             <h4>消息</h4>
-                            <a><h4>+</h4></a>
+                            <a><h4 id="addContact">+</h4></a>
                         </div>
                         <div class="card-body">
                             <ul id="messageRecord" class="list-group">
@@ -123,6 +118,59 @@
                             <div class="card-footer-tab"><div class="tab-info"><img src="http://localhost:12000/utils/msg.png"><span>消息</span></div></div>
                             <div class="card-footer-tab"><div id="switchContact_1" class="tab-info"><img src="http://localhost:12000/utils/contact.png"><span>联系人</span></div></div>
                             <div class="card-footer-tab"><div id="switchMine_1" class="tab-info"><img src="http://localhost:12000/utils/mine.png"><span>我的<span></div></div>
+                        </div>
+                    </div>
+                </div>
+                <!--查找好友-->
+                <div id="findFriend" class="col col-4 offset-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="find-title">
+                                <h6>查找好友</h6>
+                                <button id="closeFindFriend">&times;</button>
+                            </div>
+                            <form>
+                                <div class="form-group">
+                                    <input id="findFriendInput" class="form-control" placeholder="邮箱">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-body">
+                            <ul id="friendsSet">
+
+                            </ul>
+                        </div>
+                        <div class="card-footer">
+                        </div>
+                    </div>
+                </div>
+
+                <!--申请添加好友-->
+                <div id="addFriend" class="col col-4 offset-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>添加好友</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="add-info">
+                                <div class="add-info-header">
+                                    <img class="radius-friend-header" src="http://localhost:12000/userheader/82" alt="头像">
+                                </div>
+                                <div class="add-info-hint">
+                                    <h6>Name</h6>
+                                    <p><span><small>邮箱</small></span></p>
+                                </div>
+                            </div>
+                            <form>
+                                <div class="form-group">
+                                    <label for="message">附加消息</label>
+                                    <input type="text" name="message" class="form-control">
+                                </div>
+                                <div class="form-group add-submit">
+                                    <button class="btn btn-success">加为好友</button>
+                                    <button class="btn btn-danger">关闭</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

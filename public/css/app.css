@@ -10592,7 +10592,7 @@ main #message-panel .card-footer {
           flex-direction: row;
   -ms-flex-pack: distribute;
       justify-content: space-around;
-  padding: 0.25rem;
+  padding: 0.15rem;
 }
 
 main #message-panel .card-footer .card-footer-tab {
@@ -11008,6 +11008,10 @@ main #contacts-card-panel .card-header {
           justify-content: flex-start;
 }
 
+main #contacts-card-panel .card-header .info-header {
+  margin-left: 1.25rem;
+}
+
 main #contacts-card-panel .card-body {
   padding: 0px;
   padding-left: 0.5rem;
@@ -11016,6 +11020,10 @@ main #contacts-card-panel .card-body {
 
 main #contacts-card-panel .card-body .contacts-groups {
   padding: 0px;
+}
+
+main #contacts-card-panel .card-body .contacts-groups ul {
+  margin-top: 0.25rem;
 }
 
 main #contacts-card-panel .card-body .contacts-groups li {
@@ -11039,6 +11047,10 @@ main #contacts-card-panel .card-body .contacts-groups .user .user-info {
   margin-left: 1rem;
 }
 
+main #contacts-card-panel .card-body .contacts-groups .user:hover {
+  background-color: #BEBEBE;
+}
+
 main #contacts-card-panel .card-body .contacts-groups .contacts-group .collapse {
   padding: 0px;
 }
@@ -11057,6 +11069,7 @@ main #contacts-card-panel .card-footer {
   left: 0px;
   bottom: 0px;
   width: 100%;
+  padding: 0.15rem;
 }
 
 main #contacts-card-panel .card-footer .card-footer-tab {
@@ -11089,6 +11102,7 @@ main #contacts-card-panel .card-footer .card-footer-tab .tab-info span {
 }
 
 main #userInfo {
+  display: none;
   margin-left: 12%;
 }
 
@@ -11171,9 +11185,117 @@ main #userInfo .modal-body form #sexGroup {
       justify-content: space-around;
 }
 
+main #findFriend {
+  height: 480px;
+  display: none;
+}
+
+main #findFriend .card {
+  height: 480px;
+}
+
+main #findFriend .card .card-header .find-title {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  margin-bottom: 0.35rem;
+}
+
+main #findFriend .card .card-header .find-title h6 {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+main #findFriend .card .card-body {
+  overflow-y: auto;
+}
+
+main #findFriend .card .card-body .find-friend-individal {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+main #findFriend .card .card-body #friendsSet {
+  width: 100%;
+  padding: 0;
+}
+
+main #findFriend .card .card-body #friendsSet .friend-add {
+  margin-left: 0.75rem;
+}
+
+main #addFriend {
+  display: none;
+}
+
+main #addFriend .card {
+  height: 480px;
+}
+
+main #addFriend .card .card-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+main #addFriend .card .card-body .add-info {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+main #addFriend .card .card-body .add-submit {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
 .radius-header {
   height: 78px;
   width: 78px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.radius-user-header {
+  height: 55px;
+  width: 55px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.radius-friend-header {
+  height: 45px;
+  width: 45px;
   border-radius: 50%;
   overflow: hidden;
 }

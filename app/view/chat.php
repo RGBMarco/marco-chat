@@ -6,6 +6,7 @@
     require_once(__DIR__."/../error/forbidden.php");
     require_once(__DIR__."/../../vendor/database/postgressql/sqlquery.php");
     require_once(__DIR__."/../../vendor/autoload.php");
+    require_once(__DIR__."/../model/user/util.php");
     use Vendor\Database\Redis\RedisConnection;
     use Vendor\Database\Postgressql\SqlQuery;
     use App\Route\RouteHandler;
@@ -13,7 +14,10 @@
     use Swoole\Http\Response as swoole_http_response;
     use App\Session\UserSession;
     use App\Error\Forbidden;
+    use App\Model\User\Util\UserInfo;
     class Chat extends RouteHandler {
+        use UserInfo;
+        const HeaderURL = parent::BASEURL . "/userheader";
         public function __construct() {
 
         }
@@ -31,11 +35,16 @@
                 $forbidden->get($request,$response,[]);
                 return;
             }
+            print $args['id'];
             $redis->select(1);
             $data = $redis->get($args['id']);
+            $id = $args['id'];
             $value = \json_decode($data);
+            $sign = $this->getUserInfoSignById($args['id']);
             $arr = [];
             $arr['userName'] = $this->getUserName($value->email);
+            $arr['userSign'] = $sign;
+            $arr['userHeader'] = self::HeaderURL . "/$id";
             $m = new \Mustache_Engine();
             $response->end($m->render($str,$arr));
         }

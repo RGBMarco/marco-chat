@@ -7,6 +7,8 @@
     "/public/css/register.css": "/public/css/register.css",
     "/public/css/active.css": "/public/css/active.css",
     "/public/css/forbidden.css": "/public/css/forbidden.css",
+    "/public/js/panel.js": "/public/js/panel.js",
+    "/public/js/contact.js": "/public/js/contact.js",
     "/public/js/chat.js": "/public/js/chat.js",
     "/public/js/worker.js": "/public/js/worker.js"
 }

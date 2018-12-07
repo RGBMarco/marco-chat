@@ -13,6 +13,8 @@
    require_once(__DIR__."/model/message/record.php");
    require_once(__DIR__."/chatstation/websocket.php");
    require_once(__DIR__."/model/user/userinfo.php");
+   require_once(__DIR__."/model/friend/friend.php");
+   require_once(__DIR__."/model/friend/find.php");
    use App\Route\RouteRegister;
    use App\Route\RouteForward;
    use App\View\Index;
@@ -27,6 +29,8 @@
    use App\Model\Message\MeesageRecord;
    use App\Model\User\UserInfo;
    use App\ChatStation\WebSocket;
+   use App\Model\Friend\Friend;
+   use App\Model\Friend\FindFriend;
    $cache = new Cache();
    RouteRegister::add("/","App\View\Index");
    RouteRegister::add("/utils/{name}","App\Utils\Resource");
@@ -38,6 +42,8 @@
    RouteRegister::add("/userheader/{id}","App\Model\Header\UserHeader");
    RouteRegister::add("/message/record/{id}","App\Model\Message\MessageRecord");
    RouteRegister::add("/userinfo/{id}","App\Model\User\UserInfo");
+   RouteRegister::add("/friends/{id}","App\Model\Friend\Friend");
+   RouteRegister::add("/find/friends/{id}","App\Model\Friend\FindFriend");
    $server = new swoole_websocket_server("0.0.0.0",12000);
    //$http = $server->listen("0.0.0.0",12000,SWOOLE_SOCK_TCP);
    $server->set([

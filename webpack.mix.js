@@ -4,6 +4,8 @@ mix.js("build/index.js","public/js");
 mix.js("build/chat.js","public/js");
 mix.js("build/websocket.js","public/js");
 mix.js("build/worker.js","public/js");
+mix.js("build/contact.js","public/js");
+mix.js("build/panel.js","public/js");
 mix.sass("build/app.scss","public/css");
 mix.sass("build/index.scss","public/css");
 mix.sass("build/register.scss","public/css");

@@ -42,7 +42,7 @@ export default class ChatPanel {
 }
 $(document).ready(function(){
     let chatPanel = new ChatPanel('#switchMessage_1','#switchContact_1','#switchMine_1','#switchMessage_2','#switchContact_2','#switchMine_2','#message-panel','#contacts-card-panel','#mine-panel');
-    $('.contacts-group-user').on('click',function() {
+   /* $('.contacts-group-user').on('click',function() {
         $($(this).siblings('.collapse').get(0)).toggle();
-    });
+    });*/
 });

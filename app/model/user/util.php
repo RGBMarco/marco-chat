@@ -126,5 +126,14 @@
             }
             return null;
         }
+        public function getUserInfoSignById(int $id) {
+            $q = "SELECT getUserInfoSignById($id) AS sign";
+            $sq = new SqlQuery(null);
+            $result = $sq->query($q);
+            if ($result['success']) {
+                return $result['data'][0]['sign'];
+            }
+            return 'unknown';
+        }
     }
 ?>

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 141);
+/******/ 	return __webpack_require__(__webpack_require__.s = 144);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -10437,15 +10437,15 @@ return jQuery;
 
 /***/ }),
 
-/***/ 141:
+/***/ 144:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(142);
+module.exports = __webpack_require__(145);
 
 
 /***/ }),
 
-/***/ 142:
+/***/ 145:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10516,9 +10516,9 @@ var ChatPanel = function () {
 
 __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).ready(function () {
     var chatPanel = new ChatPanel('#switchMessage_1', '#switchContact_1', '#switchMine_1', '#switchMessage_2', '#switchContact_2', '#switchMine_2', '#message-panel', '#contacts-card-panel', '#mine-panel');
-    __WEBPACK_IMPORTED_MODULE_0_jquery___default()('.contacts-group-user').on('click', function () {
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(__WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).siblings('.collapse').get(0)).toggle();
-    });
+    /* $('.contacts-group-user').on('click',function() {
+         $($(this).siblings('.collapse').get(0)).toggle();
+     });*/
 });
 
 /***/ })

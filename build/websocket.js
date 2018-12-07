@@ -3,32 +3,8 @@ import mustache from 'mustache';
 import monment from 'moment';
 import { isArray, isNull } from 'util';
 import { isUndefined } from '_util@0.10.4@util';
+//import {panel} from './panel';
 //fixed me by modified the {let of} || {let in} to foreach
-/*
-    Template of contact    
-    <li class="list-group-item">
-        <div class="row message-contact">
-            <div class="col col-1">
-                <img class="user-header" src="{{contactHeader}}" alt="">
-            </div>
-            <div class="col message-contact-info">
-                <p><span>{{contactName}}</span><small>{{contactTime}}</small></p>
-                <p><small>{{contactMsg}}</small><span class="badge badge-danger">{{unRead}}</span></p>
-            </div>
-        </div>
-    </li>
- */
-/*
-    <li class="list-group-item message-by-{{msgOwner}}">
-        <div class="message-owner">    
-            <img src={{msgUserHeader}} alt="头像" class="user-header">
-            <p><h5><span>{{msgActive}}<span><span>{{msgUserName}}<span></h5></p>
-        </div>
-        <div class="message-content">
-            <span>{{msgContent}}</span>
-        </div>
-    </li>
-*/
 
 export default class Chat {
     constructor(messageInput,sendButton,messageRecord,messageSession,chatSession,closeSession,sessionHeader,chatModalBody,selfCenter) {
@@ -68,6 +44,7 @@ export default class Chat {
             $(that.sessionHeader_).html(mustache.render(that.getSingleSessionHeaderTemplate(),header));
             that.displayMessages(sessionId,userId,that);
             $(chatSession).show();
+            window.panel.resetCurrentPanel(chatSession);
             $(that.closeSession_).on('click',function(){
                 console.log("close");
                 $(that.chatSession_).hide();
@@ -218,23 +195,6 @@ export default class Chat {
     </div>`;
     }
     displayMessages(sessionId,userId,that) {
-        /*let messages = that.sessions_.get(sessionId);
-        let renderMsg = new Array();
-        for (let index in messages) {
-            let message = messages[index];
-            let obj = new Object();
-            obj.ownerId = message.ownerId;
-            if (message.ownerId == userId) {
-                obj.ownerType = "self";
-            } else {
-                obj.ownerType = "other";
-            }
-            obj.ownerName = (message.ownerId == message.firstId) ? message.firstName : message.secondName;
-            obj.content = message.content;
-            renderMsg[index] = obj;
-            $(that.messageSession_).html(mustache.render(that.getMessageTemplate(),{messages:renderMsg}));
-            
-        }*/
         console.log("显示信息!");
         this.realSessions_.get(sessionId).displayMessages();
     }
@@ -510,6 +470,8 @@ class UserInfo {
                 }
                 let str = mustache.render(that.getUserInfoTemplate(),data.data);
                 $(that.userInfoId_).html(str);
+                $(that.userInfoId_).show();
+                window.panel.resetCurrentPanel(that.userInfoId_);
                 console.log($(that.closeId_));
                 $(that.closeId_).on('click',{that:that},that.closeUserInfo);
             }
@@ -884,6 +846,5 @@ class UserInfo {
 }
 
 $(document).ready(function() {
-    console.log("Websocket Begin");
     let chat = new Chat('#messageInput','#sendButton','#messageRecord','#messageSession','#chatSession','#closeSession','#single-session-header','#chat-modal-body','#selfCenter');
 });

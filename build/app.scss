@@ -78,7 +78,7 @@ main {
             display:flex;
             flex-direction:row;
             justify-content:space-around;
-            padding:0.25rem;
+            padding:0.15rem;
             .card-footer-tab {
                 padding:0.25rem;
                 .tab-info {
@@ -335,6 +335,9 @@ main {
             display:flex;
             flex-direction:row;
             justify-content:flex-start;
+            .info-header {
+                margin-left:1.25rem;
+            }
         }
         .card-body {
             padding:0px;
@@ -342,6 +345,9 @@ main {
             padding-top:0.5rem;
             .contacts-groups {
                 padding:0px;
+                ul {
+                    margin-top:0.25rem;
+                }
                 li {
                     list-style-type:none;
                 }
@@ -351,6 +357,9 @@ main {
                     justify-content:flex-start;
                     .user-info {
                         margin-left:1rem;
+                    }
+                    &:hover {
+                        background-color:#BEBEBE;
                     }
                 }
                 .contacts-group {
@@ -368,6 +377,7 @@ main {
             left:0px;
             bottom:0px;
             width:100%;
+            padding:0.15rem;
             .card-footer-tab {
                 padding:0.25rem;
                 .tab-info {
@@ -387,6 +397,7 @@ main {
         }
     }
     #userInfo {
+        display: none;
         margin-left:12%;
         .modal {
             position:static;
@@ -441,6 +452,61 @@ main {
             }
         }
     }
+    #findFriend {
+        height:480px;
+        display: none;
+        .card {
+            height:480px;
+            .card-header {
+                .find-title {
+                    display: flex;
+                    flex-direction:row;
+                    justify-content: flex-end;
+                    h6 {
+                        margin-left:auto;
+                        margin-right:auto;
+                    }
+                    margin-bottom:0.35rem;
+                }
+            }
+            .card-body {
+                overflow-y:auto;
+                .find-friend-individal {
+                    display: flex;
+                    flex-direction: row;
+                }
+                #friendsSet {
+                    width:100%;
+                    padding:0;
+                    .friend-add {
+                        margin-left:0.75rem;
+                    }
+                }
+            }
+        }
+    }
+    #addFriend {
+        display:none;
+        .card {
+            height:480px;
+            .card-header {
+                display:flex;
+                flex-direction: row;
+                justify-content: center;
+            }
+            .card-body {
+                .add-info {
+                    display: flex;
+                    flex-direction: row;
+                }
+                .add-submit {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-around;
+                }
+            }
+        }
+    }
 }
 .radius-header {
     height:78px;
@@ -448,4 +514,18 @@ main {
     border-radius: 50%;
     overflow: hidden;
     //background-color:#CDCDB4;
+}
+
+.radius-user-header {
+    height:55px;
+    width:55px;
+    border-radius: 50%;
+    overflow: hidden;
+    //background-color:#CDCDB4;
+}
+.radius-friend-header {
+    height:45px;
+    width:45px;
+    border-radius: 50%;
+    overflow: hidden;
 }
