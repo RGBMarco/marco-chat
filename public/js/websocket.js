@@ -28398,11 +28398,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_util___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_util__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__util_0_10_4_util__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__util_0_10_4_util___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__util_0_10_4_util__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__config__ = __webpack_require__(153);
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 
 
 
@@ -28494,7 +28500,7 @@ var Chat = function () {
     }, {
         key: 'getRecordTemplate',
         value: function getRecordTemplate() {
-            return '{{#records}}<li value="{{sessionInfo}}" class="list-group-item">\n        <div class="row message-contact">\n            <div class="col col-2">\n                <img class="msguser-header" src="http://localhost:12000/userheader/{{peerId}}" alt="">\n            </div>\n            <div class="col message-contact-info">\n                <p><span>{{peerName}}</span><small class="dateHint">{{createTime}}</small></p>\n                <p><small class="contentHint">{{content}}</small><span class="badge badge-danger">0</span></p>\n            </div>\n        </div>\n    </li>{{/records}}';
+            return '{{#records}}<li value="{{sessionInfo}}" class="list-group-item">\n        <div class="row message-contact">\n            <div class="col col-2">\n                <img class="radius-friend-header" src="http://localhost:12000/userheader/{{peerId}}" alt="">\n            </div>\n            <div class="col message-contact-info">\n                <p><span>{{peerName}}</span><small class="dateHint">{{createTime}}</small></p>\n                <p><small class="contentHint">{{content}}</small><span class="badge badge-danger">0</span></p>\n            </div>\n        </div>\n    </li>{{/records}}';
         }
     }, {
         key: 'getMessageTemplate',
@@ -28520,6 +28526,7 @@ var Chat = function () {
                 if (http.readyState === 4 && http.status === 200) {
                     var func = function func() {
                         var data = JSON.parse(http.responseText);
+                        console.log(data);
                         var sessions_ = that.sessions_;
                         if (data.success) {
                             console.log(data.data);
@@ -28533,6 +28540,7 @@ var Chat = function () {
                             //console.log($(messageRecord));
                             __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.messageRecord_).html(__WEBPACK_IMPORTED_MODULE_1_mustache___default.a.render(getRecordTemplate(), { records: records }));
                             var sessions = data.data.sessions;
+                            console.log(sessions);
                             for (var s in sessions) {
                                 var session = sessions[s];
                                 for (var m in session) {
@@ -28583,7 +28591,7 @@ var Chat = function () {
     }, {
         key: 'getSingleSessionHeaderTemplate',
         value: function getSingleSessionHeaderTemplate() {
-            return '<div class="modal-header-title">\n        <div class="title-info">\n            <img src="http://localhost:12000/userheader/{{peerId}}" alt="\u5934\u50CF">    \n            <h4>{{peerName}}</h4>\n        </div>\n        <button id="closeSession" type="button" class="close" data-dismiss="modal">&times;</button>      \n    </div>\n    <div class="modal-header-info">\n        <ul class="nav nav-tabs">\n            <li class="nav-item"><a class="nav-link">\u804A\u5929</a></li>\n            <li class="nav-item"><a class="nav-link">\u8BBE\u7F6E</a></li>\n        </ul>\n    </div>';
+            return '<div class="modal-header-title">\n        <div class="title-info">\n            <img class="radius-user-header" src="http://localhost:12000/userheader/{{peerId}}" alt="\u5934\u50CF">    \n            <h4>{{peerName}}</h4>\n        </div>\n        <button id="closeSession" type="button" class="close" data-dismiss="modal">&times;</button>      \n    </div>\n    <div class="modal-header-info">\n        <ul class="nav nav-tabs">\n            <li class="nav-item"><a class="nav-link">\u804A\u5929</a></li>\n            <li class="nav-item"><a class="nav-link">\u8BBE\u7F6E</a></li>\n        </ul>\n    </div>';
         }
     }, {
         key: 'displayMessages',
@@ -28902,21 +28910,26 @@ var ChatSession = function () {
     return ChatSession;
 }();
 
-var UserInfo = function () {
+var UserInfo = function (_Config) {
+    _inherits(UserInfo, _Config);
+
     function UserInfo(userId, userInfoId, userInfoFormId, changeUserInfoId, photoId, closeId) {
         _classCallCheck(this, UserInfo);
 
-        this.userId_ = userId;
-        this.userInfoId_ = userInfoId;
-        this.userInfoFormId_ = userInfoFormId;
-        this.routeURL = "http://localhost:12000/userinfo/" + this.userId_;
-        this.changeUserInfoId_ = changeUserInfoId;
-        this.photoId_ = photoId;
-        this.isCorrectPhoto_ = false;
-        this.closeId_ = closeId;
-        this.getUserInfo();
+        var _this = _possibleConstructorReturn(this, (UserInfo.__proto__ || Object.getPrototypeOf(UserInfo)).call(this));
+
+        _this.userId_ = userId;
+        _this.userInfoId_ = userInfoId;
+        _this.userInfoFormId_ = userInfoFormId;
+        _this.routeURL = "http://localhost:12000/userinfo/" + _this.userId_;
+        _this.changeUserInfoId_ = changeUserInfoId;
+        _this.photoId_ = photoId;
+        _this.isCorrectPhoto_ = false;
+        _this.closeId_ = closeId;
+        _this.getUserInfo();
         //console.log(this.changeUserInfoId_);
         //console.log($(this.changeUserInfoId_));
+        return _this;
     }
 
     _createClass(UserInfo, [{
@@ -28941,6 +28954,7 @@ var UserInfo = function () {
                     } else {
                         data.data.unknowSex = "checked";
                     }
+                    data.data.userHeader = that.getHeaderURL(that.userId_);
                     var str = __WEBPACK_IMPORTED_MODULE_1_mustache___default.a.render(that.getUserInfoTemplate(), data.data);
                     __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.userInfoId_).html(str);
                     __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.userInfoId_).show();
@@ -29102,7 +29116,7 @@ var UserInfo = function () {
     }, {
         key: 'getUserInfoTemplate',
         value: function getUserInfoTemplate() {
-            return '\n        <div class="modal">\n            <div class="modal-dialog">\n                <div class="modal-content">\n                    <div class="modal-header">\n                        <h4>\u4E2A\u4EBA\u4FE1\u606F</h4>\n                        <button id="closeUserInfo">&times;</button>\n                    </div>\n                    <div class="modal-body">\n                       <div id="infoHint" class="alert-danger">\n                            <span></span>\n                       </div>\n                       <form id="userInfoForm" name="userinfo">\n                            <div class="headerInfo">\n                                <div class="fuison">\n                                    <label for="uploadHeader">\n                                        <img id="photoSrc" class="radius-header" src="http://localhost:12000/userheader/82">\n                                    </label>\n                                    <input name="photo" type="file" accept="image/*" id="uploadHeader">\n                                </div>\n                            </div>\n                            <div class="form-group">\n                                <label for="email">\u5E10\u53F7/\u90AE\u7BB1</label>\n                                <input class="form-control" type="email" name="email" value="{{email}}" disabled>\n                            </div>\n                            <div class="form-group">\n                                <label for="sign">\u4E2A\u6027\u7B7E\u540D</label>\n                                <input class="form-control" name="sign" type="text" value="{{sign}}">\n                            </div>\n                            <div class="form-group">\n                                <label for="name">\u6635\u79F0</label>\n                                <input class="form-control" name="name" type="text" value="{{name}}">\n                            </div>\n                            <div class="form-group">\n                                <label>\u6027\u522B</label><br>\n                                <!--<input class="form-control" type="text" value="{{sex}}">-->\n                                <div id="sexGroup">\n                                    <div class="custom-control custom-radio custom-control-inline">\n                                        <input type="radio" class="custom-control-input" id="man" value="\u7537" name="sex" {{manSex}}>\n                                        <label class="custom-control-label" for="man">\u7537</label>\n                                    </div>\n                                    <div class="custom-control custom-radio custom-control-inline">\n                                        <input type="radio" class="custom-control-input" id="woman" name="sex" value="\u5973" {{womanSex}}>\n                                        <label class="custom-control-label" for="woman">\u5973</label>\n                                    </div>\n                                    <div class="custom-control custom-radio custom-control-inline">\n                                        <input type="radio" class="custom-control-input" id="untell" name="sex" value="\u6682\u4E0D\u900F\u9732" {{unknowSex}}>\n                                        <label class="custom-control-label" for="untell">\u6682\u672A\u900F\u9732</label>\n                                    </div>\n                                </div>\n                            </div>\n                            <div class="form-group">\n                                <label for="birth">\u751F\u65E5</label>\n                                <input class="form-control" type="date" value="{{birth}}" name="birth" required>\n                            </div>\n                            <div class="form-group">\n                                <label for="vocation">\u804C\u4E1A</label>\n                                <input class="form-control" type="text" name="vocation" value="{{vocation}}">\n                            </div>\n                            <div class="form-group">\n                                <label for="company">\u516C\u53F8</label>\n                                <input type="text" class="form-control" name="company" value="{{company}}">\n                            </div>\n                            <div class="form-group">\n                                <label for="school">\u5B66\u6821</label>\n                                <input type="text" class="form-control" name="school" value="{{school}}">\n                            </div>\n                            <div class="form-group">\n                                <label for="zone">\u5730\u533A</label>\n                                <input type="text" class="form-control" name="zone" value="{{zone}}">\n                            </div>\n                            <div class="form-group">\n                                <label for="hometown">\u6545\u4E61</label>\n                                <input type="text" class="form-control" name="hometown" value="{{hometown}}">\n                            </div>\n                            <div class="userAction">\n                                <button id="changeUserInfo" type="button" class="btn btn-info">\u4FEE\u6539</button>\n                            </div>\n                        </form>\n                    </div>\n                </div>\n            </div>\n        </div>\n    ';
+            return '\n        <div class="modal">\n            <div class="modal-dialog">\n                <div class="modal-content">\n                    <div class="modal-header">\n                        <h4>\u4E2A\u4EBA\u4FE1\u606F</h4>\n                        <button id="closeUserInfo">&times;</button>\n                    </div>\n                    <div class="modal-body">\n                       <div id="infoHint" class="alert-danger">\n                            <span></span>\n                       </div>\n                       <form id="userInfoForm" name="userinfo">\n                            <div class="headerInfo">\n                                <div class="fuison">\n                                    <label for="uploadHeader">\n                                        <img id="photoSrc" class="radius-header" src="{{userHeader}}">\n                                    </label>\n                                    <input name="photo" type="file" accept="image/*" id="uploadHeader">\n                                </div>\n                            </div>\n                            <div class="form-group">\n                                <label for="email">\u5E10\u53F7/\u90AE\u7BB1</label>\n                                <input class="form-control" type="email" name="email" value="{{email}}" disabled>\n                            </div>\n                            <div class="form-group">\n                                <label for="sign">\u4E2A\u6027\u7B7E\u540D</label>\n                                <input class="form-control" name="sign" type="text" value="{{sign}}">\n                            </div>\n                            <div class="form-group">\n                                <label for="name">\u6635\u79F0</label>\n                                <input class="form-control" name="name" type="text" value="{{name}}">\n                            </div>\n                            <div class="form-group">\n                                <label>\u6027\u522B</label><br>\n                                <!--<input class="form-control" type="text" value="{{sex}}">-->\n                                <div id="sexGroup">\n                                    <div class="custom-control custom-radio custom-control-inline">\n                                        <input type="radio" class="custom-control-input" id="man" value="\u7537" name="sex" {{manSex}}>\n                                        <label class="custom-control-label" for="man">\u7537</label>\n                                    </div>\n                                    <div class="custom-control custom-radio custom-control-inline">\n                                        <input type="radio" class="custom-control-input" id="woman" name="sex" value="\u5973" {{womanSex}}>\n                                        <label class="custom-control-label" for="woman">\u5973</label>\n                                    </div>\n                                    <div class="custom-control custom-radio custom-control-inline">\n                                        <input type="radio" class="custom-control-input" id="untell" name="sex" value="\u6682\u4E0D\u900F\u9732" {{unknowSex}}>\n                                        <label class="custom-control-label" for="untell">\u6682\u672A\u900F\u9732</label>\n                                    </div>\n                                </div>\n                            </div>\n                            <div class="form-group">\n                                <label for="birth">\u751F\u65E5</label>\n                                <input class="form-control" type="date" value="{{birth}}" name="birth" required>\n                            </div>\n                            <div class="form-group">\n                                <label for="vocation">\u804C\u4E1A</label>\n                                <input class="form-control" type="text" name="vocation" value="{{vocation}}">\n                            </div>\n                            <div class="form-group">\n                                <label for="company">\u516C\u53F8</label>\n                                <input type="text" class="form-control" name="company" value="{{company}}">\n                            </div>\n                            <div class="form-group">\n                                <label for="school">\u5B66\u6821</label>\n                                <input type="text" class="form-control" name="school" value="{{school}}">\n                            </div>\n                            <div class="form-group">\n                                <label for="zone">\u5730\u533A</label>\n                                <input type="text" class="form-control" name="zone" value="{{zone}}">\n                            </div>\n                            <div class="form-group">\n                                <label for="hometown">\u6545\u4E61</label>\n                                <input type="text" class="form-control" name="hometown" value="{{hometown}}">\n                            </div>\n                            <div class="userAction">\n                                <button id="changeUserInfo" type="button" class="btn btn-info">\u4FEE\u6539</button>\n                            </div>\n                        </form>\n                    </div>\n                </div>\n            </div>\n        </div>\n    ';
         }
     }, {
         key: 'isValidName',
@@ -29270,7 +29284,7 @@ var UserInfo = function () {
     }]);
 
     return UserInfo;
-}();
+}(__WEBPACK_IMPORTED_MODULE_5__config__["a" /* Config */]);
 
 __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).ready(function () {
     var chat = new Chat('#messageInput', '#sendButton', '#messageRecord', '#messageSession', '#chatSession', '#closeSession', '#single-session-header', '#chat-modal-body', '#selfCenter');
@@ -29543,6 +29557,57 @@ webpackContext.keys = function webpackContextKeys() {
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
 webpackContext.id = 148;
+
+/***/ }),
+/* 149 */,
+/* 150 */,
+/* 151 */,
+/* 152 */,
+/* 153 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Config; });
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Config = function () {
+    function Config() {
+        _classCallCheck(this, Config);
+
+        this.baseURL = "http://localhost:12000";
+    }
+
+    _createClass(Config, [{
+        key: 'getFriendURL',
+        value: function getFriendURL(id) {
+            return this.baseURL + '/friends/' + id;
+        }
+    }, {
+        key: 'getHeaderURL',
+        value: function getHeaderURL(id) {
+            return this.baseURL + '/userheader/' + id;
+        }
+    }, {
+        key: 'getFindFriendURL',
+        value: function getFindFriendURL(id) {
+            return this.baseURL + '/find/friends/' + id;
+        }
+    }, {
+        key: 'getAddFriendURL',
+        value: function getAddFriendURL(id) {
+            return this.baseURL + '/add/friends/' + id;
+        }
+    }, {
+        key: 'getFriendActionURL',
+        value: function getFriendActionURL(id) {
+            return this.baseURL + '/action/friends/' + id;
+        }
+    }]);
+
+    return Config;
+}();
 
 /***/ })
 /******/ ]);

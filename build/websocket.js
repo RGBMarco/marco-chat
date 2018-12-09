@@ -3,6 +3,7 @@ import mustache from 'mustache';
 import monment from 'moment';
 import { isArray, isNull } from 'util';
 import { isUndefined } from '_util@0.10.4@util';
+import {Config} from './config';
 //import {panel} from './panel';
 //fixed me by modified the {let of} || {let in} to foreach
 
@@ -77,14 +78,13 @@ export default class Chat {
         $(that.messageInput_).val("");
         console.log($(that.chatModalBody_));
         console.log($(that.chatModalBody_)[0].scrollHeight);
-        
     }
     
     getRecordTemplate() {
         return `{{#records}}<li value="{{sessionInfo}}" class="list-group-item">
         <div class="row message-contact">
             <div class="col col-2">
-                <img class="msguser-header" src="http://localhost:12000/userheader/{{peerId}}" alt="">
+                <img class="radius-friend-header" src="http://localhost:12000/userheader/{{peerId}}" alt="">
             </div>
             <div class="col message-contact-info">
                 <p><span>{{peerName}}</span><small class="dateHint">{{createTime}}</small></p>
@@ -123,6 +123,7 @@ export default class Chat {
             if (http.readyState === 4 && http.status === 200) {
                 let func = function() {
                     let data = JSON.parse(http.responseText);
+                    console.log(data);
                     let sessions_ = that.sessions_;
                     if (data.success) {
                         console.log(data.data);
@@ -136,6 +137,7 @@ export default class Chat {
                         //console.log($(messageRecord));
                         $(that.messageRecord_).html(mustache.render(getRecordTemplate(),{records:records}));
                         let sessions = data.data.sessions;
+                        console.log(sessions);
                         for (let s in sessions) {
                             let session = sessions[s];
                             for (let m in session) {
@@ -182,7 +184,7 @@ export default class Chat {
     getSingleSessionHeaderTemplate() {
         return `<div class="modal-header-title">
         <div class="title-info">
-            <img src="http://localhost:12000/userheader/{{peerId}}" alt="头像">    
+            <img class="radius-user-header" src="http://localhost:12000/userheader/{{peerId}}" alt="头像">    
             <h4>{{peerName}}</h4>
         </div>
         <button id="closeSession" type="button" class="close" data-dismiss="modal">&times;</button>      
@@ -434,8 +436,9 @@ class ChatSession {
     }
 }
 
-class UserInfo {
+class UserInfo extends Config {
     constructor(userId,userInfoId,userInfoFormId,changeUserInfoId,photoId,closeId) {
+        super();
         this.userId_ = userId;
         this.userInfoId_ = userInfoId;
         this.userInfoFormId_ = userInfoFormId;
@@ -468,6 +471,7 @@ class UserInfo {
                 } else {
                     data.data.unknowSex = "checked";
                 }
+                data.data.userHeader = that.getHeaderURL(that.userId_);
                 let str = mustache.render(that.getUserInfoTemplate(),data.data);
                 $(that.userInfoId_).html(str);
                 $(that.userInfoId_).show();
@@ -641,7 +645,7 @@ class UserInfo {
                             <div class="headerInfo">
                                 <div class="fuison">
                                     <label for="uploadHeader">
-                                        <img id="photoSrc" class="radius-header" src="http://localhost:12000/userheader/82">
+                                        <img id="photoSrc" class="radius-header" src="{{userHeader}}">
                                     </label>
                                     <input name="photo" type="file" accept="image/*" id="uploadHeader">
                                 </div>

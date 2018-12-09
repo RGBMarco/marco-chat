@@ -11024,6 +11024,8 @@ main #contacts-card-panel .card-body .contacts-groups {
 
 main #contacts-card-panel .card-body .contacts-groups ul {
   margin-top: 0.25rem;
+  overflow-y: auto;
+  max-height: 100px;
 }
 
 main #contacts-card-panel .card-body .contacts-groups li {
@@ -11049,6 +11051,86 @@ main #contacts-card-panel .card-body .contacts-groups .user .user-info {
 
 main #contacts-card-panel .card-body .contacts-groups .user:hover {
   background-color: #BEBEBE;
+}
+
+main #contacts-card-panel .card-body .contacts-groups .new-friend .response-wait {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+main #contacts-card-panel .card-body .contacts-groups .new-friend .response-wait .response-info .response-info-title {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+main #contacts-card-panel .card-body .contacts-groups .new-friend .request-wait {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+main #contacts-card-panel .card-body .contacts-groups .new-friend .request-wait .request-info-title {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+main #contacts-card-panel .card-body .contacts-groups .new-friend .request-wait .request-state {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+main #contacts-card-panel .card-body .contacts-groups .new-friend .request-wait .request-state span {
+  color: #668B8B;
+}
+
+main #contacts-card-panel .card-body .contacts-groups .new-friend .request-confirm {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+main #contacts-card-panel .card-body .contacts-groups .new-friend .request-confirm .request-state {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
 }
 
 main #contacts-card-panel .card-body .contacts-groups .contacts-group .collapse {

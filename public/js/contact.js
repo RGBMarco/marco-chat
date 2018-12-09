@@ -10488,6 +10488,7 @@ var Contacts = function (_Config) {
         console.log(_this.addContactId_);
         console.log(__WEBPACK_IMPORTED_MODULE_0_jquery___default()(_this.addContactId_));
         __WEBPACK_IMPORTED_MODULE_0_jquery___default()(_this.addContactId_).on('click', { that: _this }, _this.openFindFriend);
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(_this.newFriendId_).on('click', { that: _this }, _this.queryNewFriends);
         return _this;
     }
 
@@ -10504,7 +10505,7 @@ var Contacts = function (_Config) {
     }, {
         key: 'getNewFriendTemplate',
         value: function getNewFriendTemplate() {
-            return '\n            <li class="user">\n                <img src="" alt="\u5934\u50CF" class="user-header">\n                <div class="user-info">\n                    <h5>\u65B0\u670B\u53CB</h5>\n                </div>\n            </li>\n        ';
+            return '\n            <li class="new-friend">\n               {{{sub}}}\n            </li>\n        ';
         }
     }, {
         key: 'queryFriends',
@@ -10561,6 +10562,153 @@ var Contacts = function (_Config) {
             window.panel.resetCurrentPanel(panelId);
             var friends = new Friend('#findFriend', '#friendsSet', '#findFriendInput', '#closeFindFriend');
         }
+    }, {
+        key: 'queryNewFriends',
+        value: function queryNewFriends(event) {
+            var that = event.data.that;
+            var http = new XMLHttpRequest();
+            var url = that.getFriendActionURL(that.userId_);
+            http.open('GET', url, true);
+            http.send();
+            http.onreadystatechange = function () {
+                if (http.readyState === 4 && http.status === 200) {
+                    that.afterNewFriend(http);
+                }
+            };
+        }
+    }, {
+        key: 'afterNewFriend',
+        value: function afterNewFriend(http) {
+            console.log("请求结束");
+            var data = JSON.parse(http.responseText);
+            console.log(data);
+            this.parseNewFriends(data.data);
+        }
+    }, {
+        key: 'parseNewFriends',
+        value: function parseNewFriends(data) {
+            var records = new Array();
+            var ul = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this.newFriendId_).siblings('ul').get(0);
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()(ul).html("");
+            var span = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this.newFriendId_).children('span').get(0);
+            if (__WEBPACK_IMPORTED_MODULE_0_jquery___default()(span).text() == '+') {
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()(span).text('-');
+            } else {
+                __WEBPACK_IMPORTED_MODULE_0_jquery___default()(span).text('+');
+            }
+            for (var i in data) {
+                var record = new Object();
+                var r = data[i];
+                if (this.isWait(r.state)) {
+                    if (r.responseid == this.userId_) {
+                        var template = new Object();
+                        template.peerId = r.requestid;
+                        template.peerName = r.reqname;
+                        template.peerEmail = r.reqemail;
+                        template.peerHeader = this.getHeaderURL(template.peerId);
+                        template.requestMsg = r.requestmsg;
+                        record.template = template;
+                        record.sub = this.getResponseWaitTemplate();
+                        var subRender = __WEBPACK_IMPORTED_MODULE_2_mustache___default.a.render(this.getNewFriendTemplate(), { sub: record.sub });
+                        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(ul).append(__WEBPACK_IMPORTED_MODULE_2_mustache___default.a.render(subRender, template));
+                        console.log("Wait!");
+                        var li = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(ul).children('li').last();
+                        var button = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(__WEBPACK_IMPORTED_MODULE_0_jquery___default()(li).find('.response-confirm').get(0)).children('button').get(0);
+                        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(button).on('click', { that: this, peerId: template.peerId }, this.confirmToFriend);
+                    } else {
+                        console.log("Request Wait!");
+                        var _template = new Object();
+                        _template.peerId = r.responseid;
+                        _template.peerName = r.resname;
+                        _template.peerEmail = r.resemail;
+                        _template.peerHeader = this.getHeaderURL(_template.peerId);
+                        _template.requestState = r.state;
+                        record.sub = this.getReuqestWaitTemplate();
+                        var _subRender = __WEBPACK_IMPORTED_MODULE_2_mustache___default.a.render(this.getNewFriendTemplate(), { sub: record.sub });
+                        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(ul).append(__WEBPACK_IMPORTED_MODULE_2_mustache___default.a.render(_subRender, _template));
+                    }
+                } else if (this.isConfirmed(r.state)) {
+                    if (r.requestid == this.userId_) {
+                        var _template2 = new Object();
+                        _template2.peerId = r.responseid;
+                        _template2.peerName = r.resname;
+                        _template2.peerEmail = r.resemail;
+                        _template2.peerHeader = this.getHeaderURL(_template2.peerId);
+                        _template2.requestState = r.state;
+                        record.sub = this.getRequestConfirmedTemplate();
+                        var _subRender2 = __WEBPACK_IMPORTED_MODULE_2_mustache___default.a.render(this.getNewFriendTemplate(), { sub: record.sub });
+                        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(ul).append(__WEBPACK_IMPORTED_MODULE_2_mustache___default.a.render(_subRender2, _template2));
+                    }
+                } else {}
+            }
+            console.log(records);
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()(ul).toggle();
+        }
+    }, {
+        key: 'getResponseWaitTemplate',
+        value: function getResponseWaitTemplate() {
+            return '   \n                <div class="response-wait">\n            <div class="response-header">\n                <img class="radius-friend-header" src="{{peerHeader}}">\n            </div>\n            <div class="response-info">\n                <div class="response-info-title">\n                    {{peerName}}\n                    <span><small>\uFF08{{peerEmail}})</small></span>\n                </div>\n                <span>{{requestMsg}}</span>\n            </div>\n            <div class="response-confirm">\n                <button class="btn btn-primary">\u540C\u610F</button>\n            </div>\n        </div>\n        ';
+        }
+    }, {
+        key: 'getReuqestWaitTemplate',
+        value: function getReuqestWaitTemplate() {
+            return '\n            <div class="request-wait">\n                <div class="request-header">\n                    <img src="{{peerHeader}}" class="radius-friend-header">\n                </div>\n                <div class="request-info">\n                    <div class="request-info-title">    \n                        <span>{{peerName}}</span>\n                        <span><small>{{peerEmail}}</small></span>\n                    </div>\n                </div>\n                <div class="request-state">\n                    <span>{{requestState}}</span>\n                </div>\n            </div>\n        ';
+        }
+    }, {
+        key: 'getRequestConfirmedTemplate',
+        value: function getRequestConfirmedTemplate() {
+            return '\n            <div class="request-confirm">\n                <div class="request-header">\n                    <img class="radius-friend-header" src="{{peerHeader}}}">\n                </div>\n                <div class="request-info">\n                    <div class="request-info-title">\n                        <span>{{peerName}}</span>\n                        <span><small>{{peerEmail}}</small></span>\n                    </div>\n                </div>\n                <div class="request-state">\n                    <span>{{requestState}}</span>\n                </div>\n            </div>\n        ';
+        }
+    }, {
+        key: 'confirmToFriend',
+        value: function confirmToFriend(event) {
+            var that = event.data.that;
+            var peerId = event.data.peerId;
+            var url = that.getFriendActionURL(that.userId_);
+            var http = new XMLHttpRequest();
+            var data = {
+                peerId: peerId
+            };
+            http.open('POST', url, true);
+            http.send(JSON.stringify({ data: data }));
+            http.onreadystatechange = function () {
+                if (http.readyState === 4 && http.status === 200) {
+                    that.afterConfirmFriend(http);
+                }
+            };
+        }
+    }, {
+        key: 'afterConfirmFriend',
+        value: function afterConfirmFriend(http) {
+            console.log("After Confirm");
+        }
+    }, {
+        key: 'isWait',
+        value: function isWait(state) {
+            var WAIT = "等待同意";
+            if (state == WAIT) {
+                return true;
+            }
+            return false;
+        }
+    }, {
+        key: 'isRefused',
+        value: function isRefused(state) {
+            var REFUSED = "已拒绝";
+            if (state == REFUSED) {
+                return true;
+            }
+            return false;
+        }
+    }, {
+        key: 'isConfirmed',
+        value: function isConfirmed(state) {
+            var CONFIRMED = "已同意";
+            if (state == CONFIRMED) {
+                return true;
+            }
+            return false;
+        }
     }]);
 
     return Contacts;
@@ -10594,7 +10742,7 @@ var Friend = function (_Config2) {
     _createClass(Friend, [{
         key: 'getFindFriendTemplate',
         value: function getFindFriendTemplate() {
-            return '{{#friends}}\n            <li class="find-friend-individal">\n                <div class="friend-header">\n                    <img class="radius-friend-header" src="{{friendHeader}}" alt="\u5934\u50CF">\n                </div>\n                <div friend-info>\n                    <h6>{{friendName}}</h6>\n                    <p><span><small>{{friendEmail}}</small></span></p>\n                </div>\n                <div class="friend-add">\n                    <button class="btn btn-info">\u52A0\u4E3A\u597D\u53CB</button>\n                </div>\n            </li>{{/friends}}\n        ';
+            return '{{#friends}}\n            <li class="find-friend-individal">\n                <div class="friend-header">\n                    <img class="radius-friend-header" src="{{friendHeader}}" alt="\u5934\u50CF">\n                </div>\n                <div class="friend-info">\n                    <h6>{{friendName}}</h6>\n                    <p><span><small>{{friendEmail}}</small></span></p>\n                </div>\n                <div class="friend-add">\n                    <button class="btn btn-info">\u52A0\u4E3A\u597D\u53CB</button>\n                </div>\n            </li>{{/friends}}\n        ';
         }
     }, {
         key: 'find',
@@ -10625,7 +10773,83 @@ var Friend = function (_Config2) {
             if (data.success) {
                 var friends = this.parseFriends(data.data);
                 __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this.friendsSetId_).html(__WEBPACK_IMPORTED_MODULE_2_mustache___default.a.render(this.getFindFriendTemplate(), { friends: friends }));
+                var lis = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this.friendsSetId_).children('li');
+                for (var i = 0; i < lis.length; ++i) {
+                    var info = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(lis[i]).find('.friend-info');
+                    if (info.length < 1) {
+                        continue;
+                    }
+                    var img = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(lis[i]).find('img').get(0);
+                    var friendHeader = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(img).attr('src');
+                    var friendName = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(__WEBPACK_IMPORTED_MODULE_0_jquery___default()(info.get(0)).find('h6').get(0)).text();
+                    var friendEmail = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(__WEBPACK_IMPORTED_MODULE_0_jquery___default()(info.get(0)).find('small').get(0)).text();
+                    var addButton = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(lis[i]).find('button').get(0);
+                    var addInfo = new Object();
+                    addInfo.friendName = friendName;
+                    addInfo.friendEmail = friendEmail;
+                    addInfo.friendHeader = friendHeader;
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(addButton).on('click', { info: addInfo, that: this }, this.addFriend);
+                }
             }
+        }
+    }, {
+        key: 'addFriend',
+        value: function addFriend(event) {
+            var info = event.data.info;
+            var that = event.data.that;
+            var addFriendInfoId = '#addFriendInfo';
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()(addFriendInfoId).html(__WEBPACK_IMPORTED_MODULE_2_mustache___default.a.render(that.getAddFriendTemplate(), { info: info }));
+            var addFriendId = '#addFriend';
+            window.panel.resetCurrentPanel(addFriendId);
+            var aimAddFriend = '#aimAddFriend';
+            var aimCloseAdd = '#aimCloseAdd';
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()(aimAddFriend).on('click', { that: that, email: info.friendEmail }, that.aimAddFriend);
+            __WEBPACK_IMPORTED_MODULE_0_jquery___default()(aimCloseAdd).on('click', that.aimCloseAdd);
+        }
+    }, {
+        key: 'aimAddFriend',
+        value: function aimAddFriend(event) {
+            event.preventDefault();
+            var that = event.data.that;
+            var email = event.data.email;
+            var msg = document.addFriendForm.message.value;
+            var defaultMsg = document.addFriendForm.message.placeholder;
+            var sendMsg = defaultMsg;
+            var regex = new RegExp("^\s*$");
+            if (!regex.test(msg)) {
+                sendMsg = msg;
+            }
+            var http = new XMLHttpRequest();
+            console.log(that);
+            var url = that.getAddFriendURL(that.userId_) + '?msg=' + sendMsg + '&email=' + email;
+            http.open('GET', url, true);
+            http.send();
+            http.onreadystatechange = function () {
+                if (http.readyState === 4 && http.status === 200) {
+                    that.afterAddFriend(http);
+                }
+            };
+        }
+    }, {
+        key: 'afterAddFriend',
+        value: function afterAddFriend(http) {
+            var data = JSON.parse(http.responseText);
+            console.log("添加后！");
+            if (data.success) {
+                //to do
+            }
+            window.panel.resetCurrentPanel();
+        }
+    }, {
+        key: 'aimCloseAdd',
+        value: function aimCloseAdd(event) {
+            event.preventDefault();
+            window.panel.resetCurrentPanel(null);
+        }
+    }, {
+        key: 'getAddFriendTemplate',
+        value: function getAddFriendTemplate() {
+            return '{{#info}}\n            <div class="add-info">\n        <div class="add-info-header">\n            <img class="radius-friend-header" src="{{friendHeader}}" alt="\u5934\u50CF">\n        </div>\n        <div class="add-info-hint">\n            <h6>{{friendName}}</h6>\n            <p><span><small>{{friendEmail}}</small></span></p>\n        </div>\n    </div>\n    <form name="addFriendForm">\n        <div class="form-group">\n            <label for="message">\u9644\u52A0\u6D88\u606F</label>\n            <input type="text" name="message" class="form-control" placeholder="\u60A8\u597D,\u6211\u662F{{friendName}}\u3002">\n        </div>\n        <div class="form-group add-submit">\n            <button type="button" id="aimAddFriend" class="btn btn-success">\u52A0\u4E3A\u597D\u53CB</button>\n            <button type="button" id="aimCloseAdd" class="btn btn-danger">\u5173\u95ED</button>\n        </div>\n    </form>\n    {{/info}}';
         }
     }, {
         key: 'parseFriends',
@@ -10686,6 +10910,16 @@ var Config = function () {
         key: 'getFindFriendURL',
         value: function getFindFriendURL(id) {
             return this.baseURL + '/find/friends/' + id;
+        }
+    }, {
+        key: 'getAddFriendURL',
+        value: function getAddFriendURL(id) {
+            return this.baseURL + '/add/friends/' + id;
+        }
+    }, {
+        key: 'getFriendActionURL',
+        value: function getFriendActionURL(id) {
+            return this.baseURL + '/action/friends/' + id;
         }
     }]);
 

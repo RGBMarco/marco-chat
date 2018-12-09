@@ -32,11 +32,13 @@
             }
             $id = $args['id'];
             //var_dump($this->getSessionsRecords($id);
+            $records = $this->getSessionsRecords($id);
+            $sessions = $this->getSingleSessionsMessages($id);
             $data = array(
-                'success' => true,
+                'success' => count($records) > 0 && count($sessions) > 0,
                 'data'    => [
-                    'records'   => $this->getSessionsRecords($id),
-                    'sessions'  => $this->getSingleSessionsMessages($id),
+                    'records'   => $records,
+                    'sessions'  => $sessions,
                 ],
             );
             $dataStr = \json_encode($data);
@@ -53,6 +55,9 @@
             if ($result['success']) {
                 $tempArr = $result['data'];
                 foreach ($tempArr as $k => $v) {
+                    if (!isset($v['getrelatesinglesession'])) {
+                        continue;
+                    }
                     array_push($jsonArr,$v['getrelatesinglesession']);
                 }
             }
@@ -84,6 +89,9 @@
             if ($result['success']) {
                 $res = $result['data'];
                 foreach ($res as $k => $v) {
+                    if (!isset($v['getsessionrecord'])) {
+                        continue;
+                    }
                     $obj = \json_decode($v['getsessionrecord'],true);
                     $firstName = $this->getUserNameById($obj["firstId"]);
                     $secondName = $this->getUserNameById($obj["secondId"]);

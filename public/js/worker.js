@@ -87,7 +87,7 @@ websocket.onmessage = function (event) {
     postMessage(event.data);
 };
 websocket.onclose = function (event) {
-    // postMessage("close!");
+    requestDebug("网络连接已经被关闭!");
 };
 self.onmessage = function (event) {
     var request = JSON.parse(event.data);

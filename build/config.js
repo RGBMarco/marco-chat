@@ -12,4 +12,10 @@ export class Config {
     getFindFriendURL(id) {
         return this.baseURL + '/find/friends/' + id;   
     }
+    getAddFriendURL(id) {
+        return this.baseURL + '/add/friends/' + id;
+    }
+    getFriendActionURL(id) {
+        return this.baseURL + '/action/friends/' + id;
+    } 
 }
