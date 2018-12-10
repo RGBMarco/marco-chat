@@ -17,5 +17,18 @@ export class Config {
     }
     getFriendActionURL(id) {
         return this.baseURL + '/action/friends/' + id;
-    } 
+    }
+    //获得聊天记录
+    getMessageRecordURL(id) {
+        return this.baseURL + '/message/record/' + id;
+    }
+    getWorkerResource() {
+        return this.baseURL + '/utils/worker.js';
+    }
+    getUserInfoURL(id) {
+        return this.baseURL + '/userinfo/' + id;
+    }
+    getBaseURL() {
+        return this.baseURL;
+    }
 }

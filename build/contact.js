@@ -142,7 +142,7 @@ export default class Contacts extends Config {
                     console.log("Wait!");
                     let li = $(ul).children('li').last();
                     let button = $($(li).find('.response-confirm').get(0)).children('button').get(0);
-                    $(button).on('click',{that:this,peerId:template.peerId},this.confirmToFriend);
+                    $(button).on('click',{that:this,peerId:template.peerId,ul:ul},this.confirmToFriend);
                 } else {
                     console.log("Request Wait!");
                     let template = new Object();
@@ -232,6 +232,7 @@ export default class Contacts extends Config {
     confirmToFriend(event) {
         let that = event.data.that;
         let peerId = event.data.peerId;
+        let ul = event.data.ul;
         let url = that.getFriendActionURL(that.userId_);
         let http = new XMLHttpRequest();
         let data = {
@@ -242,6 +243,8 @@ export default class Contacts extends Config {
         http.onreadystatechange = function() {
             if(http.readyState === 4 && http.status === 200) {
                 that.afterConfirmFriend(http);
+                $(ul).toggle();
+                $(ul).toggle();
             }
         };
     }
@@ -408,7 +411,7 @@ export class Friend extends Config{
     <form name="addFriendForm">
         <div class="form-group">
             <label for="message">附加消息</label>
-            <input type="text" name="message" class="form-control" placeholder="您好,我是{{friendName}}。">
+            <input type="text" name="message" class="form-control" placeholder="您好,{{friendName}}。">
         </div>
         <div class="form-group add-submit">
             <button type="button" id="aimAddFriend" class="btn btn-success">加为好友</button>

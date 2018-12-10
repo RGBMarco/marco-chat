@@ -23,7 +23,6 @@
         }
 
         public function get(swoole_http_request $request,swoole_http_response $response,array $args) {
-            $response->header("Content-Type","text/html");
             $rc = new RedisConnection();
             $redis = RedisConnection::$connection;
             $redis->select(0);
@@ -31,10 +30,10 @@
             $userSession = new UserSession();
             $pass = $userSession->post($request,$response,$args);
             if (!$pass) {
-                $forbidden = new Forbidden();
-                $forbidden->get($request,$response,[]);
+                $response->redirect(self::BASEURL."/error/forbidden",302);
                 return;
             }
+            $response->header("Content-Type","text/html");
             print $args['id'];
             $redis->select(1);
             $data = $redis->get($args['id']);

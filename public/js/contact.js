@@ -10453,7 +10453,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Friend", function() { return Friend; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config__ = __webpack_require__(153);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__config__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mustache__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_mustache___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_mustache__);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -10614,7 +10614,7 @@ var Contacts = function (_Config) {
                         console.log("Wait!");
                         var li = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(ul).children('li').last();
                         var button = __WEBPACK_IMPORTED_MODULE_0_jquery___default()(__WEBPACK_IMPORTED_MODULE_0_jquery___default()(li).find('.response-confirm').get(0)).children('button').get(0);
-                        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(button).on('click', { that: this, peerId: template.peerId }, this.confirmToFriend);
+                        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(button).on('click', { that: this, peerId: template.peerId, ul: ul }, this.confirmToFriend);
                     } else {
                         console.log("Request Wait!");
                         var _template = new Object();
@@ -10664,6 +10664,7 @@ var Contacts = function (_Config) {
         value: function confirmToFriend(event) {
             var that = event.data.that;
             var peerId = event.data.peerId;
+            var ul = event.data.ul;
             var url = that.getFriendActionURL(that.userId_);
             var http = new XMLHttpRequest();
             var data = {
@@ -10674,6 +10675,8 @@ var Contacts = function (_Config) {
             http.onreadystatechange = function () {
                 if (http.readyState === 4 && http.status === 200) {
                     that.afterConfirmFriend(http);
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(ul).toggle();
+                    __WEBPACK_IMPORTED_MODULE_0_jquery___default()(ul).toggle();
                 }
             };
         }
@@ -10849,7 +10852,7 @@ var Friend = function (_Config2) {
     }, {
         key: 'getAddFriendTemplate',
         value: function getAddFriendTemplate() {
-            return '{{#info}}\n            <div class="add-info">\n        <div class="add-info-header">\n            <img class="radius-friend-header" src="{{friendHeader}}" alt="\u5934\u50CF">\n        </div>\n        <div class="add-info-hint">\n            <h6>{{friendName}}</h6>\n            <p><span><small>{{friendEmail}}</small></span></p>\n        </div>\n    </div>\n    <form name="addFriendForm">\n        <div class="form-group">\n            <label for="message">\u9644\u52A0\u6D88\u606F</label>\n            <input type="text" name="message" class="form-control" placeholder="\u60A8\u597D,\u6211\u662F{{friendName}}\u3002">\n        </div>\n        <div class="form-group add-submit">\n            <button type="button" id="aimAddFriend" class="btn btn-success">\u52A0\u4E3A\u597D\u53CB</button>\n            <button type="button" id="aimCloseAdd" class="btn btn-danger">\u5173\u95ED</button>\n        </div>\n    </form>\n    {{/info}}';
+            return '{{#info}}\n            <div class="add-info">\n        <div class="add-info-header">\n            <img class="radius-friend-header" src="{{friendHeader}}" alt="\u5934\u50CF">\n        </div>\n        <div class="add-info-hint">\n            <h6>{{friendName}}</h6>\n            <p><span><small>{{friendEmail}}</small></span></p>\n        </div>\n    </div>\n    <form name="addFriendForm">\n        <div class="form-group">\n            <label for="message">\u9644\u52A0\u6D88\u606F</label>\n            <input type="text" name="message" class="form-control" placeholder="\u60A8\u597D,{{friendName}}\u3002">\n        </div>\n        <div class="form-group add-submit">\n            <button type="button" id="aimAddFriend" class="btn btn-success">\u52A0\u4E3A\u597D\u53CB</button>\n            <button type="button" id="aimCloseAdd" class="btn btn-danger">\u5173\u95ED</button>\n        </div>\n    </form>\n    {{/info}}';
         }
     }, {
         key: 'parseFriends',
@@ -10880,7 +10883,7 @@ __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).ready(function () {
 
 /***/ }),
 
-/***/ 153:
+/***/ 4:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10920,6 +10923,28 @@ var Config = function () {
         key: 'getFriendActionURL',
         value: function getFriendActionURL(id) {
             return this.baseURL + '/action/friends/' + id;
+        }
+        //获得聊天记录
+
+    }, {
+        key: 'getMessageRecordURL',
+        value: function getMessageRecordURL(id) {
+            return this.baseURL + '/message/record/' + id;
+        }
+    }, {
+        key: 'getWorkerResource',
+        value: function getWorkerResource() {
+            return this.baseURL + '/utils/worker.js';
+        }
+    }, {
+        key: 'getUserInfoURL',
+        value: function getUserInfoURL(id) {
+            return this.baseURL + '/userinfo/' + id;
+        }
+    }, {
+        key: 'getBaseURL',
+        value: function getBaseURL() {
+            return this.baseURL;
         }
     }]);
 

@@ -53,6 +53,9 @@
             $result = $sq->query($q);
             $jsonArr = [];
             if ($result['success']) {
+                if (!isset($result['data'])) {
+                    return [];
+                }
                 $tempArr = $result['data'];
                 foreach ($tempArr as $k => $v) {
                     if (!isset($v['getrelatesinglesession'])) {
@@ -87,6 +90,9 @@
             $result = $sq->query($q);
             $ret = [];
             if ($result['success']) {
+                if (!isset($result['data'])) {
+                    return [];
+                }
                 $res = $result['data'];
                 foreach ($res as $k => $v) {
                     if (!isset($v['getsessionrecord'])) {

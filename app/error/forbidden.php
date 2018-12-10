@@ -13,6 +13,7 @@
             $rc = new RedisConnection();
             $redis = RedisConnection::$connection;
             $str = $redis->hget('view','forbidden');
+            $response->header("Content-Type","text/html");
             $response->end($str);
         }
     }

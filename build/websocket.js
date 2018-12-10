@@ -7,8 +7,9 @@ import {Config} from './config';
 //import {panel} from './panel';
 //fixed me by modified the {let of} || {let in} to foreach
 
-export default class Chat {
+export default class Chat extends Config {
     constructor(messageInput,sendButton,messageRecord,messageSession,chatSession,closeSession,sessionHeader,chatModalBody,selfCenter) {
+        super();
         let that = this;
         this.messageInput_ = messageInput;
         this.sendButton_ = sendButton;
@@ -42,6 +43,7 @@ export default class Chat {
                 }
             }
             let userId = sessionStorage.getItem('id');
+            header.peerHeader = that.getHeaderURL(header.peerId);
             $(that.sessionHeader_).html(mustache.render(that.getSingleSessionHeaderTemplate(),header));
             that.displayMessages(sessionId,userId,that);
             $(chatSession).show();
@@ -84,7 +86,7 @@ export default class Chat {
         return `{{#records}}<li value="{{sessionInfo}}" class="list-group-item">
         <div class="row message-contact">
             <div class="col col-2">
-                <img class="radius-friend-header" src="http://localhost:12000/userheader/{{peerId}}" alt="">
+                <img class="radius-friend-header" src="{{peerHeader}}" alt="">
             </div>
             <div class="col message-contact-info">
                 <p><span>{{peerName}}</span><small class="dateHint">{{createTime}}</small></p>
@@ -97,7 +99,7 @@ export default class Chat {
     getMessageTemplate() {
         return `{{#messages}}<li class="list-group-item message-by-{{ownerType}}">
         <div class="message-owner">    
-            <img src="http://localhost:12000/userheader/{{ownerId}}" alt="头像" class="user-header">
+            <img src="{{ownerHeader}}" alt="头像" class="user-header">
             <!--<p><h5><span>{{msgActive}}<span>--><span>{{ownerName}}<span></h5></p>
         </div>
         <div class="message-content">
@@ -110,10 +112,12 @@ export default class Chat {
         let http = new XMLHttpRequest();
         let id = sessionStorage.getItem('id');
         console.log("获取数据Id: " + id);
-        let url = 'http://localhost:12000/message/record/' + id;
+       // let url = 'http://localhost:12000/message/record/' + id;
+        let url = this.getMessageRecordURL(id);
         http.open('GET',url,true);
         http.send();
         let getRealRecord = this.getRealRecord;
+        let getBaseURL = this.getBaseURL();
         //let messageRecord = this.messageRecord_;
         let getRecordTemplate = this.getRecordTemplate;
         this.sessions_ = new Map();
@@ -129,10 +133,11 @@ export default class Chat {
                         console.log(data.data);
                         let records = data.data.records;
                         for (let r in records) {
-                            records[r] = getRealRecord(id,records[r]);
+                            records[r] = that.getRealRecord(id,records[r],getBaseURL);
                         }
                         that.records_ = records;
-                        //console.log(that.records_);
+                        console.log("打印记录!");
+                        console.log(that.records_);
                         //console.log(that.messageRecord_);
                         //console.log($(messageRecord));
                         $(that.messageRecord_).html(mustache.render(getRecordTemplate(),{records:records}));
@@ -164,7 +169,7 @@ export default class Chat {
             resolve(null);
         });
     }
-    getRealRecord(userId,obj) {
+    getRealRecord(userId,obj,getBaseURL) {
         let ret = new Object();
         if (obj.firstId == userId) {
             ret.peerName = obj.secondName;
@@ -173,6 +178,7 @@ export default class Chat {
             ret.peerName = obj.firstName;
             ret.peerId = obj.firstId;
         }
+        ret.peerHeader = getBaseURL + '/userheader/' + ret.peerId;
         let sessionInfo = new Object();
         sessionInfo.userId = Number(userId);
         sessionInfo.peerId = Number(ret.peerId);
@@ -184,7 +190,7 @@ export default class Chat {
     getSingleSessionHeaderTemplate() {
         return `<div class="modal-header-title">
         <div class="title-info">
-            <img class="radius-user-header" src="http://localhost:12000/userheader/{{peerId}}" alt="头像">    
+            <img class="radius-user-header" src="{{peerHeader}}" alt="头像">    
             <h4>{{peerName}}</h4>
         </div>
         <button id="closeSession" type="button" class="close" data-dismiss="modal">&times;</button>      
@@ -268,7 +274,8 @@ export default class Chat {
     }
 
     initWorker(that) {
-        that.worker_ = new Worker('http://localhost:12000/utils/worker.js');
+        let u = that.getWorkerResource();
+        that.worker_ = new Worker(u);
         that.worker_.onmessage = function(event) {
             console.log(event.data);
             let request = JSON.parse(event.data);
@@ -310,8 +317,9 @@ export default class Chat {
         that.currentUserInfo_ = new UserInfo(that.userId_,'#userInfo','#userInfoForm','#changeUserInfo','#uploadHeader','#closeUserInfo');
     }
 }
-class MessageQueue {
+class MessageQueue extends Config {
     constructor(messages,getMessageTemplate,userId) {
+       super();
        console.log("开始构造消息队列!");
        if (!isArray(messages)) {
            console.log("消息队列构造错误!");
@@ -348,6 +356,7 @@ class MessageQueue {
             message.ownerName = message.secondName;
         }
         message.userId = userId;
+        message.ownerHeader = this.getHeaderURL(message.ownerId);
         if (message.ownerId == userId) {
             message.ownerType = "self";
         } else {
@@ -442,7 +451,8 @@ class UserInfo extends Config {
         this.userId_ = userId;
         this.userInfoId_ = userInfoId;
         this.userInfoFormId_ = userInfoFormId;
-        this.routeURL = "http://localhost:12000/userinfo/" + this.userId_;
+        //this.routeURL = "http://localhost:12000/userinfo/" + this.userId_;
+        this.routeURL = this.getUserInfoURL(this.userId_);
         this.changeUserInfoId_ = changeUserInfoId;
         this.photoId_ = photoId;
         this.isCorrectPhoto_ = false;

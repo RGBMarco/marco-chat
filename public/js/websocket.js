@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 146);
+/******/ 	return __webpack_require__(__webpack_require__.s = 145);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -4574,7 +4574,7 @@
 
 })));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(147)(module)))
 
 /***/ }),
 /* 1 */
@@ -15166,6 +15166,75 @@ process.umask = function() { return 0; };
 
 /***/ }),
 /* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Config; });
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Config = function () {
+    function Config() {
+        _classCallCheck(this, Config);
+
+        this.baseURL = "http://localhost:12000";
+    }
+
+    _createClass(Config, [{
+        key: 'getFriendURL',
+        value: function getFriendURL(id) {
+            return this.baseURL + '/friends/' + id;
+        }
+    }, {
+        key: 'getHeaderURL',
+        value: function getHeaderURL(id) {
+            return this.baseURL + '/userheader/' + id;
+        }
+    }, {
+        key: 'getFindFriendURL',
+        value: function getFindFriendURL(id) {
+            return this.baseURL + '/find/friends/' + id;
+        }
+    }, {
+        key: 'getAddFriendURL',
+        value: function getAddFriendURL(id) {
+            return this.baseURL + '/add/friends/' + id;
+        }
+    }, {
+        key: 'getFriendActionURL',
+        value: function getFriendActionURL(id) {
+            return this.baseURL + '/action/friends/' + id;
+        }
+        //获得聊天记录
+
+    }, {
+        key: 'getMessageRecordURL',
+        value: function getMessageRecordURL(id) {
+            return this.baseURL + '/message/record/' + id;
+        }
+    }, {
+        key: 'getWorkerResource',
+        value: function getWorkerResource() {
+            return this.baseURL + '/utils/worker.js';
+        }
+    }, {
+        key: 'getUserInfoURL',
+        value: function getUserInfoURL(id) {
+            return this.baseURL + '/userinfo/' + id;
+        }
+    }, {
+        key: 'getBaseURL',
+        value: function getBaseURL() {
+            return this.baseURL;
+        }
+    }]);
+
+    return Config;
+}();
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {// Copyright Joyent, Inc. and other Node contributors.
@@ -15756,34 +15825,6 @@ function hasOwnProperty(obj, prop) {
 }
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(3)))
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports) {
-
-module.exports = function(module) {
-	if(!module.webpackPolyfill) {
-		module.deprecate = function() {};
-		module.paths = [];
-		// module.parent = undefined by default
-		if(!module.children) module.children = [];
-		Object.defineProperty(module, "loaded", {
-			enumerable: true,
-			get: function() {
-				return module.l;
-			}
-		});
-		Object.defineProperty(module, "id", {
-			enumerable: true,
-			get: function() {
-				return module.i;
-			}
-		});
-		module.webpackPolyfill = 1;
-	}
-	return module;
-};
-
 
 /***/ }),
 /* 6 */
@@ -28375,15 +28416,14 @@ if (typeof Object.create === 'function') {
 /* 142 */,
 /* 143 */,
 /* 144 */,
-/* 145 */,
-/* 146 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(147);
+module.exports = __webpack_require__(146);
 
 
 /***/ }),
-/* 147 */
+/* 146 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -28394,20 +28434,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_mustache___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_mustache__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_moment__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_moment__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_util__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_util__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_util___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_util__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__util_0_10_4_util__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__util_0_10_4_util__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__util_0_10_4_util___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__util_0_10_4_util__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__config__ = __webpack_require__(153);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__config__ = __webpack_require__(4);
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
 
@@ -28418,30 +28458,34 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 //import {panel} from './panel';
 //fixed me by modified the {let of} || {let in} to foreach
 
-var Chat = function () {
+var Chat = function (_Config) {
+    _inherits(Chat, _Config);
+
     function Chat(messageInput, sendButton, messageRecord, messageSession, chatSession, closeSession, sessionHeader, chatModalBody, selfCenter) {
         _classCallCheck(this, Chat);
 
-        var that = this;
-        this.messageInput_ = messageInput;
-        this.sendButton_ = sendButton;
-        this.messageRecord_ = messageRecord;
-        this.messageSession_ = messageSession;
-        this.chatSession_ = chatSession;
-        this.closeSession_ = closeSession;
-        this.sessionHeader_ = sessionHeader;
-        this.userId_ = Number(sessionStorage.getItem('id'));
-        this.currentSessionId_ = null;
-        this.currentSessionInfo_ = null;
-        this.currentUserInfo_ = null;
-        this.chatModalBody_ = chatModalBody;
-        this.selfCenter_ = selfCenter;
+        var _this = _possibleConstructorReturn(this, (Chat.__proto__ || Object.getPrototypeOf(Chat)).call(this));
+
+        var that = _this;
+        _this.messageInput_ = messageInput;
+        _this.sendButton_ = sendButton;
+        _this.messageRecord_ = messageRecord;
+        _this.messageSession_ = messageSession;
+        _this.chatSession_ = chatSession;
+        _this.closeSession_ = closeSession;
+        _this.sessionHeader_ = sessionHeader;
+        _this.userId_ = Number(sessionStorage.getItem('id'));
+        _this.currentSessionId_ = null;
+        _this.currentSessionInfo_ = null;
+        _this.currentUserInfo_ = null;
+        _this.chatModalBody_ = chatModalBody;
+        _this.selfCenter_ = selfCenter;
         console.log(sessionStorage.getItem('id'));
-        this.initRecordPanel().then(function (data) {
+        _this.initRecordPanel().then(function (data) {
             that.initWorker(that);
         });
         console.log(that.sessions_);
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this.messageRecord_).on('click', 'li', function (event) {
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(_this.messageRecord_).on('click', 'li', function (event) {
             var sessionInfo = JSON.parse(__WEBPACK_IMPORTED_MODULE_0_jquery___default()(this).attr("value"));
             var sessionId = sessionInfo.sessionId;
             var records_ = that.records_;
@@ -28457,6 +28501,7 @@ var Chat = function () {
                 }
             }
             var userId = sessionStorage.getItem('id');
+            header.peerHeader = that.getHeaderURL(header.peerId);
             __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.sessionHeader_).html(__WEBPACK_IMPORTED_MODULE_1_mustache___default.a.render(that.getSingleSessionHeaderTemplate(), header));
             that.displayMessages(sessionId, userId, that);
             __WEBPACK_IMPORTED_MODULE_0_jquery___default()(chatSession).show();
@@ -28468,8 +28513,9 @@ var Chat = function () {
                 that.currentSessionInfo_ = null;
             });
         });
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this.sendButton_).on('click', { that: this }, this.sendMessage);
-        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(this.selfCenter_).on('click', { that: this }, this.displayUserInfo);
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(_this.sendButton_).on('click', { that: _this }, _this.sendMessage);
+        __WEBPACK_IMPORTED_MODULE_0_jquery___default()(_this.selfCenter_).on('click', { that: _this }, _this.displayUserInfo);
+        return _this;
     }
 
     _createClass(Chat, [{
@@ -28500,12 +28546,12 @@ var Chat = function () {
     }, {
         key: 'getRecordTemplate',
         value: function getRecordTemplate() {
-            return '{{#records}}<li value="{{sessionInfo}}" class="list-group-item">\n        <div class="row message-contact">\n            <div class="col col-2">\n                <img class="radius-friend-header" src="http://localhost:12000/userheader/{{peerId}}" alt="">\n            </div>\n            <div class="col message-contact-info">\n                <p><span>{{peerName}}</span><small class="dateHint">{{createTime}}</small></p>\n                <p><small class="contentHint">{{content}}</small><span class="badge badge-danger">0</span></p>\n            </div>\n        </div>\n    </li>{{/records}}';
+            return '{{#records}}<li value="{{sessionInfo}}" class="list-group-item">\n        <div class="row message-contact">\n            <div class="col col-2">\n                <img class="radius-friend-header" src="{{peerHeader}}" alt="">\n            </div>\n            <div class="col message-contact-info">\n                <p><span>{{peerName}}</span><small class="dateHint">{{createTime}}</small></p>\n                <p><small class="contentHint">{{content}}</small><span class="badge badge-danger">0</span></p>\n            </div>\n        </div>\n    </li>{{/records}}';
         }
     }, {
         key: 'getMessageTemplate',
         value: function getMessageTemplate() {
-            return '{{#messages}}<li class="list-group-item message-by-{{ownerType}}">\n        <div class="message-owner">    \n            <img src="http://localhost:12000/userheader/{{ownerId}}" alt="\u5934\u50CF" class="user-header">\n            <!--<p><h5><span>{{msgActive}}<span>--><span>{{ownerName}}<span></h5></p>\n        </div>\n        <div class="message-content">\n            <span>{{content}}</span>\n        </div>\n    </li>{{/messages}}';
+            return '{{#messages}}<li class="list-group-item message-by-{{ownerType}}">\n        <div class="message-owner">    \n            <img src="{{ownerHeader}}" alt="\u5934\u50CF" class="user-header">\n            <!--<p><h5><span>{{msgActive}}<span>--><span>{{ownerName}}<span></h5></p>\n        </div>\n        <div class="message-content">\n            <span>{{content}}</span>\n        </div>\n    </li>{{/messages}}';
         }
     }, {
         key: 'initRecordPanel',
@@ -28513,10 +28559,12 @@ var Chat = function () {
             var http = new XMLHttpRequest();
             var id = sessionStorage.getItem('id');
             console.log("获取数据Id: " + id);
-            var url = 'http://localhost:12000/message/record/' + id;
+            // let url = 'http://localhost:12000/message/record/' + id;
+            var url = this.getMessageRecordURL(id);
             http.open('GET', url, true);
             http.send();
             var getRealRecord = this.getRealRecord;
+            var getBaseURL = this.getBaseURL();
             //let messageRecord = this.messageRecord_;
             var getRecordTemplate = this.getRecordTemplate;
             this.sessions_ = new Map();
@@ -28532,10 +28580,11 @@ var Chat = function () {
                             console.log(data.data);
                             var records = data.data.records;
                             for (var r in records) {
-                                records[r] = getRealRecord(id, records[r]);
+                                records[r] = that.getRealRecord(id, records[r], getBaseURL);
                             }
                             that.records_ = records;
-                            //console.log(that.records_);
+                            console.log("打印记录!");
+                            console.log(that.records_);
                             //console.log(that.messageRecord_);
                             //console.log($(messageRecord));
                             __WEBPACK_IMPORTED_MODULE_0_jquery___default()(that.messageRecord_).html(__WEBPACK_IMPORTED_MODULE_1_mustache___default.a.render(getRecordTemplate(), { records: records }));
@@ -28571,7 +28620,7 @@ var Chat = function () {
         }
     }, {
         key: 'getRealRecord',
-        value: function getRealRecord(userId, obj) {
+        value: function getRealRecord(userId, obj, getBaseURL) {
             var ret = new Object();
             if (obj.firstId == userId) {
                 ret.peerName = obj.secondName;
@@ -28580,6 +28629,7 @@ var Chat = function () {
                 ret.peerName = obj.firstName;
                 ret.peerId = obj.firstId;
             }
+            ret.peerHeader = getBaseURL + '/userheader/' + ret.peerId;
             var sessionInfo = new Object();
             sessionInfo.userId = Number(userId);
             sessionInfo.peerId = Number(ret.peerId);
@@ -28591,7 +28641,7 @@ var Chat = function () {
     }, {
         key: 'getSingleSessionHeaderTemplate',
         value: function getSingleSessionHeaderTemplate() {
-            return '<div class="modal-header-title">\n        <div class="title-info">\n            <img class="radius-user-header" src="http://localhost:12000/userheader/{{peerId}}" alt="\u5934\u50CF">    \n            <h4>{{peerName}}</h4>\n        </div>\n        <button id="closeSession" type="button" class="close" data-dismiss="modal">&times;</button>      \n    </div>\n    <div class="modal-header-info">\n        <ul class="nav nav-tabs">\n            <li class="nav-item"><a class="nav-link">\u804A\u5929</a></li>\n            <li class="nav-item"><a class="nav-link">\u8BBE\u7F6E</a></li>\n        </ul>\n    </div>';
+            return '<div class="modal-header-title">\n        <div class="title-info">\n            <img class="radius-user-header" src="{{peerHeader}}" alt="\u5934\u50CF">    \n            <h4>{{peerName}}</h4>\n        </div>\n        <button id="closeSession" type="button" class="close" data-dismiss="modal">&times;</button>      \n    </div>\n    <div class="modal-header-info">\n        <ul class="nav nav-tabs">\n            <li class="nav-item"><a class="nav-link">\u804A\u5929</a></li>\n            <li class="nav-item"><a class="nav-link">\u8BBE\u7F6E</a></li>\n        </ul>\n    </div>';
         }
     }, {
         key: 'displayMessages',
@@ -28684,7 +28734,8 @@ var Chat = function () {
     }, {
         key: 'initWorker',
         value: function initWorker(that) {
-            that.worker_ = new Worker('http://localhost:12000/utils/worker.js');
+            var u = that.getWorkerResource();
+            that.worker_ = new Worker(u);
             that.worker_.onmessage = function (event) {
                 console.log(event.data);
                 var request = JSON.parse(event.data);
@@ -28734,29 +28785,34 @@ var Chat = function () {
     }]);
 
     return Chat;
-}();
+}(__WEBPACK_IMPORTED_MODULE_5__config__["a" /* Config */]);
 
 /* harmony default export */ __webpack_exports__["default"] = (Chat);
 
-var MessageQueue = function () {
+var MessageQueue = function (_Config2) {
+    _inherits(MessageQueue, _Config2);
+
     function MessageQueue(messages, getMessageTemplate, userId) {
         _classCallCheck(this, MessageQueue);
+
+        var _this2 = _possibleConstructorReturn(this, (MessageQueue.__proto__ || Object.getPrototypeOf(MessageQueue)).call(this));
 
         console.log("开始构造消息队列!");
         if (!Object(__WEBPACK_IMPORTED_MODULE_3_util__["isArray"])(messages)) {
             console.log("消息队列构造错误!");
-            return;
+            return _possibleConstructorReturn(_this2);
         }
-        this.userId_ = userId;
-        this.messages_ = new Array();
+        _this2.userId_ = userId;
+        _this2.messages_ = new Array();
         for (var m in messages) {
             console.log(m);
             console.log(messages[m]);
-            var message = this.formatMessage(messages[m], this.userId_);
-            this.messages_.push(message);
+            var message = _this2.formatMessage(messages[m], _this2.userId_);
+            _this2.messages_.push(message);
         }
-        this.unread_ = this.messages_.length;
-        this.getMessageTemplate = getMessageTemplate;
+        _this2.unread_ = _this2.messages_.length;
+        _this2.getMessageTemplate = getMessageTemplate;
+        return _this2;
     }
 
     _createClass(MessageQueue, [{
@@ -28782,6 +28838,7 @@ var MessageQueue = function () {
                 message.ownerName = message.secondName;
             }
             message.userId = userId;
+            message.ownerHeader = this.getHeaderURL(message.ownerId);
             if (message.ownerId == userId) {
                 message.ownerType = "self";
             } else {
@@ -28799,7 +28856,7 @@ var MessageQueue = function () {
     }]);
 
     return MessageQueue;
-}();
+}(__WEBPACK_IMPORTED_MODULE_5__config__["a" /* Config */]);
 
 var ChatRecord = function () {
     function ChatRecord(sessionId, sessionInfo, record) {
@@ -28910,26 +28967,27 @@ var ChatSession = function () {
     return ChatSession;
 }();
 
-var UserInfo = function (_Config) {
-    _inherits(UserInfo, _Config);
+var UserInfo = function (_Config3) {
+    _inherits(UserInfo, _Config3);
 
     function UserInfo(userId, userInfoId, userInfoFormId, changeUserInfoId, photoId, closeId) {
         _classCallCheck(this, UserInfo);
 
-        var _this = _possibleConstructorReturn(this, (UserInfo.__proto__ || Object.getPrototypeOf(UserInfo)).call(this));
+        var _this3 = _possibleConstructorReturn(this, (UserInfo.__proto__ || Object.getPrototypeOf(UserInfo)).call(this));
 
-        _this.userId_ = userId;
-        _this.userInfoId_ = userInfoId;
-        _this.userInfoFormId_ = userInfoFormId;
-        _this.routeURL = "http://localhost:12000/userinfo/" + _this.userId_;
-        _this.changeUserInfoId_ = changeUserInfoId;
-        _this.photoId_ = photoId;
-        _this.isCorrectPhoto_ = false;
-        _this.closeId_ = closeId;
-        _this.getUserInfo();
+        _this3.userId_ = userId;
+        _this3.userInfoId_ = userInfoId;
+        _this3.userInfoFormId_ = userInfoFormId;
+        //this.routeURL = "http://localhost:12000/userinfo/" + this.userId_;
+        _this3.routeURL = _this3.getUserInfoURL(_this3.userId_);
+        _this3.changeUserInfoId_ = changeUserInfoId;
+        _this3.photoId_ = photoId;
+        _this3.isCorrectPhoto_ = false;
+        _this3.closeId_ = closeId;
+        _this3.getUserInfo();
         //console.log(this.changeUserInfoId_);
         //console.log($(this.changeUserInfoId_));
-        return _this;
+        return _this3;
     }
 
     _createClass(UserInfo, [{
@@ -29291,6 +29349,34 @@ __WEBPACK_IMPORTED_MODULE_0_jquery___default()(document).ready(function () {
 });
 
 /***/ }),
+/* 147 */
+/***/ (function(module, exports) {
+
+module.exports = function(module) {
+	if(!module.webpackPolyfill) {
+		module.deprecate = function() {};
+		module.paths = [];
+		// module.parent = undefined by default
+		if(!module.children) module.children = [];
+		Object.defineProperty(module, "loaded", {
+			enumerable: true,
+			get: function() {
+				return module.l;
+			}
+		});
+		Object.defineProperty(module, "id", {
+			enumerable: true,
+			get: function() {
+				return module.i;
+			}
+		});
+		module.webpackPolyfill = 1;
+	}
+	return module;
+};
+
+
+/***/ }),
 /* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -29557,57 +29643,6 @@ webpackContext.keys = function webpackContextKeys() {
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
 webpackContext.id = 148;
-
-/***/ }),
-/* 149 */,
-/* 150 */,
-/* 151 */,
-/* 152 */,
-/* 153 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Config; });
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Config = function () {
-    function Config() {
-        _classCallCheck(this, Config);
-
-        this.baseURL = "http://localhost:12000";
-    }
-
-    _createClass(Config, [{
-        key: 'getFriendURL',
-        value: function getFriendURL(id) {
-            return this.baseURL + '/friends/' + id;
-        }
-    }, {
-        key: 'getHeaderURL',
-        value: function getHeaderURL(id) {
-            return this.baseURL + '/userheader/' + id;
-        }
-    }, {
-        key: 'getFindFriendURL',
-        value: function getFindFriendURL(id) {
-            return this.baseURL + '/find/friends/' + id;
-        }
-    }, {
-        key: 'getAddFriendURL',
-        value: function getAddFriendURL(id) {
-            return this.baseURL + '/add/friends/' + id;
-        }
-    }, {
-        key: 'getFriendActionURL',
-        value: function getFriendActionURL(id) {
-            return this.baseURL + '/action/friends/' + id;
-        }
-    }]);
-
-    return Config;
-}();
 
 /***/ })
 /******/ ]);

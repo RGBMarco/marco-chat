@@ -17,6 +17,7 @@
    require_once(__DIR__."/model/friend/find.php");
    require_once(__DIR__."/model/friend/add.php");
    require_once(__DIR__."/model/friend/action.php");
+   require_once(__DIR__."/error/forbidden.php");
    use App\Route\RouteRegister;
    use App\Route\RouteForward;
    use App\View\Index;
@@ -34,6 +35,7 @@
    use App\Model\Friend\Friend;
    use App\Model\Friend\FindFriend;
    use App\Model\Friend\AddFriend;
+   use App\Error\Forbidden;
    $cache = new Cache();
    RouteRegister::add("/","App\View\Index");
    RouteRegister::add("/utils/{name}","App\Utils\Resource");
@@ -49,6 +51,7 @@
    RouteRegister::add("/find/friends/{id}","App\Model\Friend\FindFriend");
    RouteRegister::add("/add/friends/{id}","App\Model\Friend\AddFriend");
    RouteRegister::add("/action/friends/{id}","App\Model\Friend\FriendAction");
+   RouteRegister::add("/error/forbidden","App\Error\Forbidden");
    $server = new swoole_websocket_server("0.0.0.0",12000);
    //$http = $server->listen("0.0.0.0",12000,SWOOLE_SOCK_TCP);
    $server->set([
@@ -61,7 +64,6 @@
    });
    $server->on("message",function($request,$response) {});
    $server->on("receive",function($request,$response) {});
-   $userconnections = [];
-   $websocket = new WebSocket($server,$userconnections);
+   $websocket = new WebSocket($server);
    $server->start();
 ?>

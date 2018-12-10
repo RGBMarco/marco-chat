@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import md5 from 'js-md5';
-import { isValid } from 'ipaddr.js';
+import {Config} from './config';
 export default class Index {
     constructor(signupId,signinId,switchSignin,switchSignup) {
         this.signupId_ = signupId;
@@ -24,15 +24,16 @@ export default class Index {
     }
 }
 
-export class SignUp {
+export class SignUp extends Config {
     constructor(signUpForm,signUpEmail,signUpPw,signUpPwConfirm,signupHint) {
+        super();
         this.signUpForm_ = signUpForm;
         this.signUpEmail_ = signUpEmail;
         this.signUpPw_ = signUpPw;
         this.signUpPwConfirm_ = signUpPwConfirm;
         this.signUpHint_ = signupHint;
         this.hintMessage = new Array();
-        this.baseURL = "http://localhost:12000";
+        this.baseURL = super().getBaseURL();
         $(this.signUpForm_).on('submit',{that:this},this.signUp);
         $(this.signUpEmail_).on('blur',{hintId:this.signUpHint_,msg:this.hintMessage},this.checkEmail);
         $(this.signUpPw_).on('blur',{hintId:this.signUpHint_,msg:this.hintMessage},this.checkPassword);
@@ -214,14 +215,16 @@ export class SignUp {
         return pw === confirmpw;
     }
 }
-export class SignIn {
+export class SignIn extends Config{
     constructor(signinForm,signinEmail,signinPw,signinHint) {
+        super();
         this.signinForm_ = signinForm;
         this.signinEmail_ = signinEmail;
         this.signinPw_ = signinPw;
         this.signinHint_ = signinHint;
         this.hintMsgs_ = new Array();
-        this.baseURL = "http://localhost:12000";
+        //this.baseURL = "http://localhost:12000";
+        this.baseURL = super().getBaseURL();
         $(this.signinForm_).on('submit',{that:this},this.login);
         $(this.signinEmail_).on('blur',{that:this},this.checkEmail);
         $(this.signinPw_).on('blur',{that:this},this.checkPassword);

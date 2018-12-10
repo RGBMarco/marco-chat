@@ -28,7 +28,9 @@
             $sq = new SqlQuery(null);
             $result = $sq->query($q);
             if ($result['success']) {
-                return $result['data'];
+                if (!isset($result['data'])) {
+                    return $result['data'];
+                }
             }
             return [];
         }
@@ -38,7 +40,9 @@
             $sq = new SqlQuery(null);
             $result = $sq->query($q);
             if ($result['success']) {
-                return $result['data'];
+                if (isset($result['data'])) {
+                    return $result['data'];
+                }
             }
             return [];
         }
